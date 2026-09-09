@@ -2,63 +2,39 @@
   "pairs": [
     {
       "id": "gen_0",
-      "lt": "-ų",
-      "ru": "-o",
-      "eng": "-o"
+      "target": "o",
+      "var01": "as",
+      "var02": "as"
     },
     {
       "id": "gen_1",
-      "lt": "-ių",
-      "ru": "-io",
-      "eng": "-io"
+      "target": "io",
+      "var01": "is",
+      "var02": "is"
     },
     {
       "id": "gen_2",
-      "lt": "-ių",
-      "ru": "-io",
-      "eng": "-io"
+      "target": "os",
+      "var01": "a",
+      "var02": "a"
     },
     {
       "id": "gen_3",
-      "lt": "-ių",
-      "ru": "-io",
-      "eng": "-io"
+      "target": "ės",
+      "var01": "ė",
+      "var02": "ė"
     },
     {
       "id": "gen_4",
-      "lt": "-ų",
-      "ru": "-aus",
-      "eng": "-aus"
+      "target": "aus",
+      "var01": "us",
+      "var02": "us"
     },
     {
       "id": "gen_5",
-      "lt": "-enų",
-      "ru": "-ens",
-      "eng": "-ens"
-    },
-    {
-      "id": "gen_6",
-      "lt": "-(i)ų",
-      "ru": "-(i)os",
-      "eng": "-(i)os"
-    },
-    {
-      "id": "gen_7",
-      "lt": "-ių",
-      "ru": "-ės",
-      "eng": "-ės"
-    },
-    {
-      "id": "gen_8",
-      "lt": "-ių",
-      "ru": "-ies",
-      "eng": "-ies"
-    },
-    {
-      "id": "gen_9",
-      "lt": "-erų",
-      "ru": "-ers",
-      "eng": "-ers"
+      "target": "ers",
+      "var01": "uo/ė",
+      "var02": "uo/ė"
     }
   ]
 }

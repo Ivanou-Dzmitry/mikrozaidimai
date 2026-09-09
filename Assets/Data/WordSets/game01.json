@@ -1,12 +1,12 @@
 {
   "pairs": [
-    { "id": "pronoun_as",  "lt": "aš",  "ru": "я",   "eng": "I" },
-    { "id": "pronoun_tu",  "lt": "tu",  "ru": "ты",  "eng": "you" },
-    { "id": "pronoun_jis", "lt": "jis", "ru": "он",  "eng": "he" },
-    { "id": "pronoun_ji",  "lt": "ji",  "ru": "она", "eng": "she" },
-    { "id": "pronoun_mes", "lt": "mes", "ru": "мы",  "eng": "we" },
-    { "id": "pronoun_jus", "lt": "jūs", "ru": "вы",  "eng": "you" },
-    { "id": "pronoun_jie", "lt": "jie", "ru": "они-м", "eng": "they-m" },
-    { "id": "pronoun_jos", "lt": "jos", "ru": "они-ж", "eng": "they-f" }
+    { "id": "pronoun_as",  "target": "aš",  "var01": "я",   "var02": "I" },
+    { "id": "pronoun_tu",  "target": "tu",  "var01": "ты",  "var02": "you" },
+    { "id": "pronoun_jis", "target": "jis", "var01": "он",  "var02": "he" },
+    { "id": "pronoun_ji",  "target": "ji",  "var01": "она", "var02": "she" },
+    { "id": "pronoun_mes", "target": "mes", "var01": "мы",  "var02": "we" },
+    { "id": "pronoun_jus", "target": "jūs", "var01": "вы",  "var02": "you" },
+    { "id": "pronoun_jie", "target": "jie", "var01": "они-м", "var02": "they-m" },
+    { "id": "pronoun_jos", "target": "jos", "var01": "они-ж", "var02": "they-f" }
   ]
 }

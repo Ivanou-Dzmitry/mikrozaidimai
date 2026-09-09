@@ -1,0 +1,32 @@
+{
+  "key": "vardininkas_e_f",
+  "target": "-ės",
+  "var01": "-ė",
+  "var02": "-ė",
+  "examples": [
+    {
+      "from": "gatvė",
+      "to": "gatvės"
+    },
+    {
+      "from": "upė",
+      "to": "upės"
+    },
+    {
+      "from": "žemė",
+      "to": "žemės"
+    },
+    {
+      "from": "saulė",
+      "to": "saulės"
+    },
+    {
+      "from": "kėdė",
+      "to": "kėdės"
+    },
+    {
+      "from": "savaitė",
+      "to": "savaitės"
+    }
+  ]
+}

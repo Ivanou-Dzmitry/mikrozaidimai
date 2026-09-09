@@ -85,11 +85,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1101937103761408
-    m_Localized: Vardininkas01
+    m_Localized: Vardini 01
     m_Metadata:
       m_Items: []
   - m_Id: 1101904799232000
     m_Localized: Vardininkas01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1381954576609280
+    m_Localized: Example
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1523854579232768
+    m_Localized: Kilmi 01
     m_Metadata:
       m_Items: []
   references:

@@ -210,7 +210,7 @@ public class BubbleField : MonoBehaviour
         WordBubble bubble = Instantiate(bubblePrefab, GridPosition(row, column), Quaternion.identity, SpawnParent);
         Gradient gradientOverride = GameLaunchConfig.Current != null ? GameLaunchConfig.Current.appearance.bubbleGradient : null;
         bubble.Setup(pair, row, column, gradientOverride);
-        bubble.name = $"sphere_{pair.lt}_{++bubbleSpawnCounter}";
+        bubble.name = $"sphere_{pair.target}_{++bubbleSpawnCounter}";
 
         activeBubbles.Add(bubble);
         rowOccupancy[row][column] = true;
@@ -328,10 +328,10 @@ public class BubbleField : MonoBehaviour
         Vector3 hitPosition = target.transform.position;
         Destroy(projectile.gameObject);
 
-        // matched by the Lithuanian term, not by reference to one specific pair —
-        // some LT forms (e.g. "yra") are correct for several different pronouns,
+        // matched by the target term, not by reference to one specific pair —
+        // some terms (e.g. "yra") are correct for several different entries,
         // so any bubble with the same term as the target pair counts as a hit
-        if (target.Pair.lt == projectile.Pair.lt)
+        if (target.Pair.target == projectile.Pair.target)
         {
             activeBubbles.Remove(target);
             rowOccupancy[target.Row][target.Column] = false;
@@ -351,8 +351,12 @@ public class BubbleField : MonoBehaviour
 
             if (HelperPanel.Instance != null)
             {
-                string translation = projectile.Pair.GetTranslation(Settings.Data.language);
-                HelperPanel.Instance.ShowHint(translation, projectile.Pair.lt);
+                string variant = projectile.Pair.GetVariant(Settings.Data.language);
+
+                ExamplePair example = projectile.Pair.example != null ? projectile.Pair.example.GetRandom() : null;
+                string exampleText = example != null ? $"{example.from} → {example.to}" : null;
+
+                HelperPanel.Instance.ShowHint(variant, projectile.Pair.target, exampleText);
             }
 
             RegisterWrongAnswer();

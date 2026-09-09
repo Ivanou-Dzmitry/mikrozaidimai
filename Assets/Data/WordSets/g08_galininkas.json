@@ -2,63 +2,63 @@
   "pairs": [
     {
       "id": "acc_0",
-      "lt": "-us",
-      "ru": "-ą",
-      "eng": "-ą"
+      "target": "-us",
+      "var01": "-ą",
+      "var02": "-ą"
     },
     {
       "id": "acc_1",
-      "lt": "-ius",
-      "ru": "-ią",
-      "eng": "-ią"
+      "target": "-ius",
+      "var01": "-ią",
+      "var02": "-ią"
     },
     {
       "id": "acc_2",
-      "lt": "-ius",
-      "ru": "-į",
-      "eng": "-į"
+      "target": "-ius",
+      "var01": "-į",
+      "var02": "-į"
     },
     {
       "id": "acc_3",
-      "lt": "-ius",
-      "ru": "-į",
-      "eng": "-į"
+      "target": "-ius",
+      "var01": "-į",
+      "var02": "-į"
     },
     {
       "id": "acc_4",
-      "lt": "-us",
-      "ru": "-ų",
-      "eng": "-ų"
+      "target": "-us",
+      "var01": "-ų",
+      "var02": "-ų"
     },
     {
       "id": "acc_5",
-      "lt": "-enis",
-      "ru": "-enį",
-      "eng": "-enį"
+      "target": "-enis",
+      "var01": "-enį",
+      "var02": "-enį"
     },
     {
       "id": "acc_6",
-      "lt": "-(i)as",
-      "ru": "-(i)ą",
-      "eng": "-(i)ą"
+      "target": "-(i)as",
+      "var01": "-(i)ą",
+      "var02": "-(i)ą"
     },
     {
       "id": "acc_7",
-      "lt": "-es",
-      "ru": "-ę",
-      "eng": "-ę"
+      "target": "-es",
+      "var01": "-ę",
+      "var02": "-ę"
     },
     {
       "id": "acc_8",
-      "lt": "-is",
-      "ru": "-į",
-      "eng": "-į"
+      "target": "-is",
+      "var01": "-į",
+      "var02": "-į"
     },
     {
       "id": "acc_9",
-      "lt": "-eris",
-      "ru": "-erį",
-      "eng": "-erį"
+      "target": "-eris",
+      "var01": "-erį",
+      "var02": "-erį"
     }
   ]
 }

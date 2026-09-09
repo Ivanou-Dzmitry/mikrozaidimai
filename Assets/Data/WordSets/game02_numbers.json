@@ -1,14 +1,14 @@
 {
   "pairs": [
-    { "id": "number_0", "lt": "nulis",  "ru": "0",     "eng": "0" },
-    { "id": "number_1", "lt": "vienas", "ru": "1",     "eng": "1" },
-    { "id": "number_2", "lt": "du",     "ru": "2",       "eng": "2" },
-    { "id": "number_3", "lt": "trys",   "ru": "3",       "eng": "3" },
-    { "id": "number_4", "lt": "keturi", "ru": "4",    "eng": "4" },
-    { "id": "number_5", "lt": "penki",  "ru": "5",      "eng": "5" },
-    { "id": "number_6", "lt": "šeši",   "ru": "6",     "eng": "6" },
-    { "id": "number_7", "lt": "septyni","ru": "7",      "eng": "7" },
-    { "id": "number_8", "lt": "aštuoni","ru": "8",    "eng": "8" },
-    { "id": "number_9", "lt": "devyni", "ru": "9",    "eng": "9" }
+    { "id": "number_0", "target": "nulis",  "var01": "0", "var02": "0" },
+    { "id": "number_1", "target": "vienas", "var01": "1", "var02": "1" },
+    { "id": "number_2", "target": "du",     "var01": "2", "var02": "2" },
+    { "id": "number_3", "target": "trys",   "var01": "3", "var02": "3" },
+    { "id": "number_4", "target": "keturi", "var01": "4", "var02": "4" },
+    { "id": "number_5", "target": "penki",  "var01": "5", "var02": "5" },
+    { "id": "number_6", "target": "šeši",   "var01": "6", "var02": "6" },
+    { "id": "number_7", "target": "septyni","var01": "7", "var02": "7" },
+    { "id": "number_8", "target": "aštuoni","var01": "8", "var02": "8" },
+    { "id": "number_9", "target": "devyni", "var01": "9", "var02": "9" }
   ]
 }

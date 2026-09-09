@@ -1,0 +1,12 @@
+{
+  "key": "vardininkas_uo_f",
+  "target": "-erys",
+  "var01": "-uo",
+  "var02": "-uo",
+  "examples": [
+    {
+      "from": "sesuo",
+      "to": "seserys"
+    }
+  ]
+}

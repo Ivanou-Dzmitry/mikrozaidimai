@@ -2,63 +2,51 @@
   "pairs": [
     {
       "id": "nom_0",
-      "lt": "-ai",
-      "ru": "-as",
-      "eng": "-as"
+      "target": "ai",
+      "var01": "as",
+      "var02": "as"
     },
     {
       "id": "nom_1",
-      "lt": "-iai",
-      "ru": "-ias",
-      "eng": "-ias"
+      "target": "iai (M)",
+      "var01": "is",
+      "var02": "is"
     },
     {
       "id": "nom_2",
-      "lt": "-iai",
-      "ru": "-is",
-      "eng": "-is"
+      "target": "iai",
+      "var01": "ys",
+      "var02": "ys"
     },
     {
       "id": "nom_3",
-      "lt": "-iai",
-      "ru": "-ys",
-      "eng": "-ys"
+      "target": "os",
+      "var01": "a",
+      "var02": "a"
     },
     {
       "id": "nom_4",
-      "lt": "-ūs",
-      "ru": "-us",
-      "eng": "-us"
+      "target": "ės",
+      "var01": "ė",
+      "var02": "ė"
     },
     {
       "id": "nom_5",
-      "lt": "-enys",
-      "ru": "-uo",
-      "eng": "-uo"
+      "target": "ūs",
+      "var01": "us",
+      "var02": "us"
     },
     {
       "id": "nom_6",
-      "lt": "-(i)ai",
-      "ru": "-(i)a",
-      "eng": "-(i)a"
+      "target": "ys (F)",
+      "var01": "is",
+      "var02": "is"
     },
     {
       "id": "nom_7",
-      "lt": "-ės",
-      "ru": "-ė",
-      "eng": "-ė"
-    },
-    {
-      "id": "nom_8",
-      "lt": "-ys",
-      "ru": "-is",
-      "eng": "-is"
-    },
-    {
-      "id": "nom_9",
-      "lt": "-enys",
-      "ru": "-uo",
-      "eng": "-uo"
+      "target": "erys",
+      "var01": "uo/ė",
+      "var02": "uo/ė"
     }
   ]
 }

@@ -37,7 +37,7 @@ public class ShooterProjectile : MonoBehaviour
         Pair = pair;
         Launched = false;
         rb.isKinematic = true;
-        if (label != null) label.text = pair.GetTranslation(Settings.Data.language);
+        if (label != null) label.text = pair.GetVariant(Settings.Data.language);
         if (randomColor != null) randomColor.Apply();
     }
 

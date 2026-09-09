@@ -1,0 +1,20 @@
+{
+  "key": "vardininkas_uo_m",
+  "target": "-enys",
+  "var01": "-uo",
+  "var02": "-uo",
+  "examples": [
+    {
+      "from": "vanduo",
+      "to": "vandenys"
+    },
+    {
+      "from": "akmuo",
+      "to": "akmenys"
+    },
+    {
+      "from": "skaitmuo",
+      "to": "skaitmenys"
+    }
+  ]
+}

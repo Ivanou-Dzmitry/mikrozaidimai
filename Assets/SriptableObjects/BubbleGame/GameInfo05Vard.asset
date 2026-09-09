@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9bc7f44f34fb9468e8077fccce41b4, type: 3}
   m_Name: GameInfo05Vard
   m_EditorClassIdentifier: Assembly-CSharp::GameInfo
-  gameId: Vardininkas01
+  gameId: Vardi 01
   title:
     m_TableReference:
       m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32

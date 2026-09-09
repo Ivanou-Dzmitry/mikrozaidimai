@@ -1,12 +1,12 @@
 {
   "pairs": [
-    { "id": "esu_0",   "lt": "esu",   "ru": "aš",       "eng": "aš" },
-    { "id": "esi_1",   "lt": "esi",   "ru": "tu",       "eng": "tu" },
-    { "id": "yra_2",   "lt": "yra",   "ru": "jis",      "eng": "jis" },
-    { "id": "yra_3",   "lt": "yra",   "ru": "ji",       "eng": "ji" },
-    { "id": "esame_4", "lt": "esame", "ru": "mes",      "eng": "mes" },
-    { "id": "esate_5", "lt": "esate", "ru": "jūs",      "eng": "jūs" },
-    { "id": "yra_6",   "lt": "yra",   "ru": "jie",      "eng": "jie" },
-    { "id": "yra_7",   "lt": "yra",   "ru": "jos",      "eng": "jos" }
+    { "id": "esu_0",   "target": "esu",   "var01": "aš",  "var02": "aš" },
+    { "id": "esi_1",   "target": "esi",   "var01": "tu",  "var02": "tu" },
+    { "id": "yra_2",   "target": "yra",   "var01": "jis", "var02": "jis" },
+    { "id": "yra_3",   "target": "yra",   "var01": "ji",  "var02": "ji" },
+    { "id": "esame_4", "target": "esame", "var01": "mes", "var02": "mes" },
+    { "id": "esate_5", "target": "esate", "var01": "jūs", "var02": "jūs" },
+    { "id": "yra_6",   "target": "yra",   "var01": "jie", "var02": "jie" },
+    { "id": "yra_7",   "target": "yra",   "var01": "jos", "var02": "jos" }
   ]
 }

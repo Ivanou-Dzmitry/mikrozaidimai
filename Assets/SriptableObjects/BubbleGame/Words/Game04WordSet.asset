@@ -14,34 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WordSet
   pairs:
   - id: nesu_0
-    lt: nesu
-    ru: "a\u0161"
-    eng: "a\u0161"
+    target: nesu
+    var01: "a\u0161"
+    var02: "a\u0161"
+    example: {fileID: 0}
   - id: nesi_1
-    lt: nesi
-    ru: tu
-    eng: tu
+    target: nesi
+    var01: tu
+    var02: tu
+    example: {fileID: 0}
   - id: nera_2
-    lt: "n\u0117ra"
-    ru: jis
-    eng: jis
+    target: "n\u0117ra"
+    var01: jis
+    var02: jis
+    example: {fileID: 0}
   - id: nera_3
-    lt: "n\u0117ra"
-    ru: ji
-    eng: ji
+    target: "n\u0117ra"
+    var01: ji
+    var02: ji
+    example: {fileID: 0}
   - id: nesame_4
-    lt: nesame
-    ru: mes
-    eng: mes
+    target: nesame
+    var01: mes
+    var02: mes
+    example: {fileID: 0}
   - id: nesate_5
-    lt: nesate
-    ru: "j\u016Bs"
-    eng: "j\u016Bs"
+    target: nesate
+    var01: "j\u016Bs"
+    var02: "j\u016Bs"
+    example: {fileID: 0}
   - id: nera_6
-    lt: "n\u0117ra"
-    ru: jie
-    eng: jie
+    target: "n\u0117ra"
+    var01: jie
+    var02: jie
+    example: {fileID: 0}
   - id: nera_7
-    lt: "n\u0117ra"
-    ru: jos
-    eng: jos
+    target: "n\u0117ra"
+    var01: jos
+    var02: jos
+    example: {fileID: 0}

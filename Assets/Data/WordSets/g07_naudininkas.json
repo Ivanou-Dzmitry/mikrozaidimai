@@ -2,63 +2,63 @@
   "pairs": [
     {
       "id": "dat_0",
-      "lt": "-ams",
-      "ru": "-ui",
-      "eng": "-ui"
+      "target": "-ams",
+      "var01": "-ui",
+      "var02": "-ui"
     },
     {
       "id": "dat_1",
-      "lt": "-iams",
-      "ru": "-iui",
-      "eng": "-iui"
+      "target": "-iams",
+      "var01": "-iui",
+      "var02": "-iui"
     },
     {
       "id": "dat_2",
-      "lt": "-iams",
-      "ru": "-iui",
-      "eng": "-iui"
+      "target": "-iams",
+      "var01": "-iui",
+      "var02": "-iui"
     },
     {
       "id": "dat_3",
-      "lt": "-iams",
-      "ru": "-iui",
-      "eng": "-iui"
+      "target": "-iams",
+      "var01": "-iui",
+      "var02": "-iui"
     },
     {
       "id": "dat_4",
-      "lt": "-ums",
-      "ru": "-ui",
-      "eng": "-ui"
+      "target": "-ums",
+      "var01": "-ui",
+      "var02": "-ui"
     },
     {
       "id": "dat_5",
-      "lt": "-enims",
-      "ru": "-eniui",
-      "eng": "-eniui"
+      "target": "-enims",
+      "var01": "-eniui",
+      "var02": "-eniui"
     },
     {
       "id": "dat_6",
-      "lt": "-(i)oms",
-      "ru": "-(i)ai",
-      "eng": "-(i)ai"
+      "target": "-(i)oms",
+      "var01": "-(i)ai",
+      "var02": "-(i)ai"
     },
     {
       "id": "dat_7",
-      "lt": "-ėms",
-      "ru": "-ei",
-      "eng": "-ei"
+      "target": "-ėms",
+      "var01": "-ei",
+      "var02": "-ei"
     },
     {
       "id": "dat_8",
-      "lt": "-ims",
-      "ru": "-iai",
-      "eng": "-iai"
+      "target": "-ims",
+      "var01": "-iai",
+      "var02": "-iai"
     },
     {
       "id": "dat_9",
-      "lt": "-erims",
-      "ru": "-eriai",
-      "eng": "-eriai"
+      "target": "-erims",
+      "var01": "-eriai",
+      "var02": "-eriai"
     }
   ]
 }

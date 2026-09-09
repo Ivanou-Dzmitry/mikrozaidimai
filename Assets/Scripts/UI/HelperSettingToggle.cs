@@ -1,10 +1,13 @@
 using UnityEngine;
 
-// Toggle for Settings.Data.helperEnabled — reuses SelectableButton's
-// selected/normal visuals as the on/off state, same pattern as LanguageSelector.
+// Toggle for Settings.Data.helperDuration: click flips between 0 (off) and 1
+// (on, minimum duration). Stays in sync with HelperDurationSlider — each
+// refreshes the other after a change, since they edit the same value.
 [RequireComponent(typeof(SelectableButton))]
 public class HelperSettingToggle : MonoBehaviour
 {
+    [SerializeField] HelperDurationSlider durationSlider;
+
     SelectableButton button;
 
     void Awake()
@@ -25,13 +28,14 @@ public class HelperSettingToggle : MonoBehaviour
 
     void Toggle()
     {
-        Settings.Data.helperEnabled = !Settings.Data.helperEnabled;
+        Settings.Data.helperDuration = Settings.Data.helperDuration > 0 ? 0 : 1;
         Settings.Save();
         Refresh();
+        if (durationSlider != null) durationSlider.Refresh();
     }
 
-    void Refresh()
+    public void Refresh()
     {
-        button.SetSelected(Settings.Data.helperEnabled);
+        button.SetSelected(Settings.Data.helperDuration > 0);
     }
 }

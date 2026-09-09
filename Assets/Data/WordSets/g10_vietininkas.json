@@ -2,63 +2,63 @@
   "pairs": [
     {
       "id": "loc_0",
-      "lt": "-uose",
-      "ru": "-e",
-      "eng": "-e"
+      "target": "-uose",
+      "var01": "-e",
+      "var02": "-e"
     },
     {
       "id": "loc_1",
-      "lt": "-iuose",
-      "ru": "-yje",
-      "eng": "-yje"
+      "target": "-iuose",
+      "var01": "-yje",
+      "var02": "-yje"
     },
     {
       "id": "loc_2",
-      "lt": "-iuose",
-      "ru": "-yje",
-      "eng": "-yje"
+      "target": "-iuose",
+      "var01": "-yje",
+      "var02": "-yje"
     },
     {
       "id": "loc_3",
-      "lt": "-iuose",
-      "ru": "-yje",
-      "eng": "-yje"
+      "target": "-iuose",
+      "var01": "-yje",
+      "var02": "-yje"
     },
     {
       "id": "loc_4",
-      "lt": "-uose",
-      "ru": "-uje",
-      "eng": "-uje"
+      "target": "-uose",
+      "var01": "-uje",
+      "var02": "-uje"
     },
     {
       "id": "loc_5",
-      "lt": "-enyse",
-      "ru": "-enyje",
-      "eng": "-enyje"
+      "target": "-enyse",
+      "var01": "-enyje",
+      "var02": "-enyje"
     },
     {
       "id": "loc_6",
-      "lt": "-(i)ose",
-      "ru": "-(i)oje",
-      "eng": "-(i)oje"
+      "target": "-(i)ose",
+      "var01": "-(i)oje",
+      "var02": "-(i)oje"
     },
     {
       "id": "loc_7",
-      "lt": "-ėse",
-      "ru": "-ėje",
-      "eng": "-ėje"
+      "target": "-ėse",
+      "var01": "-ėje",
+      "var02": "-ėje"
     },
     {
       "id": "loc_8",
-      "lt": "-yse",
-      "ru": "-yje",
-      "eng": "-yje"
+      "target": "-yse",
+      "var01": "-yje",
+      "var02": "-yje"
     },
     {
       "id": "loc_9",
-      "lt": "-eryse",
-      "ru": "-eryje",
-      "eng": "-eryje"
+      "target": "-eryse",
+      "var01": "-eryje",
+      "var02": "-eryje"
     }
   ]
 }

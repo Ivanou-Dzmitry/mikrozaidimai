@@ -2,63 +2,63 @@
   "pairs": [
     {
       "id": "ins_0",
-      "lt": "-ais",
-      "ru": "-u",
-      "eng": "-u"
+      "target": "-ais",
+      "var01": "-u",
+      "var02": "-u"
     },
     {
       "id": "ins_1",
-      "lt": "-iais",
-      "ru": "-iu",
-      "eng": "-iu"
+      "target": "-iais",
+      "var01": "-iu",
+      "var02": "-iu"
     },
     {
       "id": "ins_2",
-      "lt": "-iais",
-      "ru": "-iu",
-      "eng": "-iu"
+      "target": "-iais",
+      "var01": "-iu",
+      "var02": "-iu"
     },
     {
       "id": "ins_3",
-      "lt": "-iais",
-      "ru": "-iu",
-      "eng": "-iu"
+      "target": "-iais",
+      "var01": "-iu",
+      "var02": "-iu"
     },
     {
       "id": "ins_4",
-      "lt": "-umis",
-      "ru": "-umi",
-      "eng": "-umi"
+      "target": "-umis",
+      "var01": "-umi",
+      "var02": "-umi"
     },
     {
       "id": "ins_5",
-      "lt": "-enimis",
-      "ru": "-eniu",
-      "eng": "-eniu"
+      "target": "-enimis",
+      "var01": "-eniu",
+      "var02": "-eniu"
     },
     {
       "id": "ins_6",
-      "lt": "-(i)omis",
-      "ru": "-(i)a",
-      "eng": "-(i)a"
+      "target": "-(i)omis",
+      "var01": "-(i)a",
+      "var02": "-(i)a"
     },
     {
       "id": "ins_7",
-      "lt": "-ėmis",
-      "ru": "-e",
-      "eng": "-e"
+      "target": "-ėmis",
+      "var01": "-e",
+      "var02": "-e"
     },
     {
       "id": "ins_8",
-      "lt": "-imis",
-      "ru": "-imi",
-      "eng": "-imi"
+      "target": "-imis",
+      "var01": "-imi",
+      "var02": "-imi"
     },
     {
       "id": "ins_9",
-      "lt": "-erimis",
-      "ru": "-erimi",
-      "eng": "-erimi"
+      "target": "-erimis",
+      "var01": "-erimi",
+      "var02": "-erimi"
     }
   ]
 }

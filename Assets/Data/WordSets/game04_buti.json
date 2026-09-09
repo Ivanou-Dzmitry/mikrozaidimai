@@ -1,12 +1,12 @@
 {
   "pairs": [
-    { "id": "nesu_0",    "lt": "nesu",    "ru": "aš",  "eng": "aš" },
-    { "id": "nesi_1",    "lt": "nesi",    "ru": "tu",  "eng": "tu" },
-    { "id": "nera_2",    "lt": "nėra",    "ru": "jis", "eng": "jis" },
-    { "id": "nera_3",    "lt": "nėra",    "ru": "ji",  "eng": "ji" },
-    { "id": "nesame_4",  "lt": "nesame",  "ru": "mes", "eng": "mes" },
-    { "id": "nesate_5",  "lt": "nesate",  "ru": "jūs", "eng": "jūs" },
-    { "id": "nera_6",    "lt": "nėra",    "ru": "jie", "eng": "jie" },
-    { "id": "nera_7",    "lt": "nėra",    "ru": "jos",  "eng": "jos" }
+    { "id": "nesu_0",    "target": "nesu",    "var01": "aš",  "var02": "aš" },
+    { "id": "nesi_1",    "target": "nesi",    "var01": "tu",  "var02": "tu" },
+    { "id": "nera_2",    "target": "nėra",    "var01": "jis", "var02": "jis" },
+    { "id": "nera_3",    "target": "nėra",    "var01": "ji",  "var02": "ji" },
+    { "id": "nesame_4",  "target": "nesame",  "var01": "mes", "var02": "mes" },
+    { "id": "nesate_5",  "target": "nesate",  "var01": "jūs", "var02": "jūs" },
+    { "id": "nera_6",    "target": "nėra",    "var01": "jie", "var02": "jie" },
+    { "id": "nera_7",    "target": "nėra",    "var01": "jos", "var02": "jos" }
   ]
 }

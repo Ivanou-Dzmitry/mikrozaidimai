@@ -23,7 +23,7 @@ public class WordBubble : MonoBehaviour
         Pair = pair;
         Row = row;
         Column = column;
-        if (label != null) label.text = pair.lt;
+        if (label != null) label.text = pair.target;
 
         if (randomColor != null)
         {

@@ -10,7 +10,8 @@ public class SettingsData
     public float musicVolume = 1f;
     public float sfxVolume = 1f;
     public string language = "en";
-    public bool helperEnabled = true;
+    // 0 = helper hints off; 1-6 = how many seconds a hint stays visible
+    public int helperDuration = 2;
 }
 
 // Static access to settings: Settings.Data.masterVolume, then Settings.Save().

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9bc7f44f34fb9468e8077fccce41b4, type: 3}
+  m_Name: GameInfo06Kilm
+  m_EditorClassIdentifier: Assembly-CSharp::GameInfo
+  gameId: Kilmi 01
+  title:
+    m_TableReference:
+      m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32
+    m_TableEntryReference:
+      m_KeyId: 1523854579232768
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32
+    m_TableEntryReference:
+      m_KeyId: 1101904799232000
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  wordSet: {fileID: 11400000, guid: ef8204d1c03e8bd4c82429f73811529d, type: 2}
+  bubblePrefab: {fileID: 2483069116360678100, guid: 5374fab23ff55fa438b97c74099e25c0, type: 3}
+  appearance:
+    bubbleGradient:
+      serializedVersion: 2
+      key0: {r: 0.64512837, g: 0.23137254, b: 1, a: 1}
+      key1: {r: 0.99215686, g: 0.50363076, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rowSpacingMultiplier: 0.9
+  references:
+    version: 2
+    RefIds: []

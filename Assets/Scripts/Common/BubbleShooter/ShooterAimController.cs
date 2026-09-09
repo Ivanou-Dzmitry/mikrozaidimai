@@ -19,9 +19,14 @@ public class ShooterAimController : MonoBehaviour
     [SerializeField] BubbleField field;
     [SerializeField] float dragSensitivity = 0.01f;
     [SerializeField] float maxPullDistance = 3f;
+    [Tooltip("Below this pull distance, aim angle holds at straight down instead of being computed — atan2 is numerically unstable near zero pull (tiny jitter swings the angle wildly).")]
+    [SerializeField] float angleDeadzone = 0.15f;
+    [Tooltip("How long the aim angle takes to catch up to the target angle. 0 = instant/no smoothing.")]
+    [SerializeField] float angleSmoothTime = 0.06f;
     [SerializeField] AimLine aimLine;
     [SerializeField] float aimLinePreviewLength = 5f;
     [SerializeField] int aimLineMaxBounces = 2;
+    [SerializeField] SpringVisual spring;
 
     [Header("Launch force (spring feel)")]
     [SerializeField] float minLaunchForce = 2f;
@@ -32,6 +37,8 @@ public class ShooterAimController : MonoBehaviour
 
     bool dragging;
     Vector2 dragStartScreen;
+    float smoothedAngle;
+    float angleSmoothVelocity;
 
     void Update()
     {
@@ -43,6 +50,7 @@ public class ShooterAimController : MonoBehaviour
         {
             dragging = false;
             if (aimLine != null) aimLine.Hide();
+            if (spring != null) spring.ReleaseSpring();
             return;
         }
 
@@ -62,6 +70,8 @@ public class ShooterAimController : MonoBehaviour
 
             dragging = true;
             dragStartScreen = pointer.position.ReadValue();
+            smoothedAngle = 0f;
+            angleSmoothVelocity = 0f;
         }
 
         if (dragging && pointer.press.isPressed)
@@ -75,6 +85,8 @@ public class ShooterAimController : MonoBehaviour
             pos.y += clampedOffset.y;
             projectile.transform.position = pos;
 
+            if (spring != null) spring.SetCompression(clampedOffset.magnitude / maxPullDistance);
+
             if (aimLine != null)
             {
                 Vector2 dir = clampedOffset.sqrMagnitude > 0.0001f ? -clampedOffset.normalized : Vector2.up;
@@ -86,6 +98,8 @@ public class ShooterAimController : MonoBehaviour
         {
             dragging = false;
             if (aimLine != null) aimLine.Hide();
+            if (HelperPanel.Instance != null) HelperPanel.Instance.HideImmediately();
+            if (spring != null) spring.ReleaseSpring();
 
             Vector2 clampedOffset = ComputeClampedPullOffset(pointer.position.ReadValue());
             float pullFraction = Mathf.Clamp01(clampedOffset.magnitude / maxPullDistance);
@@ -170,11 +184,16 @@ public class ShooterAimController : MonoBehaviour
 
         float magnitude = Mathf.Min(rawOffset.magnitude, maxPullDistance);
 
-        // angle measured from straight down (0,-1); positive = tilted toward +X
-        float angleFromDown = Mathf.Atan2(rawOffset.x, -rawOffset.y) * Mathf.Rad2Deg;
-        angleFromDown = Mathf.Clamp(angleFromDown, -field.MaxAimAngle, field.MaxAimAngle);
+        // angle measured from straight down (0,-1); positive = tilted toward +X.
+        // Below the deadzone, atan2 is numerically unstable (y near 0 means tiny
+        // jitter on x swings the angle wildly) so just hold at straight down.
+        float targetAngle = magnitude < angleDeadzone
+            ? 0f
+            : Mathf.Clamp(Mathf.Atan2(rawOffset.x, -rawOffset.y) * Mathf.Rad2Deg, -field.MaxAimAngle, field.MaxAimAngle);
 
-        float rad = angleFromDown * Mathf.Deg2Rad;
+        smoothedAngle = Mathf.SmoothDampAngle(smoothedAngle, targetAngle, ref angleSmoothVelocity, angleSmoothTime);
+
+        float rad = smoothedAngle * Mathf.Deg2Rad;
         return new Vector2(Mathf.Sin(rad), -Mathf.Cos(rad)) * magnitude;
     }
 }

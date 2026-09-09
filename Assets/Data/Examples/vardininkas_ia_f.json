@@ -1,0 +1,32 @@
+{
+  "key": "vardininkas_ia_f",
+  "target": "-ios",
+  "var01": "-ia",
+  "var02": "-ia",
+  "examples": [
+    {
+      "from": "vyšnia",
+      "to": "vyšnios"
+    },
+    {
+      "from": "žinia",
+      "to": "žinios"
+    },
+    {
+      "from": "valia",
+      "to": "valios"
+    },
+    {
+      "from": "galia",
+      "to": "galios"
+    },
+    {
+      "from": "giria",
+      "to": "girios"
+    },
+    {
+      "from": "pradžia",
+      "to": "pradžios"
+    }
+  ]
+}

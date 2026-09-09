@@ -103,6 +103,16 @@ MonoBehaviour:
     m_Key: Game05Name
     m_Metadata:
       m_Items: []
+  - m_Id: 1381954576609280
+    m_Key: 'ExampleTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1523854579232768
+    m_Key: Game06Name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

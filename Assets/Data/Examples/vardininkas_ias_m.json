@@ -1,0 +1,24 @@
+{
+  "key": "vardininkas_ias_m",
+  "target": "-iai",
+  "var01": "-ias",
+  "var02": "-ias",
+  "examples": [
+    {
+      "from": "kelias",
+      "to": "keliai"
+    },
+    {
+      "from": "svečias",
+      "to": "svečiai"
+    },
+    {
+      "from": "velnias",
+      "to": "velniai"
+    },
+    {
+      "from": "elnias",
+      "to": "elniai"
+    }
+  ]
+}
