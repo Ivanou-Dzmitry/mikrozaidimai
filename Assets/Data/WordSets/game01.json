@@ -1,0 +1,12 @@
+{
+  "pairs": [
+    { "id": "pronoun_as",  "lt": "aš",  "ru": "я",   "eng": "I" },
+    { "id": "pronoun_tu",  "lt": "tu",  "ru": "ты",  "eng": "you" },
+    { "id": "pronoun_jis", "lt": "jis", "ru": "он",  "eng": "he" },
+    { "id": "pronoun_ji",  "lt": "ji",  "ru": "она", "eng": "she" },
+    { "id": "pronoun_mes", "lt": "mes", "ru": "мы",  "eng": "we" },
+    { "id": "pronoun_jus", "lt": "jūs", "ru": "вы",  "eng": "you" },
+    { "id": "pronoun_jie", "lt": "jie", "ru": "они-м", "eng": "they-m" },
+    { "id": "pronoun_jos", "lt": "jos", "ru": "они-ж", "eng": "they-f" }
+  ]
+}

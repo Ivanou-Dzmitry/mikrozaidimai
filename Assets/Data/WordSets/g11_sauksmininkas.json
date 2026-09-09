@@ -1,0 +1,64 @@
+{
+  "pairs": [
+    {
+      "id": "voc_0",
+      "lt": "-ai",
+      "ru": "-e",
+      "eng": "-e"
+    },
+    {
+      "id": "voc_1",
+      "lt": "-iai",
+      "ru": "-i",
+      "eng": "-i"
+    },
+    {
+      "id": "voc_2",
+      "lt": "-iai",
+      "ru": "-y",
+      "eng": "-y"
+    },
+    {
+      "id": "voc_3",
+      "lt": "-iai",
+      "ru": "-au",
+      "eng": "-au"
+    },
+    {
+      "id": "voc_4",
+      "lt": "-ūs",
+      "ru": "-au",
+      "eng": "-au"
+    },
+    {
+      "id": "voc_5",
+      "lt": "-enys",
+      "ru": "-enie",
+      "eng": "-enie"
+    },
+    {
+      "id": "voc_6",
+      "lt": "-(i)ai",
+      "ru": "-(i)a",
+      "eng": "-(i)a"
+    },
+    {
+      "id": "voc_7",
+      "lt": "-ės",
+      "ru": "-e",
+      "eng": "-e"
+    },
+    {
+      "id": "voc_8",
+      "lt": "-ys",
+      "ru": "-ie",
+      "eng": "-ie"
+    },
+    {
+      "id": "voc_9",
+      "lt": "-enys",
+      "ru": "-erie",
+      "eng": "-erie"
+    }
+  ]
+}

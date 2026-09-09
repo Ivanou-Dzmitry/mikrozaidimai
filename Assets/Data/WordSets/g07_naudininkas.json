@@ -1,0 +1,64 @@
+{
+  "pairs": [
+    {
+      "id": "dat_0",
+      "lt": "-ams",
+      "ru": "-ui",
+      "eng": "-ui"
+    },
+    {
+      "id": "dat_1",
+      "lt": "-iams",
+      "ru": "-iui",
+      "eng": "-iui"
+    },
+    {
+      "id": "dat_2",
+      "lt": "-iams",
+      "ru": "-iui",
+      "eng": "-iui"
+    },
+    {
+      "id": "dat_3",
+      "lt": "-iams",
+      "ru": "-iui",
+      "eng": "-iui"
+    },
+    {
+      "id": "dat_4",
+      "lt": "-ums",
+      "ru": "-ui",
+      "eng": "-ui"
+    },
+    {
+      "id": "dat_5",
+      "lt": "-enims",
+      "ru": "-eniui",
+      "eng": "-eniui"
+    },
+    {
+      "id": "dat_6",
+      "lt": "-(i)oms",
+      "ru": "-(i)ai",
+      "eng": "-(i)ai"
+    },
+    {
+      "id": "dat_7",
+      "lt": "-ėms",
+      "ru": "-ei",
+      "eng": "-ei"
+    },
+    {
+      "id": "dat_8",
+      "lt": "-ims",
+      "ru": "-iai",
+      "eng": "-iai"
+    },
+    {
+      "id": "dat_9",
+      "lt": "-erims",
+      "ru": "-eriai",
+      "eng": "-eriai"
+    }
+  ]
+}

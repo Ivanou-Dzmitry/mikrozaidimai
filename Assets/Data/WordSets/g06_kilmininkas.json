@@ -1,0 +1,64 @@
+{
+  "pairs": [
+    {
+      "id": "gen_0",
+      "lt": "-ų",
+      "ru": "-o",
+      "eng": "-o"
+    },
+    {
+      "id": "gen_1",
+      "lt": "-ių",
+      "ru": "-io",
+      "eng": "-io"
+    },
+    {
+      "id": "gen_2",
+      "lt": "-ių",
+      "ru": "-io",
+      "eng": "-io"
+    },
+    {
+      "id": "gen_3",
+      "lt": "-ių",
+      "ru": "-io",
+      "eng": "-io"
+    },
+    {
+      "id": "gen_4",
+      "lt": "-ų",
+      "ru": "-aus",
+      "eng": "-aus"
+    },
+    {
+      "id": "gen_5",
+      "lt": "-enų",
+      "ru": "-ens",
+      "eng": "-ens"
+    },
+    {
+      "id": "gen_6",
+      "lt": "-(i)ų",
+      "ru": "-(i)os",
+      "eng": "-(i)os"
+    },
+    {
+      "id": "gen_7",
+      "lt": "-ių",
+      "ru": "-ės",
+      "eng": "-ės"
+    },
+    {
+      "id": "gen_8",
+      "lt": "-ių",
+      "ru": "-ies",
+      "eng": "-ies"
+    },
+    {
+      "id": "gen_9",
+      "lt": "-erų",
+      "ru": "-ers",
+      "eng": "-ers"
+    }
+  ]
+}

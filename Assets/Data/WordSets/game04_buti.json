@@ -1,0 +1,12 @@
+{
+  "pairs": [
+    { "id": "nesu_0",    "lt": "nesu",    "ru": "aš",  "eng": "aš" },
+    { "id": "nesi_1",    "lt": "nesi",    "ru": "tu",  "eng": "tu" },
+    { "id": "nera_2",    "lt": "nėra",    "ru": "jis", "eng": "jis" },
+    { "id": "nera_3",    "lt": "nėra",    "ru": "ji",  "eng": "ji" },
+    { "id": "nesame_4",  "lt": "nesame",  "ru": "mes", "eng": "mes" },
+    { "id": "nesate_5",  "lt": "nesate",  "ru": "jūs", "eng": "jūs" },
+    { "id": "nera_6",    "lt": "nėra",    "ru": "jie", "eng": "jie" },
+    { "id": "nera_7",    "lt": "nėra",    "ru": "jos",  "eng": "jos" }
+  ]
+}

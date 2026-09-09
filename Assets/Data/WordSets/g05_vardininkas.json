@@ -1,0 +1,64 @@
+{
+  "pairs": [
+    {
+      "id": "nom_0",
+      "lt": "-ai",
+      "ru": "-as",
+      "eng": "-as"
+    },
+    {
+      "id": "nom_1",
+      "lt": "-iai",
+      "ru": "-ias",
+      "eng": "-ias"
+    },
+    {
+      "id": "nom_2",
+      "lt": "-iai",
+      "ru": "-is",
+      "eng": "-is"
+    },
+    {
+      "id": "nom_3",
+      "lt": "-iai",
+      "ru": "-ys",
+      "eng": "-ys"
+    },
+    {
+      "id": "nom_4",
+      "lt": "-ūs",
+      "ru": "-us",
+      "eng": "-us"
+    },
+    {
+      "id": "nom_5",
+      "lt": "-enys",
+      "ru": "-uo",
+      "eng": "-uo"
+    },
+    {
+      "id": "nom_6",
+      "lt": "-(i)ai",
+      "ru": "-(i)a",
+      "eng": "-(i)a"
+    },
+    {
+      "id": "nom_7",
+      "lt": "-ės",
+      "ru": "-ė",
+      "eng": "-ė"
+    },
+    {
+      "id": "nom_8",
+      "lt": "-ys",
+      "ru": "-is",
+      "eng": "-is"
+    },
+    {
+      "id": "nom_9",
+      "lt": "-enys",
+      "ru": "-uo",
+      "eng": "-uo"
+    }
+  ]
+}

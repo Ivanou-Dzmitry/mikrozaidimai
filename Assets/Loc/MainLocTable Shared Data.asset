@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MainLocTable Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MainLocTable
+  m_TableCollectionNameGuidString: f612ad86a0d79cc4b9b6b08859f96d32
+  m_Entries:
+  - m_Id: 526475386880
+    m_Key: Game01Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1008149258240
+    m_Key: 'SettingsTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7763554000896
+    m_Key: 'SoundTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8988047499264
+    m_Key: 'UILangTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 302581299601408
+    m_Key: 'GameTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303437394796544
+    m_Key: LeaveGameTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 305304455667712
+    m_Key: 'InformationTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 459852767879168
+    m_Key: 'ResultTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 463235893485568
+    m_Key: 'OKTxt
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 722805060694016
+    m_Key: Game02Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 724085145497600
+    m_Key: Game01Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 724124882333696
+    m_Key: Game02Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 822160014761984
+    m_Key: Game03Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 822230994968576
+    m_Key: 'Game03Desc
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1095769266483200
+    m_Key: Game04Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1095798689525760
+    m_Key: Game04Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1101904799232000
+    m_Key: Game05Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1101937103761408
+    m_Key: Game05Name
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 3718254878938104067
+  references:
+    version: 2
+    RefIds:
+    - rid: 3718254878938104067
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1788612613811

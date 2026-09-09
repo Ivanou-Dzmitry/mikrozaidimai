@@ -1,0 +1,14 @@
+{
+  "pairs": [
+    { "id": "number_0", "lt": "nulis",  "ru": "0",     "eng": "0" },
+    { "id": "number_1", "lt": "vienas", "ru": "1",     "eng": "1" },
+    { "id": "number_2", "lt": "du",     "ru": "2",       "eng": "2" },
+    { "id": "number_3", "lt": "trys",   "ru": "3",       "eng": "3" },
+    { "id": "number_4", "lt": "keturi", "ru": "4",    "eng": "4" },
+    { "id": "number_5", "lt": "penki",  "ru": "5",      "eng": "5" },
+    { "id": "number_6", "lt": "šeši",   "ru": "6",     "eng": "6" },
+    { "id": "number_7", "lt": "septyni","ru": "7",      "eng": "7" },
+    { "id": "number_8", "lt": "aštuoni","ru": "8",    "eng": "8" },
+    { "id": "number_9", "lt": "devyni", "ru": "9",    "eng": "9" }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "pairs": [
+    {
+      "id": "loc_0",
+      "lt": "-uose",
+      "ru": "-e",
+      "eng": "-e"
+    },
+    {
+      "id": "loc_1",
+      "lt": "-iuose",
+      "ru": "-yje",
+      "eng": "-yje"
+    },
+    {
+      "id": "loc_2",
+      "lt": "-iuose",
+      "ru": "-yje",
+      "eng": "-yje"
+    },
+    {
+      "id": "loc_3",
+      "lt": "-iuose",
+      "ru": "-yje",
+      "eng": "-yje"
+    },
+    {
+      "id": "loc_4",
+      "lt": "-uose",
+      "ru": "-uje",
+      "eng": "-uje"
+    },
+    {
+      "id": "loc_5",
+      "lt": "-enyse",
+      "ru": "-enyje",
+      "eng": "-enyje"
+    },
+    {
+      "id": "loc_6",
+      "lt": "-(i)ose",
+      "ru": "-(i)oje",
+      "eng": "-(i)oje"
+    },
+    {
+      "id": "loc_7",
+      "lt": "-ėse",
+      "ru": "-ėje",
+      "eng": "-ėje"
+    },
+    {
+      "id": "loc_8",
+      "lt": "-yse",
+      "ru": "-yje",
+      "eng": "-yje"
+    },
+    {
+      "id": "loc_9",
+      "lt": "-eryse",
+      "ru": "-eryje",
+      "eng": "-eryje"
+    }
+  ]
+}
