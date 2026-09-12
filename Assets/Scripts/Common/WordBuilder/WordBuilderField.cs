@@ -40,6 +40,8 @@ public class WordBuilderField : MonoBehaviour
 
     [Header("Letters")]
     [SerializeField] int extraLetterCount = 3;
+    [Tooltip("Hard cap on total letter tiles (word's own letters + decoys). The word's own letters always take priority — decoys only fill whatever room is left under this cap, never push a needed letter out.")]
+    [SerializeField] int maxLetterButtons = 12;
     [SerializeField] string decoyAlphabet = "aąbcčdeęėfghiįyjklmnoprsštuųūvzž";
     [Tooltip("Delay between each letter button appearing, so the panel fills in instead of popping in all at once. 0 = instant.")]
     [SerializeField] float letterSpawnDelay = 0.05f;
@@ -55,6 +57,14 @@ public class WordBuilderField : MonoBehaviour
     Coroutine spawnRoutine;
     bool inputEnabled = true;
     int helpUsesLeft;
+    int blocksCompleted;
+
+    // Fires whenever a block finishes (all 3 forms correct) — (completed, total).
+    // For a stats screen ("1 / 80"), not tied to score/records.
+    public event System.Action<int, int> ProgressChanged;
+
+    public int BlocksCompleted => blocksCompleted;
+    public int TotalBlocks => verbSet.blocks.Count;
 
     void Awake()
     {
@@ -180,7 +190,8 @@ public class WordBuilderField : MonoBehaviour
             if (!seen.Contains(c)) availableDecoys.Add(c);
         }
 
-        int decoyCount = Mathf.Min(extraLetterCount, availableDecoys.Count);
+        int roomForDecoys = Mathf.Max(0, maxLetterButtons - letters.Count);
+        int decoyCount = Mathf.Min(extraLetterCount, Mathf.Min(roomForDecoys, availableDecoys.Count));
         for (int i = 0; i < decoyCount; i++)
         {
             int index = Random.Range(0, availableDecoys.Count);
@@ -280,6 +291,9 @@ public class WordBuilderField : MonoBehaviour
     void CompleteBlock()
     {
         SetInputEnabled(false);
+
+        blocksCompleted++;
+        ProgressChanged?.Invoke(blocksCompleted, TotalBlocks);
 
         string message = LocalizationUtil.Resolve(successMessage, "Great");
         string forms = string.Join(" - ", answeredForms);

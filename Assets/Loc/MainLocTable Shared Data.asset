@@ -151,6 +151,10 @@ MonoBehaviour:
     m_Key: MistakesTxt
     m_Metadata:
       m_Items: []
+  - m_Id: 2560554533183488
+    m_Key: StatTxt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

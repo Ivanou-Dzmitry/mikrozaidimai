@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -277,6 +277,9 @@ MonoBehaviour:
   pressedColor: {r: 0, g: 0.44705883, b: 0.69803923, a: 1}
   pressedScale: 0.9
   returnDuration: 0.3
+  hintColor: {r: 0, g: 1, b: 1, a: 1}
+  hintBlinkInterval: 0.2
+  hintBlinkCount: 4
 --- !u!114 &3044199176380108398
 MonoBehaviour:
   m_ObjectHideFlags: 0
