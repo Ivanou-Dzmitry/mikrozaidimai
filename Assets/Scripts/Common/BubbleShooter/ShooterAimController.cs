@@ -51,6 +51,7 @@ public class ShooterAimController : MonoBehaviour
             dragging = false;
             if (aimLine != null) aimLine.Hide();
             if (spring != null) spring.ReleaseSpring();
+            if (field.CurrentProjectile != null) field.CurrentProjectile.SetLabelLifted(false);
             return;
         }
 
@@ -72,6 +73,7 @@ public class ShooterAimController : MonoBehaviour
             dragStartScreen = pointer.position.ReadValue();
             smoothedAngle = 0f;
             angleSmoothVelocity = 0f;
+            projectile.SetLabelLifted(true);
         }
 
         if (dragging && pointer.press.isPressed)
@@ -100,6 +102,7 @@ public class ShooterAimController : MonoBehaviour
             if (aimLine != null) aimLine.Hide();
             if (HelperPanel.Instance != null) HelperPanel.Instance.HideImmediately();
             if (spring != null) spring.ReleaseSpring();
+            projectile.SetLabelLifted(false);
 
             Vector2 clampedOffset = ComputeClampedPullOffset(pointer.position.ReadValue());
             float pullFraction = Mathf.Clamp01(clampedOffset.magnitude / maxPullDistance);

@@ -1,0 +1,40 @@
+{
+  "pairs": [
+    {
+      "id": "esma_i_01_0",
+      "target": "iu",
+      "var01": "Aš",
+      "var02": "Aš"
+    },
+    {
+      "id": "esma_i_01_1",
+      "target": "i",
+      "var01": "Tu",
+      "var02": "Tu"
+    },
+    {
+      "id": "esma_i_01_2",
+      "target": "i",
+      "var01": "Jis, ji",
+      "var02": "Jis, ji"
+    },
+    {
+      "id": "esma_i_01_3",
+      "target": "ime",
+      "var01": "Mes",
+      "var02": "Mes"
+    },
+    {
+      "id": "esma_i_01_4",
+      "target": "ite",
+      "var01": "Jūs",
+      "var02": "Jūs"
+    },
+    {
+      "id": "esma_i_01_5",
+      "target": "i",
+      "var01": "Jie, jos",
+      "var02": "Jie, jos"
+    }
+  ]
+}

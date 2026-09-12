@@ -59,15 +59,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 724085145497600
-    m_Localized: Game 01
+    m_Localized: AsTuJis
     m_Metadata:
       m_Items: []
   - m_Id: 724124882333696
-    m_Localized: Game 02
+    m_Localized: "Skai\u010Diai"
     m_Metadata:
       m_Items: []
   - m_Id: 822160014761984
-    m_Localized: Game03
+    m_Localized: AsEsu
     m_Metadata:
       m_Items: []
   - m_Id: 822230994968576
@@ -76,7 +76,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1095769266483200
-    m_Localized: Game04
+    m_Localized: JiNera
     m_Metadata:
       m_Items: []
   - m_Id: 1095798689525760
@@ -98,6 +98,44 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1523854579232768
     m_Localized: Kilmi 01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2468837708587008
+    m_Localized: "Verbs in the 3rd person singular of the past simple tense can have
+      one of two endings: -o, -\u0117. The ending determines the verb type and how
+      the verb form changes."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2468936236982272
+    m_Localized: Busi Busi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2470580639031296
+    m_Localized: The past frequent tense describes an action that was repeated two
+      or more times. The -ti suffix is replaced with the -dav- suffix, followed by
+      endings.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2470839788298240
+    m_Localized: Busi Daz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2512098565349376
+    m_Localized: The translation is shown at the top. Build the Lithuanian word from
+      the letters below by tapping them (buttons can be tapped as many times as needed).
+      Back removes the last letter, Check submits your answer, Next skips the word
+      if you can't recall it (counts as a mistake). Each word is one of a verb's
+      three forms (infinitive, present tense, and past tense). Get one wrong, or
+      hit Next, and all three forms of that verb come back later to try again. Answer
+      all three forms correctly to score points.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2530852363886592
+    m_Localized: Great!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2539415870169088
+    m_Localized: 'Mistakes:'
     m_Metadata:
       m_Items: []
   references:

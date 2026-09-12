@@ -16,7 +16,8 @@ public abstract class GameSession : MonoBehaviour
 
     // Synchronous resolve — fine as long as the string table is already loaded.
     // Switch to description.StringChanged if a table can still be loading when this is read.
-    public string Description => description.GetLocalizedString();
+    // Falls back instead of throwing if the reference is empty or unresolved.
+    public string Description => LocalizationUtil.Resolve(description, "No description yet");
 
     public int Score { get; private set; }
     public int Record { get; private set; }

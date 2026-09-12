@@ -1,0 +1,40 @@
+{
+  "pairs": [
+    {
+      "id": "esma_o_01_0",
+      "target": "au",
+      "var01": "Aš",
+      "var02": "Aš"
+    },
+    {
+      "id": "esma_o_01_1",
+      "target": "ai",
+      "var01": "Tu",
+      "var02": "Tu"
+    },
+    {
+      "id": "esma_o_01_2",
+      "target": "o",
+      "var01": "Jis, ji",
+      "var02": "Jis, ji"
+    },
+    {
+      "id": "esma_o_01_3",
+      "target": "ome",
+      "var01": "Mes",
+      "var02": "Mes"
+    },
+    {
+      "id": "esma_o_01_4",
+      "target": "ote",
+      "var01": "Jūs",
+      "var02": "Jūs"
+    },
+    {
+      "id": "esma_o_01_5",
+      "target": "o",
+      "var01": "Jie, jos",
+      "var02": "Jie, jos"
+    }
+  ]
+}

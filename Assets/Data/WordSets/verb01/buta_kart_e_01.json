@@ -1,0 +1,40 @@
+{
+  "pairs": [
+    {
+      "id": "buta_kart_e_01_0",
+      "target": "iau",
+      "var01": "Aš",
+      "var02": "Aš"
+    },
+    {
+      "id": "buta_kart_e_01_1",
+      "target": "ei",
+      "var01": "Tu",
+      "var02": "Tu"
+    },
+    {
+      "id": "buta_kart_e_01_2",
+      "target": "ė",
+      "var01": "Jis, ji",
+      "var02": "Jis, ji"
+    },
+    {
+      "id": "buta_kart_e_01_3",
+      "target": "ėme",
+      "var01": "Mes",
+      "var02": "Mes"
+    },
+    {
+      "id": "buta_kart_e_01_4",
+      "target": "ėte",
+      "var01": "Jūs",
+      "var02": "Jūs"
+    },
+    {
+      "id": "buta_kart_e_01_5",
+      "target": "ė",
+      "var01": "Jie, jos",
+      "var02": "Jie, jos"
+    }
+  ]
+}

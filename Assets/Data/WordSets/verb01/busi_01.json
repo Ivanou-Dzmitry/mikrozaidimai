@@ -1,0 +1,40 @@
+{
+  "pairs": [
+    {
+      "id": "buisi_01_0",
+      "target": "siu",
+      "var01": "Aš",
+      "var02": "Aš"
+    },
+    {
+      "id": "buisi_01_1",
+      "target": "si",
+      "var01": "Tu",
+      "var02": "Tu"
+    },
+    {
+      "id": "buisi_01_2",
+      "target": "s",
+      "var01": "Jis, ji",
+      "var02": "Jis, ji"
+    },
+    {
+      "id": "buisi_01_3",
+      "target": "sime",
+      "var01": "Mes",
+      "var02": "Mes"
+    },
+    {
+      "id": "buisi_01_4",
+      "target": "site",
+      "var01": "Jūs",
+      "var02": "Jūs"
+    },
+    {
+      "id": "buisi_01_5",
+      "target": "s",
+      "var01": "Jie, jos",
+      "var02": "Jie, jos"
+    }
+  ]
+}

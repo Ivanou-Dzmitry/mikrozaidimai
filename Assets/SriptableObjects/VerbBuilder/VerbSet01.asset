@@ -1,0 +1,1094 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1896b49c7e053c7488e0b03271476e3c, type: 3}
+  m_Name: VerbSet01
+  m_EditorClassIdentifier: Assembly-CSharp::VerbSet
+  blocks:
+  - id: buti
+    infinitive:
+      target: "b\u016Bti"
+      var01: "\u0431\u044B\u0442\u044C"
+      var02: to be
+    presentTense:
+      target: yra
+      var01: "\u0435\u0441\u0442\u044C"
+      var02: is
+    pastTense:
+      target: buvo
+      var01: "\u0431\u044B\u043B"
+      var02: was
+  - id: nebuti
+    infinitive:
+      target: "neb\u016Bti"
+      var01: "\u043D\u0435 \u0431\u044B\u0442\u044C"
+      var02: not to be
+    presentTense:
+      target: "n\u0117ra"
+      var01: "\u043D\u0435\u0442"
+      var02: is not
+    pastTense:
+      target: nebuvo
+      var01: "\u043D\u0435 \u0431\u044B\u043B\u043E"
+      var02: was not
+  - id: tureti
+    infinitive:
+      target: "tur\u0117ti"
+      var01: "\u0438\u043C\u0435\u0442\u044C"
+      var02: to have
+    presentTense:
+      target: turi
+      var01: "\u0438\u043C\u0435\u0435\u0442"
+      var02: has
+    pastTense:
+      target: "tur\u0117jo"
+      var01: "\u0438\u043C\u0435\u043B"
+      var02: had
+  - id: galeti
+    infinitive:
+      target: "gal\u0117ti"
+      var01: "\u043C\u043E\u0447\u044C"
+      var02: to be able to
+    presentTense:
+      target: gali
+      var01: "\u043C\u043E\u0436\u0435\u0442"
+      var02: can
+    pastTense:
+      target: "gal\u0117jo"
+      var01: "\u043C\u043E\u0433"
+      var02: could
+  - id: reiketi
+    infinitive:
+      target: "reik\u0117ti"
+      var01: "\u0431\u044B\u0442\u044C \u043D\u0443\u0436\u043D\u044B\u043C"
+      var02: to be needed
+    presentTense:
+      target: reikia
+      var01: "\u043D\u0443\u0436\u043D\u043E"
+      var02: is needed
+    pastTense:
+      target: "reik\u0117jo"
+      var01: "\u0431\u044B\u043B\u043E \u043D\u0443\u0436\u043D\u043E"
+      var02: was needed
+  - id: noreti
+    infinitive:
+      target: "nor\u0117ti"
+      var01: "\u0445\u043E\u0442\u0435\u0442\u044C"
+      var02: to want
+    presentTense:
+      target: nori
+      var01: "\u0445\u043E\u0447\u0435\u0442"
+      var02: wants
+    pastTense:
+      target: "nor\u0117jo"
+      var01: "\u0445\u043E\u0442\u0435\u043B"
+      var02: wanted
+  - id: megti
+    infinitive:
+      target: "m\u0117gti"
+      var01: "\u043B\u044E\u0431\u0438\u0442\u044C (\u043D\u0440\u0430\u0432\u0438\u0442\u0441\u044F)"
+      var02: to like
+    presentTense:
+      target: "m\u0117gsta"
+      var01: "\u043B\u044E\u0431\u0438\u0442"
+      var02: likes
+    pastTense:
+      target: "m\u0117go"
+      var01: "\u043B\u044E\u0431\u0438\u043B"
+      var02: liked
+  - id: patikti
+    infinitive:
+      target: patikti
+      var01: "\u043D\u0440\u0430\u0432\u0438\u0442\u044C\u0441\u044F"
+      var02: to please
+    presentTense:
+      target: patinka
+      var01: "\u043D\u0440\u0430\u0432\u0438\u0442\u0441\u044F"
+      var02: pleases
+    pastTense:
+      target: patiko
+      var01: "\u043F\u043E\u043D\u0440\u0430\u0432\u0438\u043B\u0441\u044F"
+      var02: pleased
+  - id: dirbti
+    infinitive:
+      target: dirbti
+      var01: "\u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C"
+      var02: to work
+    presentTense:
+      target: dirba
+      var01: "\u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442"
+      var02: works
+    pastTense:
+      target: dirbo
+      var01: "\u0440\u0430\u0431\u043E\u0442\u0430\u043B"
+      var02: worked
+  - id: gyventi
+    infinitive:
+      target: gyventi
+      var01: "\u0436\u0438\u0442\u044C"
+      var02: to live
+    presentTense:
+      target: gyvena
+      var01: "\u0436\u0438\u0432\u0451\u0442"
+      var02: lives
+    pastTense:
+      target: gyveno
+      var01: "\u0436\u0438\u043B"
+      var02: lived
+  - id: mokytis
+    infinitive:
+      target: mokytis
+      var01: "\u0443\u0447\u0438\u0442\u044C\u0441\u044F"
+      var02: to study
+    presentTense:
+      target: mokosi
+      var01: "\u0443\u0447\u0438\u0442\u0441\u044F"
+      var02: studies
+    pastTense:
+      target: "mok\u0117si"
+      var01: "\u0443\u0447\u0438\u043B\u0441\u044F"
+      var02: studied
+  - id: studijuoti
+    infinitive:
+      target: studijuoti
+      var01: "\u0443\u0447\u0438\u0442\u044C\u0441\u044F (\u0432 \u0432\u0443\u0437\u0435)"
+      var02: to study (at university)
+    presentTense:
+      target: studijuoja
+      var01: "\u0443\u0447\u0438\u0442\u0441\u044F"
+      var02: studies
+    pastTense:
+      target: studijavo
+      var01: "\u0443\u0447\u0438\u043B\u0441\u044F"
+      var02: studied
+  - id: kalbeti
+    infinitive:
+      target: "kalb\u0117ti"
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u044C"
+      var02: to speak
+    presentTense:
+      target: kalba
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442"
+      var02: speaks
+    pastTense:
+      target: "kalb\u0117jo"
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u043B"
+      var02: spoke
+  - id: sakyti
+    infinitive:
+      target: sakyti
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u044C (\u0441\u043A\u0430\u0437\u0430\u0442\u044C)"
+      var02: to say
+    presentTense:
+      target: sako
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442"
+      var02: says
+    pastTense:
+      target: "sak\u0117"
+      var01: "\u0441\u043A\u0430\u0437\u0430\u043B"
+      var02: said
+  - id: pasakyti
+    infinitive:
+      target: pasakyti
+      var01: "\u0441\u043A\u0430\u0437\u0430\u0442\u044C"
+      var02: to tell
+    presentTense:
+      target: pasako
+      var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442"
+      var02: tells
+    pastTense:
+      target: "pasak\u0117"
+      var01: "\u0441\u043A\u0430\u0437\u0430\u043B"
+      var02: told
+  - id: klausti
+    infinitive:
+      target: klausti
+      var01: "\u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u0442\u044C"
+      var02: to ask
+    presentTense:
+      target: klausia
+      var01: "\u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u0435\u0442"
+      var02: asks
+    pastTense:
+      target: "klaus\u0117"
+      var01: "\u0441\u043F\u0440\u043E\u0441\u0438\u043B"
+      var02: asked
+  - id: atsakyti
+    infinitive:
+      target: atsakyti
+      var01: "\u043E\u0442\u0432\u0435\u0447\u0430\u0442\u044C"
+      var02: to answer
+    presentTense:
+      target: atsako
+      var01: "\u043E\u0442\u0432\u0435\u0447\u0430\u0435\u0442"
+      var02: answers
+    pastTense:
+      target: "atsak\u0117"
+      var01: "\u043E\u0442\u0432\u0435\u0442\u0438\u043B"
+      var02: answered
+  - id: suprasti
+    infinitive:
+      target: suprasti
+      var01: "\u043F\u043E\u043D\u0438\u043C\u0430\u0442\u044C"
+      var02: to understand
+    presentTense:
+      target: supranta
+      var01: "\u043F\u043E\u043D\u0438\u043C\u0430\u0435\u0442"
+      var02: understands
+    pastTense:
+      target: suprato
+      var01: "\u043F\u043E\u043D\u044F\u043B"
+      var02: understood
+  - id: zinoti
+    infinitive:
+      target: "\u017Einoti"
+      var01: "\u0437\u043D\u0430\u0442\u044C"
+      var02: to know
+    presentTense:
+      target: "\u017Eino"
+      var01: "\u0437\u043D\u0430\u0435\u0442"
+      var02: knows
+    pastTense:
+      target: "\u017Einojo"
+      var01: "\u0437\u043D\u0430\u043B"
+      var02: knew
+  - id: manyti
+    infinitive:
+      target: manyti
+      var01: "\u043F\u043E\u043B\u0430\u0433\u0430\u0442\u044C"
+      var02: to think
+    presentTense:
+      target: mano
+      var01: "\u043F\u043E\u043B\u0430\u0433\u0430\u0435\u0442"
+      var02: thinks
+    pastTense:
+      target: "man\u0117"
+      var01: "\u043F\u043E\u043B\u0430\u0433\u0430\u043B"
+      var02: thought
+  - id: galvoti
+    infinitive:
+      target: galvoti
+      var01: "\u0434\u0443\u043C\u0430\u0442\u044C"
+      var02: to think
+    presentTense:
+      target: galvoja
+      var01: "\u0434\u0443\u043C\u0430\u0435\u0442"
+      var02: thinks
+    pastTense:
+      target: galvojo
+      var01: "\u0434\u0443\u043C\u0430\u043B"
+      var02: thought
+  - id: prisiminti
+    infinitive:
+      target: prisiminti
+      var01: "\u0432\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u0442\u044C"
+      var02: to remember
+    presentTense:
+      target: prisimena
+      var01: "\u0432\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u0435\u0442"
+      var02: remembers
+    pastTense:
+      target: "prisimin\u0117"
+      var01: "\u0432\u0441\u043F\u043E\u043C\u043D\u0438\u043B"
+      var02: remembered
+  - id: pamirsti
+    infinitive:
+      target: "pamir\u0161ti"
+      var01: "\u0437\u0430\u0431\u044B\u0432\u0430\u0442\u044C"
+      var02: to forget
+    presentTense:
+      target: "pamir\u0161ta"
+      var01: "\u0437\u0430\u0431\u044B\u0432\u0430\u0435\u0442"
+      var02: forgets
+    pastTense:
+      target: "pamir\u0161o"
+      var01: "\u0437\u0430\u0431\u044B\u043B"
+      var02: forgot
+  - id: matyti
+    infinitive:
+      target: matyti
+      var01: "\u0432\u0438\u0434\u0435\u0442\u044C"
+      var02: to see
+    presentTense:
+      target: mato
+      var01: "\u0432\u0438\u0434\u0438\u0442"
+      var02: sees
+    pastTense:
+      target: "mat\u0117"
+      var01: "\u0432\u0438\u0434\u0435\u043B"
+      var02: saw
+  - id: ziureti
+    infinitive:
+      target: "\u017Ei\u016Br\u0117ti"
+      var01: "\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
+      var02: to watch
+    presentTense:
+      target: "\u017Ei\u016Bri"
+      var01: "\u0441\u043C\u043E\u0442\u0440\u0438\u0442"
+      var02: watches
+    pastTense:
+      target: "\u017Ei\u016Br\u0117jo"
+      var01: "\u0441\u043C\u043E\u0442\u0440\u0435\u043B"
+      var02: watched
+  - id: skaityti
+    infinitive:
+      target: skaityti
+      var01: "\u0447\u0438\u0442\u0430\u0442\u044C"
+      var02: to read
+    presentTense:
+      target: skaito
+      var01: "\u0447\u0438\u0442\u0430\u0435\u0442"
+      var02: reads
+    pastTense:
+      target: "skait\u0117"
+      var01: "\u0447\u0438\u0442\u0430\u043B"
+      var02: read
+  - id: rasyti
+    infinitive:
+      target: "ra\u0161yti"
+      var01: "\u043F\u0438\u0441\u0430\u0442\u044C"
+      var02: to write
+    presentTense:
+      target: "ra\u0161o"
+      var01: "\u043F\u0438\u0448\u0435\u0442"
+      var02: writes
+    pastTense:
+      target: "ra\u0161\u0117"
+      var01: "\u043F\u0438\u0441\u0430\u043B"
+      var02: wrote
+  - id: klausyti
+    infinitive:
+      target: klausyti
+      var01: "\u0441\u043B\u0443\u0448\u0430\u0442\u044C(\u0441\u044F)"
+      var02: to listen to
+    presentTense:
+      target: klauso
+      var01: "\u0441\u043B\u0443\u0448\u0430\u0435\u0442(\u0441\u044F)"
+      var02: listens to
+    pastTense:
+      target: "klaus\u0117"
+      var01: "\u0441\u043B\u0443\u0448\u0430\u043B(\u0441\u044F)"
+      var02: listened to
+  - id: girdeti
+    infinitive:
+      target: "gird\u0117ti"
+      var01: "\u0441\u043B\u044B\u0448\u0430\u0442\u044C"
+      var02: to hear
+    presentTense:
+      target: girdi
+      var01: "\u0441\u043B\u044B\u0448\u0438\u0442"
+      var02: hears
+    pastTense:
+      target: "gird\u0117jo"
+      var01: "\u0441\u043B\u044B\u0448\u0430\u043B"
+      var02: heard
+  - id: eiti
+    infinitive:
+      target: eiti
+      var01: "\u0438\u0434\u0442\u0438"
+      var02: to go
+    presentTense:
+      target: eina
+      var01: "\u0438\u0434\u0451\u0442"
+      var02: goes
+    pastTense:
+      target: "\u0117jo"
+      var01: "\u0448\u0451\u043B"
+      var02: went
+  - id: ateiti
+    infinitive:
+      target: ateiti
+      var01: "\u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to come
+    presentTense:
+      target: ateina
+      var01: "\u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442"
+      var02: comes
+    pastTense:
+      target: "at\u0117jo"
+      var01: "\u043F\u0440\u0438\u0448\u0451\u043B"
+      var02: came
+  - id: iseiti
+    infinitive:
+      target: "i\u0161eiti"
+      var01: "\u0443\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to leave
+    presentTense:
+      target: "i\u0161eina"
+      var01: "\u0443\u0445\u043E\u0434\u0438\u0442"
+      var02: leaves
+    pastTense:
+      target: "i\u0161\u0117jo"
+      var01: "\u0443\u0448\u0451\u043B"
+      var02: left
+  - id: grizti
+    infinitive:
+      target: "gr\u012F\u017Eti"
+      var01: "\u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0442\u044C\u0441\u044F"
+      var02: to return
+    presentTense:
+      target: "gr\u012F\u017Eta"
+      var01: "\u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442\u0441\u044F"
+      var02: returns
+    pastTense:
+      target: "gr\u012F\u017Eo"
+      var01: "\u0432\u0435\u0440\u043D\u0443\u043B\u0441\u044F"
+      var02: returned
+  - id: vaziuoti
+    infinitive:
+      target: "va\u017Eiuoti"
+      var01: "\u0435\u0445\u0430\u0442\u044C"
+      var02: to go (by vehicle)
+    presentTense:
+      target: "va\u017Eiuoja"
+      var01: "\u0435\u0434\u0435\u0442"
+      var02: goes
+    pastTense:
+      target: "va\u017Eiavo"
+      var01: "\u0435\u0445\u0430\u043B"
+      var02: went
+  - id: vykti
+    infinitive:
+      target: vykti
+      var01: "\u043F\u0440\u043E\u0438\u0441\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to take place
+    presentTense:
+      target: vyksta
+      var01: "\u043F\u0440\u043E\u0438\u0441\u0445\u043E\u0434\u0438\u0442"
+      var02: takes place
+    pastTense:
+      target: vyko
+      var01: "\u043F\u0440\u043E\u0438\u0437\u043E\u0448\u0451\u043B"
+      var02: took place
+  - id: skristi
+    infinitive:
+      target: skristi
+      var01: "\u043B\u0435\u0442\u0435\u0442\u044C"
+      var02: to fly
+    presentTense:
+      target: skrenda
+      var01: "\u043B\u0435\u0442\u0438\u0442"
+      var02: flies
+    pastTense:
+      target: skrido
+      var01: "\u043B\u0435\u0442\u0435\u043B"
+      var02: flew
+  - id: begti
+    infinitive:
+      target: "b\u0117gti"
+      var01: "\u0431\u0435\u0436\u0430\u0442\u044C"
+      var02: to run
+    presentTense:
+      target: "b\u0117ga"
+      var01: "\u0431\u0435\u0436\u0438\u0442"
+      var02: runs
+    pastTense:
+      target: "b\u0117go"
+      var01: "\u0431\u0435\u0436\u0430\u043B"
+      var02: ran
+  - id: valgyti
+    infinitive:
+      target: valgyti
+      var01: "\u0435\u0441\u0442\u044C"
+      var02: to eat
+    presentTense:
+      target: valgo
+      var01: "\u0435\u0441\u0442"
+      var02: eats
+    pastTense:
+      target: "valg\u0117"
+      var01: "\u0435\u043B"
+      var02: ate
+  - id: gerti
+    infinitive:
+      target: gerti
+      var01: "\u043F\u0438\u0442\u044C"
+      var02: to drink
+    presentTense:
+      target: geria
+      var01: "\u043F\u044C\u0451\u0442"
+      var02: drinks
+    pastTense:
+      target: "g\u0117r\u0117"
+      var01: "\u043F\u0438\u043B"
+      var02: drank
+  - id: virti
+    infinitive:
+      target: virti
+      var01: "\u0432\u0430\u0440\u0438\u0442\u044C\u0441\u044F"
+      var02: to boil
+    presentTense:
+      target: verda
+      var01: "\u0432\u0430\u0440\u0438\u0442\u0441\u044F"
+      var02: boils
+    pastTense:
+      target: "vir\u0117"
+      var01: "\u0432\u0430\u0440\u0438\u043B\u043E\u0441\u044C"
+      var02: boiled
+  - id: gaminti
+    infinitive:
+      target: gaminti
+      var01: "\u0433\u043E\u0442\u043E\u0432\u0438\u0442\u044C (\u0435\u0434\u0443)"
+      var02: to cook
+    presentTense:
+      target: gamina
+      var01: "\u0433\u043E\u0442\u043E\u0432\u0438\u0442"
+      var02: cooks
+    pastTense:
+      target: gamino
+      var01: "\u0433\u043E\u0442\u043E\u0432\u0438\u043B"
+      var02: cooked
+  - id: pirkti
+    infinitive:
+      target: pirkti
+      var01: "\u043F\u043E\u043A\u0443\u043F\u0430\u0442\u044C"
+      var02: to buy
+    presentTense:
+      target: perka
+      var01: "\u043F\u043E\u043A\u0443\u043F\u0430\u0435\u0442"
+      var02: buys
+    pastTense:
+      target: pirko
+      var01: "\u043A\u0443\u043F\u0438\u043B"
+      var02: bought
+  - id: parduoti
+    infinitive:
+      target: parduoti
+      var01: "\u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C"
+      var02: to sell
+    presentTense:
+      target: parduoda
+      var01: "\u043F\u0440\u043E\u0434\u0430\u0451\u0442"
+      var02: sells
+    pastTense:
+      target: "pardav\u0117"
+      var01: "\u043F\u0440\u043E\u0434\u0430\u043B"
+      var02: sold
+  - id: moketi
+    infinitive:
+      target: "mok\u0117ti"
+      var01: "\u0443\u043C\u0435\u0442\u044C"
+      var02: to know how
+    presentTense:
+      target: moka
+      var01: "\u0443\u043C\u0435\u0435\u0442"
+      var02: knows how
+    pastTense:
+      target: "mok\u0117jo"
+      var01: "\u0443\u043C\u0435\u043B"
+      var02: knew how
+  - id: kainuoti
+    infinitive:
+      target: kainuoti
+      var01: "\u0441\u0442\u043E\u0438\u0442\u044C"
+      var02: to cost
+    presentTense:
+      target: kainuoja
+      var01: "\u0441\u0442\u043E\u0438\u0442"
+      var02: costs
+    pastTense:
+      target: kainavo
+      var01: "\u0441\u0442\u043E\u0438\u043B\u043E"
+      var02: cost
+  - id: duoti
+    infinitive:
+      target: duoti
+      var01: "\u0434\u0430\u0432\u0430\u0442\u044C"
+      var02: to give
+    presentTense:
+      target: duoda
+      var01: "\u0434\u0430\u0451\u0442"
+      var02: gives
+    pastTense:
+      target: "dav\u0117"
+      var01: "\u0434\u0430\u043B"
+      var02: gave
+  - id: imti
+    infinitive:
+      target: imti
+      var01: "\u0431\u0440\u0430\u0442\u044C"
+      var02: to take
+    presentTense:
+      target: ima
+      var01: "\u0431\u0435\u0440\u0451\u0442"
+      var02: takes
+    pastTense:
+      target: "\u0117m\u0117"
+      var01: "\u0432\u0437\u044F\u043B"
+      var02: took
+  - id: gauti
+    infinitive:
+      target: gauti
+      var01: "\u043F\u043E\u043B\u0443\u0447\u0430\u0442\u044C"
+      var02: to receive
+    presentTense:
+      target: gauna
+      var01: "\u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442"
+      var02: receives
+    pastTense:
+      target: gavo
+      var01: "\u043F\u043E\u043B\u0443\u0447\u0438\u043B"
+      var02: received
+  - id: deti
+    infinitive:
+      target: "d\u0117ti"
+      var01: "\u043A\u043B\u0430\u0441\u0442\u044C"
+      var02: to put
+    presentTense:
+      target: deda
+      var01: "\u043A\u043B\u0430\u0434\u0451\u0442"
+      var02: puts
+    pastTense:
+      target: "d\u0117jo"
+      var01: "\u043F\u043E\u043B\u043E\u0436\u0438\u043B"
+      var02: put
+  - id: daryti
+    infinitive:
+      target: daryti
+      var01: "\u0434\u0435\u043B\u0430\u0442\u044C"
+      var02: to do
+    presentTense:
+      target: daro
+      var01: "\u0434\u0435\u043B\u0430\u0435\u0442"
+      var02: does
+    pastTense:
+      target: "dar\u0117"
+      var01: "\u0434\u0435\u043B\u0430\u043B"
+      var02: did
+  - id: padaryti
+    infinitive:
+      target: padaryti
+      var01: "\u0441\u0434\u0435\u043B\u0430\u0442\u044C"
+      var02: to make
+    presentTense:
+      target: padaro
+      var01: "\u0434\u0435\u043B\u0430\u0435\u0442"
+      var02: makes
+    pastTense:
+      target: "padar\u0117"
+      var01: "\u0441\u0434\u0435\u043B\u0430\u043B"
+      var02: made
+  - id: pradeti
+    infinitive:
+      target: "prad\u0117ti"
+      var01: "\u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C"
+      var02: to begin
+    presentTense:
+      target: pradeda
+      var01: "\u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442"
+      var02: begins
+    pastTense:
+      target: "prad\u0117jo"
+      var01: "\u043D\u0430\u0447\u0430\u043B"
+      var02: began
+  - id: baigti
+    infinitive:
+      target: baigti
+      var01: "\u0437\u0430\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0442\u044C"
+      var02: to finish
+    presentTense:
+      target: baigia
+      var01: "\u0437\u0430\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0435\u0442"
+      var02: finishes
+    pastTense:
+      target: "baig\u0117"
+      var01: "\u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B"
+      var02: finished
+  - id: laukti
+    infinitive:
+      target: laukti
+      var01: "\u0436\u0434\u0430\u0442\u044C"
+      var02: to wait
+    presentTense:
+      target: laukia
+      var01: "\u0436\u0434\u0451\u0442"
+      var02: waits
+    pastTense:
+      target: "lauk\u0117"
+      var01: "\u0436\u0434\u0430\u043B"
+      var02: waited
+  - id: ieskoti
+    infinitive:
+      target: "ie\u0161koti"
+      var01: "\u0438\u0441\u043A\u0430\u0442\u044C"
+      var02: to look for
+    presentTense:
+      target: "ie\u0161ko"
+      var01: "\u0438\u0449\u0435\u0442"
+      var02: looks for
+    pastTense:
+      target: "ie\u0161kojo"
+      var01: "\u0438\u0441\u043A\u0430\u043B"
+      var02: looked for
+  - id: rasti
+    infinitive:
+      target: rasti
+      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to find
+    presentTense:
+      target: randa
+      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442"
+      var02: finds
+    pastTense:
+      target: rado
+      var01: "\u043D\u0430\u0448\u0451\u043B"
+      var02: found
+  - id: padeti
+    infinitive:
+      target: "pad\u0117ti"
+      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0442\u044C"
+      var02: to help
+    presentTense:
+      target: padeda
+      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442"
+      var02: helps
+    pastTense:
+      target: "pad\u0117jo"
+      var01: "\u043F\u043E\u043C\u043E\u0433"
+      var02: helped
+  - id: naudoti
+    infinitive:
+      target: naudoti
+      var01: "\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C"
+      var02: to use
+    presentTense:
+      target: naudoja
+      var01: "\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442"
+      var02: uses
+    pastTense:
+      target: naudojo
+      var01: "\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043B"
+      var02: used
+  - id: veikti
+    infinitive:
+      target: veikti
+      var01: "\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C"
+      var02: to act
+    presentTense:
+      target: veikia
+      var01: "\u0434\u0435\u0439\u0441\u0442\u0432\u0443\u0435\u0442"
+      var02: acts
+    pastTense:
+      target: "veik\u0117"
+      var01: "\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u043B"
+      var02: acted
+  - id: stoveti
+    infinitive:
+      target: "stov\u0117ti"
+      var01: "\u0441\u0442\u043E\u044F\u0442\u044C"
+      var02: to stand
+    presentTense:
+      target: stovi
+      var01: "\u0441\u0442\u043E\u0438\u0442"
+      var02: stands
+    pastTense:
+      target: "stov\u0117jo"
+      var01: "\u0441\u0442\u043E\u044F\u043B"
+      var02: stood
+  - id: sedeti
+    infinitive:
+      target: "s\u0117d\u0117ti"
+      var01: "\u0441\u0438\u0434\u0435\u0442\u044C"
+      var02: to sit
+    presentTense:
+      target: "s\u0117di"
+      var01: "\u0441\u0438\u0434\u0438\u0442"
+      var02: sits
+    pastTense:
+      target: "s\u0117d\u0117jo"
+      var01: "\u0441\u0438\u0434\u0435\u043B"
+      var02: sat
+  - id: miegoti
+    infinitive:
+      target: miegoti
+      var01: "\u0441\u043F\u0430\u0442\u044C"
+      var02: to sleep
+    presentTense:
+      target: miega
+      var01: "\u0441\u043F\u0438\u0442"
+      var02: sleeps
+    pastTense:
+      target: miegojo
+      var01: "\u0441\u043F\u0430\u043B"
+      var02: slept
+  - id: keltis
+    infinitive:
+      target: keltis
+      var01: "\u0432\u0441\u0442\u0430\u0432\u0430\u0442\u044C"
+      var02: to get up
+    presentTense:
+      target: keliasi
+      var01: "\u0432\u0441\u0442\u0430\u0451\u0442"
+      var02: gets up
+    pastTense:
+      target: "k\u0117l\u0117si"
+      var01: "\u0432\u0441\u0442\u0430\u043B"
+      var02: got up
+  - id: susitikti
+    infinitive:
+      target: susitikti
+      var01: "\u0432\u0441\u0442\u0440\u0435\u0447\u0430\u0442\u044C\u0441\u044F"
+      var02: to meet
+    presentTense:
+      target: susitinka
+      var01: "\u0432\u0441\u0442\u0440\u0435\u0447\u0430\u0435\u0442\u0441\u044F"
+      var02: meets
+    pastTense:
+      target: susitiko
+      var01: "\u0432\u0441\u0442\u0440\u0435\u0442\u0438\u043B\u0441\u044F"
+      var02: met
+  - id: susipazinti
+    infinitive:
+      target: "susipa\u017Einti"
+      var01: "\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F"
+      var02: to get acquainted
+    presentTense:
+      target: "susipa\u017E\u012Fsta"
+      var01: "\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u0441\u044F"
+      var02: gets acquainted
+    pastTense:
+      target: "susipa\u017Eino"
+      var01: "\u043F\u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u043B\u0441\u044F"
+      var02: got acquainted
+  - id: skambinti
+    infinitive:
+      target: skambinti
+      var01: "\u0437\u0432\u043E\u043D\u0438\u0442\u044C"
+      var02: to call
+    presentTense:
+      target: skambina
+      var01: "\u0437\u0432\u043E\u043D\u0438\u0442"
+      var02: calls
+    pastTense:
+      target: skambino
+      var01: "\u043F\u043E\u0437\u0432\u043E\u043D\u0438\u043B"
+      var02: called
+  - id: dekoti
+    infinitive:
+      target: "d\u0117koti"
+      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442\u044C"
+      var02: to thank
+    presentTense:
+      target: "d\u0117koja"
+      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442"
+      var02: thanks
+    pastTense:
+      target: "d\u0117kojo"
+      var01: "\u043F\u043E\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u043B"
+      var02: thanked
+  - id: prasyti
+    infinitive:
+      target: "pra\u0161yti"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u0442\u044C"
+      var02: to ask for
+    presentTense:
+      target: "pra\u0161o"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u0442"
+      var02: asks for
+    pastTense:
+      target: "pra\u0161\u0117"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u043B"
+      var02: asked for
+  - id: myleti
+    infinitive:
+      target: "myl\u0117ti"
+      var01: "\u043B\u044E\u0431\u0438\u0442\u044C"
+      var02: to love
+    presentTense:
+      target: myli
+      var01: "\u043B\u044E\u0431\u0438\u0442"
+      var02: loves
+    pastTense:
+      target: "myl\u0117jo"
+      var01: "\u043B\u044E\u0431\u0438\u043B"
+      var02: loved
+  - id: dziaugtis
+    infinitive:
+      target: "d\u017Eiaugtis"
+      var01: "\u0440\u0430\u0434\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
+      var02: to be glad
+    presentTense:
+      target: "d\u017Eiaugiasi"
+      var01: "\u0440\u0430\u0434\u0443\u0435\u0442\u0441\u044F"
+      var02: is glad
+    pastTense:
+      target: "d\u017Eiaug\u0117si"
+      var01: "\u0440\u0430\u0434\u043E\u0432\u0430\u043B\u0441\u044F"
+      var02: was glad
+  - id: bijoti
+    infinitive:
+      target: bijoti
+      var01: "\u0431\u043E\u044F\u0442\u044C\u0441\u044F"
+      var02: to be afraid
+    presentTense:
+      target: bijo
+      var01: "\u0431\u043E\u0438\u0442\u0441\u044F"
+      var02: is afraid
+    pastTense:
+      target: bijojo
+      var01: "\u0431\u043E\u044F\u043B\u0441\u044F"
+      var02: was afraid
+  - id: tiketi
+    infinitive:
+      target: "tik\u0117ti"
+      var01: "\u0432\u0435\u0440\u0438\u0442\u044C"
+      var02: to believe
+    presentTense:
+      target: tiki
+      var01: "\u0432\u0435\u0440\u0438\u0442"
+      var02: believes
+    pastTense:
+      target: "tik\u0117jo"
+      var01: "\u0432\u0435\u0440\u0438\u043B"
+      var02: believed
+  - id: tikti
+    infinitive:
+      target: tikti
+      var01: "\u043F\u043E\u0434\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to suit
+    presentTense:
+      target: tinka
+      var01: "\u043F\u043E\u0434\u0445\u043E\u0434\u0438\u0442"
+      var02: suits
+    pastTense:
+      target: tiko
+      var01: "\u043F\u043E\u0434\u043E\u0448\u0451\u043B"
+      var02: suited
+  - id: rinktis
+    infinitive:
+      target: rinktis
+      var01: "\u0432\u044B\u0431\u0438\u0440\u0430\u0442\u044C"
+      var02: to choose
+    presentTense:
+      target: renkasi
+      var01: "\u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442"
+      var02: chooses
+    pastTense:
+      target: rinkosi
+      var01: "\u0432\u044B\u0431\u0438\u0440\u0430\u043B"
+      var02: chose
+  - id: rengtis
+    infinitive:
+      target: rengtis
+      var01: "\u043E\u0434\u0435\u0432\u0430\u0442\u044C\u0441\u044F"
+      var02: to get dressed
+    presentTense:
+      target: rengiasi
+      var01: "\u043E\u0434\u0435\u0432\u0430\u0435\u0442\u0441\u044F"
+      var02: gets dressed
+    pastTense:
+      target: "reng\u0117si"
+      var01: "\u043E\u0434\u0435\u043B\u0441\u044F"
+      var02: got dressed
+  - id: plauti
+    infinitive:
+      target: plauti
+      var01: "\u043C\u044B\u0442\u044C"
+      var02: to wash
+    presentTense:
+      target: plauna
+      var01: "\u043C\u043E\u0435\u0442"
+      var02: washes
+    pastTense:
+      target: "plov\u0117"
+      var01: "\u043C\u044B\u043B"
+      var02: washed
+  - id: praustis
+    infinitive:
+      target: praustis
+      var01: "\u0443\u043C\u044B\u0432\u0430\u0442\u044C\u0441\u044F"
+      var02: to wash (oneself)
+    presentTense:
+      target: prausiasi
+      var01: "\u0443\u043C\u044B\u0432\u0430\u0435\u0442\u0441\u044F"
+      var02: washes (oneself)
+    pastTense:
+      target: "praus\u0117si"
+      var01: "\u0443\u043C\u044B\u043B\u0441\u044F"
+      var02: washed (oneself)
+  - id: maudytis
+    infinitive:
+      target: maudytis
+      var01: "\u043A\u0443\u043F\u0430\u0442\u044C\u0441\u044F"
+      var02: to bathe
+    presentTense:
+      target: maudosi
+      var01: "\u043A\u0443\u043F\u0430\u0435\u0442\u0441\u044F"
+      var02: bathes
+    pastTense:
+      target: "maud\u0117si"
+      var01: "\u043A\u0443\u043F\u0430\u043B\u0441\u044F"
+      var02: bathed
+  - id: valyti
+    infinitive:
+      target: valyti
+      var01: "\u0447\u0438\u0441\u0442\u0438\u0442\u044C"
+      var02: to clean
+    presentTense:
+      target: valo
+      var01: "\u0447\u0438\u0441\u0442\u0438\u0442"
+      var02: cleans
+    pastTense:
+      target: "val\u0117"
+      var01: "\u0447\u0438\u0441\u0442\u0438\u043B"
+      var02: cleaned
+  - id: atidaryti
+    infinitive:
+      target: atidaryti
+      var01: "\u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0442\u044C"
+      var02: to open
+    presentTense:
+      target: atidaro
+      var01: "\u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442"
+      var02: opens
+    pastTense:
+      target: "atidar\u0117"
+      var01: "\u043E\u0442\u043A\u0440\u044B\u043B"
+      var02: opened
+  - id: uzdaryti
+    infinitive:
+      target: "u\u017Edaryti"
+      var01: "\u0437\u0430\u043A\u0440\u044B\u0432\u0430\u0442\u044C"
+      var02: to close
+    presentTense:
+      target: "u\u017Edaro"
+      var01: "\u0437\u0430\u043A\u0440\u044B\u0432\u0430\u0435\u0442"
+      var02: closes
+    pastTense:
+      target: "u\u017Edar\u0117"
+      var01: "\u0437\u0430\u043A\u0440\u044B\u043B"
+      var02: closed
+  - id: nesti
+    infinitive:
+      target: "ne\u0161ti"
+      var01: "\u043D\u0435\u0441\u0442\u0438"
+      var02: to carry
+    presentTense:
+      target: "ne\u0161a"
+      var01: "\u043D\u0435\u0441\u0451\u0442"
+      var02: carries
+    pastTense:
+      target: "ne\u0161\u0117"
+      var01: "\u043D\u0451\u0441"
+      var02: carried
+  - id: vesti
+    infinitive:
+      target: vesti
+      var01: "\u0432\u0435\u0441\u0442\u0438"
+      var02: to lead
+    presentTense:
+      target: veda
+      var01: "\u0432\u0435\u0434\u0451\u0442"
+      var02: leads
+    pastTense:
+      target: "ved\u0117"
+      var01: "\u0432\u0451\u043B"
+      var02: led

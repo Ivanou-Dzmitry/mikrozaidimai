@@ -49,7 +49,11 @@ public class RunGameButton : MonoBehaviour
             return;
         }
 
-        if (gameInfo != null) GameLaunchConfig.Current = gameInfo;
+        // Always assign (even null) — GameLaunchConfig.Current is static and
+        // survives scene loads, so a plain button (no gameInfo) must clear
+        // whatever a previous game's button left behind, or the next scene's
+        // GameSession picks up stale identity from an unrelated game.
+        GameLaunchConfig.Current = gameInfo;
 
         SceneManager.LoadScene(scene.SceneName);
     }
@@ -81,7 +85,7 @@ public class RunGameButton : MonoBehaviour
         string displayLabel = label;
         if (gameInfo != null)
         {
-            displayLabel = Application.isPlaying ? gameInfo.title.GetLocalizedString() : gameInfo.name;
+            displayLabel = Application.isPlaying ? LocalizationUtil.Resolve(gameInfo.title, "NoName") : gameInfo.name;
         }
 
         if (labelText != null)

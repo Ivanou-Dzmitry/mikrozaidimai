@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9bc7f44f34fb9468e8077fccce41b4, type: 3}
-  m_Name: GameInfo05Vard
+  m_Name: JiNera01
   m_EditorClassIdentifier: Assembly-CSharp::GameInfo
-  gameId: Vardi 01
+  gameId: Game04
   title:
     m_TableReference:
       m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32
     m_TableEntryReference:
-      m_KeyId: 1101937103761408
+      m_KeyId: 1095769266483200
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -26,18 +26,18 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32
     m_TableEntryReference:
-      m_KeyId: 1101904799232000
+      m_KeyId: 1095798689525760
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  wordSet: {fileID: 11400000, guid: 0360b4e972aecdc418e08decad824257, type: 2}
-  bubblePrefab: {fileID: 2483069116360678100, guid: 5374fab23ff55fa438b97c74099e25c0, type: 3}
+  wordSet: {fileID: 11400000, guid: ad2f2ca732ec0db4d89a6d588b86501d, type: 2}
+  bubblePrefab: {fileID: 2483069116360678100, guid: 30e810daba913aa42b1feda469356db9, type: 3}
   appearance:
     bubbleGradient:
       serializedVersion: 2
-      key0: {r: 0.43272364, g: 0.2295596, b: 1, a: 1}
-      key1: {r: 0.99371064, g: 0, b: 0.2610981, a: 1}
+      key0: {r: 0.4628487, g: 0.72327036, b: 0, a: 1}
+      key1: {r: 0.9748427, g: 0.6655564, b: 0, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -64,7 +64,7 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    rowSpacingMultiplier: 0.9
+    rowSpacingMultiplier: 1
   references:
     version: 2
     RefIds: []

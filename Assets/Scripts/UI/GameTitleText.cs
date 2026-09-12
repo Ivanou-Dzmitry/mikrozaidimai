@@ -23,7 +23,7 @@ public class GameTitleText : MonoBehaviour
         // resolved), which only happens in real Play/build — guard against edit-time
         // activation (e.g. dragging a prefab with this into the scene) throwing.
         label.text = Application.isPlaying && GameLaunchConfig.Current != null
-            ? GameLaunchConfig.Current.title.GetLocalizedString()
+            ? LocalizationUtil.Resolve(GameLaunchConfig.Current.title, "NoName")
             : fallbackTitle;
     }
 }

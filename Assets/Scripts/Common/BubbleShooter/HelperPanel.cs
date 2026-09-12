@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,11 @@ using UnityEngine;
 public class HelperPanel : MonoBehaviour
 {
     public static HelperPanel Instance { get; private set; }
+
+    // Fires once the hint is no longer visible (fade finished, or cut short by
+    // HideImmediately) — lets callers (e.g. WordBuilderField) hold off showing
+    // the next word until the hint pointing at the previous one is gone.
+    public event Action Hidden;
 
     [SerializeField] GameSession gameSession;
     [SerializeField] CanvasGroup canvasGroup;
@@ -26,6 +32,13 @@ public class HelperPanel : MonoBehaviour
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         if (gameSession == null) gameSession = FindFirstObjectByType<GameSession>();
         canvasGroup.alpha = 0f;
+
+        // Purely a text overlay — never has anything to click, but a CanvasGroup
+        // still blocks raycasts to whatever's underneath even at alpha 0 unless
+        // told not to, which was silently eating clicks on UI under/behind it
+        // (letter buttons, etc.) for its whole visible+fade duration.
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
     }
 
     void OnEnable()
@@ -45,30 +58,53 @@ public class HelperPanel : MonoBehaviour
 
     public void HideImmediately()
     {
+        bool wasShowing = activeRoutine != null;
+
         if (activeRoutine != null)
         {
             StopCoroutine(activeRoutine);
             activeRoutine = null;
         }
         canvasGroup.alpha = 0f;
+
+        if (wasShowing) Hidden?.Invoke();
     }
 
-    // example is optional — pass null/empty when the WordPair has no ExampleSet.
-    public void ShowHint(string translation, string correctTerm, string example = null)
+    // example is optional — pass null/empty for none. Returns whether a hint
+    // will actually be shown (false if the player has the helper turned off
+    // in Settings) — callers waiting on Hidden should skip waiting entirely
+    // when this comes back false, since it never fires.
+    public bool ShowHint(string translation, string correctTerm, string example = null)
     {
-        if (Settings.Data.helperDuration <= 0) return;
+        SetExampleText(example);
+        return Show($"{translation} → {correctTerm}");
+    }
 
-        text.text = $"{translation} → {correctTerm}";
+    // Plain one-line message (e.g. a localized "Great") instead of the
+    // translation-→-answer hint format — same show/fade/Hidden behavior.
+    public bool ShowMessage(string message, string example = null)
+    {
+        SetExampleText(example);
+        return Show(message);
+    }
 
-        if (exampleText != null)
-        {
-            bool hasExample = !string.IsNullOrEmpty(example);
-            exampleText.gameObject.SetActive(hasExample);
-            if (hasExample) exampleText.text = example;
-        }
+    void SetExampleText(string example)
+    {
+        if (exampleText == null) return;
+        bool hasExample = !string.IsNullOrEmpty(example);
+        exampleText.gameObject.SetActive(hasExample);
+        if (hasExample) exampleText.text = example;
+    }
+
+    bool Show(string message)
+    {
+        if (Settings.Data.helperDuration <= 0) return false;
+
+        text.text = message;
 
         if (activeRoutine != null) StopCoroutine(activeRoutine);
         activeRoutine = StartCoroutine(ShowThenFade(Settings.Data.helperDuration));
+        return true;
     }
 
     IEnumerator ShowThenFade(float visibleDuration)
@@ -86,5 +122,6 @@ public class HelperPanel : MonoBehaviour
 
         canvasGroup.alpha = 0f;
         activeRoutine = null;
+        Hidden?.Invoke();
     }
 }

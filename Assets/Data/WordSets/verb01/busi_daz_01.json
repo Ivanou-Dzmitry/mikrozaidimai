@@ -1,0 +1,40 @@
+{
+  "pairs": [
+    {
+      "id": "buisi_daz_01_0",
+      "target": "davau",
+      "var01": "Aš",
+      "var02": "Aš"
+    },
+    {
+      "id": "buisi_daz_01_1",
+      "target": "davai",
+      "var01": "Tu",
+      "var02": "Tu"
+    },
+    {
+      "id": "buisi_daz_01_2",
+      "target": "davo",
+      "var01": "Jis, ji",
+      "var02": "Jis, ji"
+    },
+    {
+      "id": "buisi_daz_01_3",
+      "target": "davome",
+      "var01": "Mes",
+      "var02": "Mes"
+    },
+    {
+      "id": "buisi_daz_01_4",
+      "target": "davote",
+      "var01": "Jūs",
+      "var02": "Jūs"
+    },
+    {
+      "id": "buisi_daz_01_5",
+      "target": "davo",
+      "var01": "Jie, jos",
+      "var02": "Jie, jos"
+    }
+  ]
+}
