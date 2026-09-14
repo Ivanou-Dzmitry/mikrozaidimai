@@ -38,6 +38,11 @@ public class WordBuilderField : MonoBehaviour
     [Tooltip("Prefix shown above the player's wrong attempt in the HelperPanel's example line, with the incorrect letters underlined.")]
     [SerializeField] LocalizedString mistakesLabel;
 
+    [Header("Grouping")]
+    [Tooltip("Chance to continue picking the previous block's theme (if any same-theme blocks remain) instead of a fully random one, forming short 2-3 runs of related verbs.")]
+    [Range(0f, 1f)]
+    [SerializeField] float sameThemeChance = 0.75f;
+
     [Header("Letters")]
     [SerializeField] int extraLetterCount = 3;
     [Tooltip("Hard cap on total letter tiles (word's own letters + decoys). The word's own letters always take priority — decoys only fill whatever room is left under this cap, never push a needed letter out.")]
@@ -58,13 +63,23 @@ public class WordBuilderField : MonoBehaviour
     bool inputEnabled = true;
     int helpUsesLeft;
     int blocksCompleted;
+    int totalAttempts;
+    string activeTheme;
+    int themeStreakLeft;
 
     // Fires whenever a block finishes (all 3 forms correct) — (completed, total).
     // For a stats screen ("1 / 80"), not tied to score/records.
     public event System.Action<int, int> ProgressChanged;
 
+    // Fires every time a block gets resolved one way or another (passed OR
+    // failed/skipped) — a block that fails and comes back later counts again
+    // each time it's retried, so this is "how many 3-word rounds I've gone
+    // through", not just successful ones.
+    public event System.Action<int> AttemptsChanged;
+
     public int BlocksCompleted => blocksCompleted;
     public int TotalBlocks => verbSet.blocks.Count;
+    public int TotalAttempts => totalAttempts;
 
     void Awake()
     {
@@ -110,9 +125,7 @@ public class WordBuilderField : MonoBehaviour
             Shuffle(pending);
         }
 
-        int lastIndex = pending.Count - 1;
-        currentBlock = pending[lastIndex];
-        pending.RemoveAt(lastIndex);
+        currentBlock = PickNextBlock();
         currentFormIndex = 0;
 
         answeredForms.Clear();
@@ -122,6 +135,37 @@ public class WordBuilderField : MonoBehaviour
         UpdateHelpCountText();
 
         ShowForm();
+    }
+
+    // Prefers continuing the previous block's theme for a short run (2-3
+    // blocks) before deliberately switching — pure random order made related
+    // verbs (e.g. all the movement ones) too scattered to notice the pattern
+    // between them, which is what actually helps recall.
+    VerbBlock PickNextBlock()
+    {
+        if (themeStreakLeft > 0 && Random.value < sameThemeChance)
+        {
+            var sameTheme = new List<VerbBlock>();
+            foreach (var b in pending)
+            {
+                if (b.theme == activeTheme) sameTheme.Add(b);
+            }
+
+            if (sameTheme.Count > 0)
+            {
+                VerbBlock chosen = sameTheme[Random.Range(0, sameTheme.Count)];
+                pending.Remove(chosen);
+                themeStreakLeft--;
+                return chosen;
+            }
+        }
+
+        int index = Random.Range(0, pending.Count);
+        VerbBlock picked = pending[index];
+        pending.RemoveAt(index);
+        activeTheme = picked.theme;
+        themeStreakLeft = Random.Range(1, 3); // 1-2 MORE after this one => a run of 2-3 total
+        return picked;
     }
 
     void UpdateHelpCountText()
@@ -148,9 +192,13 @@ public class WordBuilderField : MonoBehaviour
         BuildLetterButtons(form.target);
     }
 
+    // Check and Back both need at least one typed letter to do anything —
+    // nothing to submit, nothing to delete.
     void UpdateCheckInteractable()
     {
-        if (checkButton != null) checkButton.interactable = inputEnabled && answerZone.CurrentText.Length > 0;
+        bool hasText = answerZone.CurrentText.Length > 0;
+        if (checkButton != null) checkButton.interactable = inputEnabled && hasText;
+        if (backButton != null) backButton.interactable = inputEnabled && hasText;
     }
 
     // Disabled while waiting for the HelperPanel hint to finish showing after a
@@ -159,7 +207,6 @@ public class WordBuilderField : MonoBehaviour
     void SetInputEnabled(bool enabled)
     {
         inputEnabled = enabled;
-        if (backButton != null) backButton.interactable = enabled;
         if (nextButton != null) nextButton.interactable = enabled;
         if (helpButton != null) helpButton.interactable = enabled && helpUsesLeft > 0;
         UpdateCheckInteractable();
@@ -295,6 +342,9 @@ public class WordBuilderField : MonoBehaviour
         blocksCompleted++;
         ProgressChanged?.Invoke(blocksCompleted, TotalBlocks);
 
+        totalAttempts++;
+        AttemptsChanged?.Invoke(totalAttempts);
+
         string message = LocalizationUtil.Resolve(successMessage, "Great");
         string forms = string.Join(" - ", answeredForms);
         bool messageShowing = HelperPanel.Instance != null && HelperPanel.Instance.ShowMessage(message, forms);
@@ -323,6 +373,9 @@ public class WordBuilderField : MonoBehaviour
     {
         failQueue.Add(currentBlock);
         SetInputEnabled(false);
+
+        totalAttempts++;
+        AttemptsChanged?.Invoke(totalAttempts);
 
         string mistakes = !string.IsNullOrEmpty(wrongAttempt) ? BuildMistakesText(wrongAttempt, form.target) : null;
 

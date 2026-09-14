@@ -38,8 +38,8 @@ RectTransform:
   - {fileID: 7852486756884417697}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.03671706}
-  m_AnchorMax: {x: 1, y: 0.9492441}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0.97117877}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -98,7 +98,7 @@ MonoBehaviour:
   bottomPanel: {fileID: 7852486756884417697}
   topHeight: 128
   useBottomPanel: 1
-  bottomHeight: 128
+  bottomHeight: 200
 --- !u!114 &5172628861314625180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,8 +857,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -256}
+  m_AnchoredPosition: {x: 0, y: 36}
+  m_SizeDelta: {x: 0, y: -328}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4518942941938347531
 CanvasRenderer:
@@ -1169,8 +1169,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -102}
-  m_SizeDelta: {x: 0, y: 230}
+  m_AnchoredPosition: {x: 0, y: -0}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8465903452218725964
 CanvasRenderer:
@@ -1612,7 +1612,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
@@ -1974,8 +1974,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 141}
-  m_SizeDelta: {x: 0, y: 269}
+  m_AnchoredPosition: {x: 0, y: 89}
+  m_SizeDelta: {x: 0, y: 217}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &6465456127008004608
 CanvasRenderer:
@@ -2189,7 +2189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2139832058004460870, guid: 11899bf8ee5d0f344a993c5977579414, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 250
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2139832058004460870, guid: 11899bf8ee5d0f344a993c5977579414, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2363,7 +2363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2139832058004460870, guid: 11899bf8ee5d0f344a993c5977579414, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2139832058004460870, guid: 11899bf8ee5d0f344a993c5977579414, type: 3}
       propertyPath: m_SizeDelta.y

@@ -277,7 +277,7 @@ MonoBehaviour:
   pressedColor: {r: 0, g: 0.44705883, b: 0.69803923, a: 1}
   pressedScale: 0.9
   returnDuration: 0.3
-  hintColor: {r: 0, g: 1, b: 1, a: 1}
+  hintColor: {r: 0, g: 0.44705883, b: 0.69803923, a: 1}
   hintBlinkInterval: 0.2
   hintBlinkCount: 4
 --- !u!114 &3044199176380108398

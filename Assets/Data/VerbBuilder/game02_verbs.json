@@ -2,498 +2,581 @@
   "blocks": [
     {
       "id": "buti",
+      "theme": "core",
       "infinitive": { "target": "būti", "var01": "быть", "var02": "to be" },
       "presentTense": { "target": "yra", "var01": "есть", "var02": "is" },
       "pastTense": { "target": "buvo", "var01": "был", "var02": "was" }
     },
     {
       "id": "nebuti",
+      "theme": "core",
       "infinitive": { "target": "nebūti", "var01": "не быть", "var02": "not to be" },
       "presentTense": { "target": "nėra", "var01": "нет", "var02": "is not" },
       "pastTense": { "target": "nebuvo", "var01": "не было", "var02": "was not" }
     },
     {
       "id": "tureti",
+      "theme": "core",
       "infinitive": { "target": "turėti", "var01": "иметь", "var02": "to have" },
       "presentTense": { "target": "turi", "var01": "имеет", "var02": "has" },
       "pastTense": { "target": "turėjo", "var01": "имел", "var02": "had" }
     },
     {
       "id": "galeti",
+      "theme": "core",
       "infinitive": { "target": "galėti", "var01": "мочь", "var02": "to be able to" },
       "presentTense": { "target": "gali", "var01": "может", "var02": "can" },
       "pastTense": { "target": "galėjo", "var01": "мог", "var02": "could" }
     },
     {
       "id": "reiketi",
+      "theme": "core",
       "infinitive": { "target": "reikėti", "var01": "быть нужным", "var02": "to be needed" },
       "presentTense": { "target": "reikia", "var01": "нужно", "var02": "is needed" },
       "pastTense": { "target": "reikėjo", "var01": "было нужно", "var02": "was needed" }
     },
     {
       "id": "noreti",
+      "theme": "core",
       "infinitive": { "target": "norėti", "var01": "хотеть", "var02": "to want" },
       "presentTense": { "target": "nori", "var01": "хочет", "var02": "wants" },
       "pastTense": { "target": "norėjo", "var01": "хотел", "var02": "wanted" }
     },
     {
       "id": "megti",
+      "theme": "core",
       "infinitive": { "target": "mėgti", "var01": "любить (нравится)", "var02": "to like" },
       "presentTense": { "target": "mėgsta", "var01": "любит", "var02": "likes" },
       "pastTense": { "target": "mėgo", "var01": "любил", "var02": "liked" }
     },
     {
       "id": "patikti",
+      "theme": "core",
       "infinitive": { "target": "patikti", "var01": "нравиться", "var02": "to please" },
       "presentTense": { "target": "patinka", "var01": "нравится", "var02": "pleases" },
       "pastTense": { "target": "patiko", "var01": "понравился", "var02": "pleased" }
     },
     {
       "id": "dirbti",
+      "theme": "work_study",
       "infinitive": { "target": "dirbti", "var01": "работать", "var02": "to work" },
       "presentTense": { "target": "dirba", "var01": "работает", "var02": "works" },
       "pastTense": { "target": "dirbo", "var01": "работал", "var02": "worked" }
     },
     {
       "id": "gyventi",
+      "theme": "work_study",
       "infinitive": { "target": "gyventi", "var01": "жить", "var02": "to live" },
       "presentTense": { "target": "gyvena", "var01": "живёт", "var02": "lives" },
       "pastTense": { "target": "gyveno", "var01": "жил", "var02": "lived" }
     },
     {
       "id": "mokytis",
+      "theme": "work_study",
       "infinitive": { "target": "mokytis", "var01": "учиться", "var02": "to study" },
       "presentTense": { "target": "mokosi", "var01": "учится", "var02": "studies" },
       "pastTense": { "target": "mokėsi", "var01": "учился", "var02": "studied" }
     },
     {
       "id": "studijuoti",
+      "theme": "work_study",
       "infinitive": { "target": "studijuoti", "var01": "учиться (в вузе)", "var02": "to study (at university)" },
       "presentTense": { "target": "studijuoja", "var01": "учится", "var02": "studies" },
       "pastTense": { "target": "studijavo", "var01": "учился", "var02": "studied" }
     },
     {
       "id": "kalbeti",
+      "theme": "communication",
       "infinitive": { "target": "kalbėti", "var01": "говорить", "var02": "to speak" },
       "presentTense": { "target": "kalba", "var01": "говорит", "var02": "speaks" },
       "pastTense": { "target": "kalbėjo", "var01": "говорил", "var02": "spoke" }
     },
     {
       "id": "sakyti",
+      "theme": "communication",
       "infinitive": { "target": "sakyti", "var01": "говорить (сказать)", "var02": "to say" },
       "presentTense": { "target": "sako", "var01": "говорит", "var02": "says" },
       "pastTense": { "target": "sakė", "var01": "сказал", "var02": "said" }
     },
     {
       "id": "pasakyti",
+      "theme": "communication",
       "infinitive": { "target": "pasakyti", "var01": "сказать", "var02": "to tell" },
       "presentTense": { "target": "pasako", "var01": "говорит", "var02": "tells" },
       "pastTense": { "target": "pasakė", "var01": "сказал", "var02": "told" }
     },
     {
       "id": "klausti",
+      "theme": "communication",
       "infinitive": { "target": "klausti", "var01": "спрашивать", "var02": "to ask" },
       "presentTense": { "target": "klausia", "var01": "спрашивает", "var02": "asks" },
       "pastTense": { "target": "klausė", "var01": "спросил", "var02": "asked" }
     },
     {
       "id": "atsakyti",
+      "theme": "communication",
       "infinitive": { "target": "atsakyti", "var01": "отвечать", "var02": "to answer" },
       "presentTense": { "target": "atsako", "var01": "отвечает", "var02": "answers" },
       "pastTense": { "target": "atsakė", "var01": "ответил", "var02": "answered" }
     },
     {
+      "id": "prasyti",
+      "theme": "communication",
+      "infinitive": { "target": "prašyti", "var01": "просить", "var02": "to ask for" },
+      "presentTense": { "target": "prašo", "var01": "просит", "var02": "asks for" },
+      "pastTense": { "target": "prašė", "var01": "просил", "var02": "asked for" }
+    },
+    {
+      "id": "dekoti",
+      "theme": "communication",
+      "infinitive": { "target": "dėkoti", "var01": "благодарить", "var02": "to thank" },
+      "presentTense": { "target": "dėkoja", "var01": "благодарит", "var02": "thanks" },
+      "pastTense": { "target": "dėkojo", "var01": "поблагодарил", "var02": "thanked" }
+    },
+    {
       "id": "suprasti",
+      "theme": "mind",
       "infinitive": { "target": "suprasti", "var01": "понимать", "var02": "to understand" },
       "presentTense": { "target": "supranta", "var01": "понимает", "var02": "understands" },
       "pastTense": { "target": "suprato", "var01": "понял", "var02": "understood" }
     },
     {
       "id": "zinoti",
+      "theme": "mind",
       "infinitive": { "target": "žinoti", "var01": "знать", "var02": "to know" },
       "presentTense": { "target": "žino", "var01": "знает", "var02": "knows" },
       "pastTense": { "target": "žinojo", "var01": "знал", "var02": "knew" }
     },
     {
       "id": "manyti",
+      "theme": "mind",
       "infinitive": { "target": "manyti", "var01": "полагать", "var02": "to think" },
       "presentTense": { "target": "mano", "var01": "полагает", "var02": "thinks" },
       "pastTense": { "target": "manė", "var01": "полагал", "var02": "thought" }
     },
     {
       "id": "galvoti",
+      "theme": "mind",
       "infinitive": { "target": "galvoti", "var01": "думать", "var02": "to think" },
       "presentTense": { "target": "galvoja", "var01": "думает", "var02": "thinks" },
       "pastTense": { "target": "galvojo", "var01": "думал", "var02": "thought" }
     },
     {
       "id": "prisiminti",
+      "theme": "mind",
       "infinitive": { "target": "prisiminti", "var01": "вспоминать", "var02": "to remember" },
       "presentTense": { "target": "prisimena", "var01": "вспоминает", "var02": "remembers" },
       "pastTense": { "target": "prisiminė", "var01": "вспомнил", "var02": "remembered" }
     },
     {
       "id": "pamirsti",
+      "theme": "mind",
       "infinitive": { "target": "pamiršti", "var01": "забывать", "var02": "to forget" },
       "presentTense": { "target": "pamiršta", "var01": "забывает", "var02": "forgets" },
       "pastTense": { "target": "pamiršo", "var01": "забыл", "var02": "forgot" }
     },
     {
+      "id": "tiketi",
+      "theme": "mind",
+      "infinitive": { "target": "tikėti", "var01": "верить", "var02": "to believe" },
+      "presentTense": { "target": "tiki", "var01": "верит", "var02": "believes" },
+      "pastTense": { "target": "tikėjo", "var01": "верил", "var02": "believed" }
+    },
+    {
       "id": "matyti",
+      "theme": "perception",
       "infinitive": { "target": "matyti", "var01": "видеть", "var02": "to see" },
       "presentTense": { "target": "mato", "var01": "видит", "var02": "sees" },
       "pastTense": { "target": "matė", "var01": "видел", "var02": "saw" }
     },
     {
       "id": "ziureti",
+      "theme": "perception",
       "infinitive": { "target": "žiūrėti", "var01": "смотреть", "var02": "to watch" },
       "presentTense": { "target": "žiūri", "var01": "смотрит", "var02": "watches" },
       "pastTense": { "target": "žiūrėjo", "var01": "смотрел", "var02": "watched" }
     },
     {
       "id": "skaityti",
+      "theme": "perception",
       "infinitive": { "target": "skaityti", "var01": "читать", "var02": "to read" },
       "presentTense": { "target": "skaito", "var01": "читает", "var02": "reads" },
       "pastTense": { "target": "skaitė", "var01": "читал", "var02": "read" }
     },
     {
       "id": "rasyti",
+      "theme": "perception",
       "infinitive": { "target": "rašyti", "var01": "писать", "var02": "to write" },
       "presentTense": { "target": "rašo", "var01": "пишет", "var02": "writes" },
       "pastTense": { "target": "rašė", "var01": "писал", "var02": "wrote" }
     },
     {
       "id": "klausyti",
+      "theme": "perception",
       "infinitive": { "target": "klausyti", "var01": "слушать(ся)", "var02": "to listen to" },
       "presentTense": { "target": "klauso", "var01": "слушает(ся)", "var02": "listens to" },
       "pastTense": { "target": "klausė", "var01": "слушал(ся)", "var02": "listened to" }
     },
     {
       "id": "girdeti",
+      "theme": "perception",
       "infinitive": { "target": "girdėti", "var01": "слышать", "var02": "to hear" },
       "presentTense": { "target": "girdi", "var01": "слышит", "var02": "hears" },
       "pastTense": { "target": "girdėjo", "var01": "слышал", "var02": "heard" }
     },
     {
       "id": "eiti",
+      "theme": "movement",
       "infinitive": { "target": "eiti", "var01": "идти", "var02": "to go" },
       "presentTense": { "target": "eina", "var01": "идёт", "var02": "goes" },
       "pastTense": { "target": "ėjo", "var01": "шёл", "var02": "went" }
     },
     {
       "id": "ateiti",
+      "theme": "movement",
       "infinitive": { "target": "ateiti", "var01": "приходить", "var02": "to come" },
       "presentTense": { "target": "ateina", "var01": "приходит", "var02": "comes" },
       "pastTense": { "target": "atėjo", "var01": "пришёл", "var02": "came" }
     },
     {
       "id": "iseiti",
+      "theme": "movement",
       "infinitive": { "target": "išeiti", "var01": "уходить", "var02": "to leave" },
       "presentTense": { "target": "išeina", "var01": "уходит", "var02": "leaves" },
       "pastTense": { "target": "išėjo", "var01": "ушёл", "var02": "left" }
     },
     {
       "id": "grizti",
+      "theme": "movement",
       "infinitive": { "target": "grįžti", "var01": "возвращаться", "var02": "to return" },
       "presentTense": { "target": "grįžta", "var01": "возвращается", "var02": "returns" },
       "pastTense": { "target": "grįžo", "var01": "вернулся", "var02": "returned" }
     },
     {
       "id": "vaziuoti",
+      "theme": "movement",
       "infinitive": { "target": "važiuoti", "var01": "ехать", "var02": "to go (by vehicle)" },
       "presentTense": { "target": "važiuoja", "var01": "едет", "var02": "goes" },
       "pastTense": { "target": "važiavo", "var01": "ехал", "var02": "went" }
     },
     {
       "id": "vykti",
+      "theme": "movement",
       "infinitive": { "target": "vykti", "var01": "происходить", "var02": "to take place" },
       "presentTense": { "target": "vyksta", "var01": "происходит", "var02": "takes place" },
       "pastTense": { "target": "vyko", "var01": "произошёл", "var02": "took place" }
     },
     {
       "id": "skristi",
+      "theme": "movement",
       "infinitive": { "target": "skristi", "var01": "лететь", "var02": "to fly" },
       "presentTense": { "target": "skrenda", "var01": "летит", "var02": "flies" },
       "pastTense": { "target": "skrido", "var01": "летел", "var02": "flew" }
     },
     {
       "id": "begti",
+      "theme": "movement",
       "infinitive": { "target": "bėgti", "var01": "бежать", "var02": "to run" },
       "presentTense": { "target": "bėga", "var01": "бежит", "var02": "runs" },
       "pastTense": { "target": "bėgo", "var01": "бежал", "var02": "ran" }
     },
     {
       "id": "valgyti",
+      "theme": "food",
       "infinitive": { "target": "valgyti", "var01": "есть", "var02": "to eat" },
       "presentTense": { "target": "valgo", "var01": "ест", "var02": "eats" },
       "pastTense": { "target": "valgė", "var01": "ел", "var02": "ate" }
     },
     {
       "id": "gerti",
+      "theme": "food",
       "infinitive": { "target": "gerti", "var01": "пить", "var02": "to drink" },
       "presentTense": { "target": "geria", "var01": "пьёт", "var02": "drinks" },
       "pastTense": { "target": "gėrė", "var01": "пил", "var02": "drank" }
     },
     {
       "id": "virti",
+      "theme": "food",
       "infinitive": { "target": "virti", "var01": "вариться", "var02": "to boil" },
       "presentTense": { "target": "verda", "var01": "варится", "var02": "boils" },
       "pastTense": { "target": "virė", "var01": "варилось", "var02": "boiled" }
     },
     {
       "id": "gaminti",
+      "theme": "food",
       "infinitive": { "target": "gaminti", "var01": "готовить (еду)", "var02": "to cook" },
       "presentTense": { "target": "gamina", "var01": "готовит", "var02": "cooks" },
       "pastTense": { "target": "gamino", "var01": "готовил", "var02": "cooked" }
     },
     {
       "id": "pirkti",
+      "theme": "commerce",
       "infinitive": { "target": "pirkti", "var01": "покупать", "var02": "to buy" },
       "presentTense": { "target": "perka", "var01": "покупает", "var02": "buys" },
       "pastTense": { "target": "pirko", "var01": "купил", "var02": "bought" }
     },
     {
       "id": "parduoti",
+      "theme": "commerce",
       "infinitive": { "target": "parduoti", "var01": "продавать", "var02": "to sell" },
       "presentTense": { "target": "parduoda", "var01": "продаёт", "var02": "sells" },
       "pastTense": { "target": "pardavė", "var01": "продал", "var02": "sold" }
     },
     {
       "id": "moketi",
+      "theme": "commerce",
       "infinitive": { "target": "mokėti", "var01": "уметь", "var02": "to know how" },
       "presentTense": { "target": "moka", "var01": "умеет", "var02": "knows how" },
       "pastTense": { "target": "mokėjo", "var01": "умел", "var02": "knew how" }
     },
     {
       "id": "kainuoti",
+      "theme": "commerce",
       "infinitive": { "target": "kainuoti", "var01": "стоить", "var02": "to cost" },
       "presentTense": { "target": "kainuoja", "var01": "стоит", "var02": "costs" },
       "pastTense": { "target": "kainavo", "var01": "стоило", "var02": "cost" }
     },
     {
       "id": "duoti",
+      "theme": "commerce",
       "infinitive": { "target": "duoti", "var01": "давать", "var02": "to give" },
       "presentTense": { "target": "duoda", "var01": "даёт", "var02": "gives" },
       "pastTense": { "target": "davė", "var01": "дал", "var02": "gave" }
     },
     {
       "id": "imti",
+      "theme": "commerce",
       "infinitive": { "target": "imti", "var01": "брать", "var02": "to take" },
       "presentTense": { "target": "ima", "var01": "берёт", "var02": "takes" },
       "pastTense": { "target": "ėmė", "var01": "взял", "var02": "took" }
     },
     {
       "id": "gauti",
+      "theme": "commerce",
       "infinitive": { "target": "gauti", "var01": "получать", "var02": "to receive" },
       "presentTense": { "target": "gauna", "var01": "получает", "var02": "receives" },
       "pastTense": { "target": "gavo", "var01": "получил", "var02": "received" }
     },
     {
       "id": "deti",
+      "theme": "action",
       "infinitive": { "target": "dėti", "var01": "класть", "var02": "to put" },
       "presentTense": { "target": "deda", "var01": "кладёт", "var02": "puts" },
       "pastTense": { "target": "dėjo", "var01": "положил", "var02": "put" }
     },
     {
       "id": "daryti",
+      "theme": "action",
       "infinitive": { "target": "daryti", "var01": "делать", "var02": "to do" },
       "presentTense": { "target": "daro", "var01": "делает", "var02": "does" },
       "pastTense": { "target": "darė", "var01": "делал", "var02": "did" }
     },
     {
       "id": "padaryti",
+      "theme": "action",
       "infinitive": { "target": "padaryti", "var01": "сделать", "var02": "to make" },
       "presentTense": { "target": "padaro", "var01": "делает", "var02": "makes" },
       "pastTense": { "target": "padarė", "var01": "сделал", "var02": "made" }
     },
     {
       "id": "pradeti",
+      "theme": "action",
       "infinitive": { "target": "pradėti", "var01": "начинать", "var02": "to begin" },
       "presentTense": { "target": "pradeda", "var01": "начинает", "var02": "begins" },
       "pastTense": { "target": "pradėjo", "var01": "начал", "var02": "began" }
     },
     {
       "id": "baigti",
+      "theme": "action",
       "infinitive": { "target": "baigti", "var01": "заканчивать", "var02": "to finish" },
       "presentTense": { "target": "baigia", "var01": "заканчивает", "var02": "finishes" },
       "pastTense": { "target": "baigė", "var01": "закончил", "var02": "finished" }
     },
     {
-      "id": "laukti",
-      "infinitive": { "target": "laukti", "var01": "ждать", "var02": "to wait" },
-      "presentTense": { "target": "laukia", "var01": "ждёт", "var02": "waits" },
-      "pastTense": { "target": "laukė", "var01": "ждал", "var02": "waited" }
-    },
-    {
-      "id": "ieskoti",
-      "infinitive": { "target": "ieškoti", "var01": "искать", "var02": "to look for" },
-      "presentTense": { "target": "ieško", "var01": "ищет", "var02": "looks for" },
-      "pastTense": { "target": "ieškojo", "var01": "искал", "var02": "looked for" }
-    },
-    {
-      "id": "rasti",
-      "infinitive": { "target": "rasti", "var01": "находить", "var02": "to find" },
-      "presentTense": { "target": "randa", "var01": "находит", "var02": "finds" },
-      "pastTense": { "target": "rado", "var01": "нашёл", "var02": "found" }
-    },
-    {
-      "id": "padeti",
-      "infinitive": { "target": "padėti", "var01": "помогать", "var02": "to help" },
-      "presentTense": { "target": "padeda", "var01": "помогает", "var02": "helps" },
-      "pastTense": { "target": "padėjo", "var01": "помог", "var02": "helped" }
-    },
-    {
       "id": "naudoti",
+      "theme": "action",
       "infinitive": { "target": "naudoti", "var01": "использовать", "var02": "to use" },
       "presentTense": { "target": "naudoja", "var01": "использует", "var02": "uses" },
       "pastTense": { "target": "naudojo", "var01": "использовал", "var02": "used" }
     },
     {
       "id": "veikti",
+      "theme": "action",
       "infinitive": { "target": "veikti", "var01": "действовать", "var02": "to act" },
       "presentTense": { "target": "veikia", "var01": "действует", "var02": "acts" },
       "pastTense": { "target": "veikė", "var01": "действовал", "var02": "acted" }
     },
     {
+      "id": "laukti",
+      "theme": "search_help",
+      "infinitive": { "target": "laukti", "var01": "ждать", "var02": "to wait" },
+      "presentTense": { "target": "laukia", "var01": "ждёт", "var02": "waits" },
+      "pastTense": { "target": "laukė", "var01": "ждал", "var02": "waited" }
+    },
+    {
+      "id": "ieskoti",
+      "theme": "search_help",
+      "infinitive": { "target": "ieškoti", "var01": "искать", "var02": "to look for" },
+      "presentTense": { "target": "ieško", "var01": "ищет", "var02": "looks for" },
+      "pastTense": { "target": "ieškojo", "var01": "искал", "var02": "looked for" }
+    },
+    {
+      "id": "rasti",
+      "theme": "search_help",
+      "infinitive": { "target": "rasti", "var01": "находить", "var02": "to find" },
+      "presentTense": { "target": "randa", "var01": "находит", "var02": "finds" },
+      "pastTense": { "target": "rado", "var01": "нашёл", "var02": "found" }
+    },
+    {
+      "id": "padeti",
+      "theme": "search_help",
+      "infinitive": { "target": "padėti", "var01": "помогать", "var02": "to help" },
+      "presentTense": { "target": "padeda", "var01": "помогает", "var02": "helps" },
+      "pastTense": { "target": "padėjo", "var01": "помог", "var02": "helped" }
+    },
+    {
       "id": "stoveti",
+      "theme": "position",
       "infinitive": { "target": "stovėti", "var01": "стоять", "var02": "to stand" },
       "presentTense": { "target": "stovi", "var01": "стоит", "var02": "stands" },
       "pastTense": { "target": "stovėjo", "var01": "стоял", "var02": "stood" }
     },
     {
       "id": "sedeti",
+      "theme": "position",
       "infinitive": { "target": "sėdėti", "var01": "сидеть", "var02": "to sit" },
       "presentTense": { "target": "sėdi", "var01": "сидит", "var02": "sits" },
       "pastTense": { "target": "sėdėjo", "var01": "сидел", "var02": "sat" }
     },
     {
       "id": "miegoti",
+      "theme": "position",
       "infinitive": { "target": "miegoti", "var01": "спать", "var02": "to sleep" },
       "presentTense": { "target": "miega", "var01": "спит", "var02": "sleeps" },
       "pastTense": { "target": "miegojo", "var01": "спал", "var02": "slept" }
     },
     {
       "id": "keltis",
+      "theme": "position",
       "infinitive": { "target": "keltis", "var01": "вставать", "var02": "to get up" },
       "presentTense": { "target": "keliasi", "var01": "встаёт", "var02": "gets up" },
       "pastTense": { "target": "kėlėsi", "var01": "встал", "var02": "got up" }
     },
     {
       "id": "susitikti",
+      "theme": "social",
       "infinitive": { "target": "susitikti", "var01": "встречаться", "var02": "to meet" },
       "presentTense": { "target": "susitinka", "var01": "встречается", "var02": "meets" },
       "pastTense": { "target": "susitiko", "var01": "встретился", "var02": "met" }
     },
     {
       "id": "susipazinti",
+      "theme": "social",
       "infinitive": { "target": "susipažinti", "var01": "знакомиться", "var02": "to get acquainted" },
       "presentTense": { "target": "susipažįsta", "var01": "знакомится", "var02": "gets acquainted" },
       "pastTense": { "target": "susipažino", "var01": "познакомился", "var02": "got acquainted" }
     },
     {
       "id": "skambinti",
+      "theme": "social",
       "infinitive": { "target": "skambinti", "var01": "звонить", "var02": "to call" },
       "presentTense": { "target": "skambina", "var01": "звонит", "var02": "calls" },
       "pastTense": { "target": "skambino", "var01": "позвонил", "var02": "called" }
     },
     {
-      "id": "dekoti",
-      "infinitive": { "target": "dėkoti", "var01": "благодарить", "var02": "to thank" },
-      "presentTense": { "target": "dėkoja", "var01": "благодарит", "var02": "thanks" },
-      "pastTense": { "target": "dėkojo", "var01": "поблагодарил", "var02": "thanked" }
-    },
-    {
-      "id": "prasyti",
-      "infinitive": { "target": "prašyti", "var01": "просить", "var02": "to ask for" },
-      "presentTense": { "target": "prašo", "var01": "просит", "var02": "asks for" },
-      "pastTense": { "target": "prašė", "var01": "просил", "var02": "asked for" }
-    },
-    {
       "id": "myleti",
+      "theme": "emotion",
       "infinitive": { "target": "mylėti", "var01": "любить", "var02": "to love" },
       "presentTense": { "target": "myli", "var01": "любит", "var02": "loves" },
       "pastTense": { "target": "mylėjo", "var01": "любил", "var02": "loved" }
     },
     {
       "id": "dziaugtis",
+      "theme": "emotion",
       "infinitive": { "target": "džiaugtis", "var01": "радоваться", "var02": "to be glad" },
       "presentTense": { "target": "džiaugiasi", "var01": "радуется", "var02": "is glad" },
       "pastTense": { "target": "džiaugėsi", "var01": "радовался", "var02": "was glad" }
     },
     {
       "id": "bijoti",
+      "theme": "emotion",
       "infinitive": { "target": "bijoti", "var01": "бояться", "var02": "to be afraid" },
       "presentTense": { "target": "bijo", "var01": "боится", "var02": "is afraid" },
       "pastTense": { "target": "bijojo", "var01": "боялся", "var02": "was afraid" }
     },
     {
-      "id": "tiketi",
-      "infinitive": { "target": "tikėti", "var01": "верить", "var02": "to believe" },
-      "presentTense": { "target": "tiki", "var01": "верит", "var02": "believes" },
-      "pastTense": { "target": "tikėjo", "var01": "верил", "var02": "believed" }
-    },
-    {
       "id": "tikti",
+      "theme": "choice",
       "infinitive": { "target": "tikti", "var01": "подходить", "var02": "to suit" },
       "presentTense": { "target": "tinka", "var01": "подходит", "var02": "suits" },
       "pastTense": { "target": "tiko", "var01": "подошёл", "var02": "suited" }
     },
     {
       "id": "rinktis",
+      "theme": "choice",
       "infinitive": { "target": "rinktis", "var01": "выбирать", "var02": "to choose" },
       "presentTense": { "target": "renkasi", "var01": "выбирает", "var02": "chooses" },
       "pastTense": { "target": "rinkosi", "var01": "выбирал", "var02": "chose" }
     },
     {
       "id": "rengtis",
+      "theme": "hygiene",
       "infinitive": { "target": "rengtis", "var01": "одеваться", "var02": "to get dressed" },
       "presentTense": { "target": "rengiasi", "var01": "одевается", "var02": "gets dressed" },
       "pastTense": { "target": "rengėsi", "var01": "оделся", "var02": "got dressed" }
     },
     {
       "id": "plauti",
+      "theme": "hygiene",
       "infinitive": { "target": "plauti", "var01": "мыть", "var02": "to wash" },
       "presentTense": { "target": "plauna", "var01": "моет", "var02": "washes" },
       "pastTense": { "target": "plovė", "var01": "мыл", "var02": "washed" }
     },
     {
       "id": "praustis",
+      "theme": "hygiene",
       "infinitive": { "target": "praustis", "var01": "умываться", "var02": "to wash (oneself)" },
       "presentTense": { "target": "prausiasi", "var01": "умывается", "var02": "washes (oneself)" },
       "pastTense": { "target": "prausėsi", "var01": "умылся", "var02": "washed (oneself)" }
     },
     {
       "id": "maudytis",
+      "theme": "hygiene",
       "infinitive": { "target": "maudytis", "var01": "купаться", "var02": "to bathe" },
       "presentTense": { "target": "maudosi", "var01": "купается", "var02": "bathes" },
       "pastTense": { "target": "maudėsi", "var01": "купался", "var02": "bathed" }
     },
     {
       "id": "valyti",
+      "theme": "hygiene",
       "infinitive": { "target": "valyti", "var01": "чистить", "var02": "to clean" },
       "presentTense": { "target": "valo", "var01": "чистит", "var02": "cleans" },
       "pastTense": { "target": "valė", "var01": "чистил", "var02": "cleaned" }
     },
     {
       "id": "atidaryti",
+      "theme": "objects",
       "infinitive": { "target": "atidaryti", "var01": "открывать", "var02": "to open" },
       "presentTense": { "target": "atidaro", "var01": "открывает", "var02": "opens" },
       "pastTense": { "target": "atidarė", "var01": "открыл", "var02": "opened" }
     },
     {
       "id": "uzdaryti",
+      "theme": "objects",
       "infinitive": { "target": "uždaryti", "var01": "закрывать", "var02": "to close" },
       "presentTense": { "target": "uždaro", "var01": "закрывает", "var02": "closes" },
       "pastTense": { "target": "uždarė", "var01": "закрыл", "var02": "closed" }
     },
     {
       "id": "nesti",
+      "theme": "objects",
       "infinitive": { "target": "nešti", "var01": "нести", "var02": "to carry" },
       "presentTense": { "target": "neša", "var01": "несёт", "var02": "carries" },
       "pastTense": { "target": "nešė", "var01": "нёс", "var02": "carried" }
     },
     {
       "id": "vesti",
+      "theme": "objects",
       "infinitive": { "target": "vesti", "var01": "вести", "var02": "to lead" },
       "presentTense": { "target": "veda", "var01": "ведёт", "var02": "leads" },
       "pastTense": { "target": "vedė", "var01": "вёл", "var02": "led" }

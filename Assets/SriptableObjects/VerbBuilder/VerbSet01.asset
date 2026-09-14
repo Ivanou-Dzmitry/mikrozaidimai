@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VerbSet
   blocks:
   - id: buti
+    theme: core
     infinitive:
       target: "b\u016Bti"
       var01: "\u0431\u044B\u0442\u044C"
@@ -27,6 +28,7 @@ MonoBehaviour:
       var01: "\u0431\u044B\u043B"
       var02: was
   - id: nebuti
+    theme: core
     infinitive:
       target: "neb\u016Bti"
       var01: "\u043D\u0435 \u0431\u044B\u0442\u044C"
@@ -40,6 +42,7 @@ MonoBehaviour:
       var01: "\u043D\u0435 \u0431\u044B\u043B\u043E"
       var02: was not
   - id: tureti
+    theme: core
     infinitive:
       target: "tur\u0117ti"
       var01: "\u0438\u043C\u0435\u0442\u044C"
@@ -53,6 +56,7 @@ MonoBehaviour:
       var01: "\u0438\u043C\u0435\u043B"
       var02: had
   - id: galeti
+    theme: core
     infinitive:
       target: "gal\u0117ti"
       var01: "\u043C\u043E\u0447\u044C"
@@ -66,6 +70,7 @@ MonoBehaviour:
       var01: "\u043C\u043E\u0433"
       var02: could
   - id: reiketi
+    theme: core
     infinitive:
       target: "reik\u0117ti"
       var01: "\u0431\u044B\u0442\u044C \u043D\u0443\u0436\u043D\u044B\u043C"
@@ -79,6 +84,7 @@ MonoBehaviour:
       var01: "\u0431\u044B\u043B\u043E \u043D\u0443\u0436\u043D\u043E"
       var02: was needed
   - id: noreti
+    theme: core
     infinitive:
       target: "nor\u0117ti"
       var01: "\u0445\u043E\u0442\u0435\u0442\u044C"
@@ -92,6 +98,7 @@ MonoBehaviour:
       var01: "\u0445\u043E\u0442\u0435\u043B"
       var02: wanted
   - id: megti
+    theme: core
     infinitive:
       target: "m\u0117gti"
       var01: "\u043B\u044E\u0431\u0438\u0442\u044C (\u043D\u0440\u0430\u0432\u0438\u0442\u0441\u044F)"
@@ -105,6 +112,7 @@ MonoBehaviour:
       var01: "\u043B\u044E\u0431\u0438\u043B"
       var02: liked
   - id: patikti
+    theme: core
     infinitive:
       target: patikti
       var01: "\u043D\u0440\u0430\u0432\u0438\u0442\u044C\u0441\u044F"
@@ -118,6 +126,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u043D\u0440\u0430\u0432\u0438\u043B\u0441\u044F"
       var02: pleased
   - id: dirbti
+    theme: work_study
     infinitive:
       target: dirbti
       var01: "\u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C"
@@ -131,6 +140,7 @@ MonoBehaviour:
       var01: "\u0440\u0430\u0431\u043E\u0442\u0430\u043B"
       var02: worked
   - id: gyventi
+    theme: work_study
     infinitive:
       target: gyventi
       var01: "\u0436\u0438\u0442\u044C"
@@ -144,6 +154,7 @@ MonoBehaviour:
       var01: "\u0436\u0438\u043B"
       var02: lived
   - id: mokytis
+    theme: work_study
     infinitive:
       target: mokytis
       var01: "\u0443\u0447\u0438\u0442\u044C\u0441\u044F"
@@ -157,6 +168,7 @@ MonoBehaviour:
       var01: "\u0443\u0447\u0438\u043B\u0441\u044F"
       var02: studied
   - id: studijuoti
+    theme: work_study
     infinitive:
       target: studijuoti
       var01: "\u0443\u0447\u0438\u0442\u044C\u0441\u044F (\u0432 \u0432\u0443\u0437\u0435)"
@@ -170,6 +182,7 @@ MonoBehaviour:
       var01: "\u0443\u0447\u0438\u043B\u0441\u044F"
       var02: studied
   - id: kalbeti
+    theme: communication
     infinitive:
       target: "kalb\u0117ti"
       var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u044C"
@@ -183,6 +196,7 @@ MonoBehaviour:
       var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u043B"
       var02: spoke
   - id: sakyti
+    theme: communication
     infinitive:
       target: sakyti
       var01: "\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u044C (\u0441\u043A\u0430\u0437\u0430\u0442\u044C)"
@@ -196,6 +210,7 @@ MonoBehaviour:
       var01: "\u0441\u043A\u0430\u0437\u0430\u043B"
       var02: said
   - id: pasakyti
+    theme: communication
     infinitive:
       target: pasakyti
       var01: "\u0441\u043A\u0430\u0437\u0430\u0442\u044C"
@@ -209,6 +224,7 @@ MonoBehaviour:
       var01: "\u0441\u043A\u0430\u0437\u0430\u043B"
       var02: told
   - id: klausti
+    theme: communication
     infinitive:
       target: klausti
       var01: "\u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u0442\u044C"
@@ -222,6 +238,7 @@ MonoBehaviour:
       var01: "\u0441\u043F\u0440\u043E\u0441\u0438\u043B"
       var02: asked
   - id: atsakyti
+    theme: communication
     infinitive:
       target: atsakyti
       var01: "\u043E\u0442\u0432\u0435\u0447\u0430\u0442\u044C"
@@ -234,7 +251,36 @@ MonoBehaviour:
       target: "atsak\u0117"
       var01: "\u043E\u0442\u0432\u0435\u0442\u0438\u043B"
       var02: answered
+  - id: prasyti
+    theme: communication
+    infinitive:
+      target: "pra\u0161yti"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u0442\u044C"
+      var02: to ask for
+    presentTense:
+      target: "pra\u0161o"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u0442"
+      var02: asks for
+    pastTense:
+      target: "pra\u0161\u0117"
+      var01: "\u043F\u0440\u043E\u0441\u0438\u043B"
+      var02: asked for
+  - id: dekoti
+    theme: communication
+    infinitive:
+      target: "d\u0117koti"
+      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442\u044C"
+      var02: to thank
+    presentTense:
+      target: "d\u0117koja"
+      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442"
+      var02: thanks
+    pastTense:
+      target: "d\u0117kojo"
+      var01: "\u043F\u043E\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u043B"
+      var02: thanked
   - id: suprasti
+    theme: mind
     infinitive:
       target: suprasti
       var01: "\u043F\u043E\u043D\u0438\u043C\u0430\u0442\u044C"
@@ -248,6 +294,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u043D\u044F\u043B"
       var02: understood
   - id: zinoti
+    theme: mind
     infinitive:
       target: "\u017Einoti"
       var01: "\u0437\u043D\u0430\u0442\u044C"
@@ -261,6 +308,7 @@ MonoBehaviour:
       var01: "\u0437\u043D\u0430\u043B"
       var02: knew
   - id: manyti
+    theme: mind
     infinitive:
       target: manyti
       var01: "\u043F\u043E\u043B\u0430\u0433\u0430\u0442\u044C"
@@ -274,6 +322,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u043B\u0430\u0433\u0430\u043B"
       var02: thought
   - id: galvoti
+    theme: mind
     infinitive:
       target: galvoti
       var01: "\u0434\u0443\u043C\u0430\u0442\u044C"
@@ -287,6 +336,7 @@ MonoBehaviour:
       var01: "\u0434\u0443\u043C\u0430\u043B"
       var02: thought
   - id: prisiminti
+    theme: mind
     infinitive:
       target: prisiminti
       var01: "\u0432\u0441\u043F\u043E\u043C\u0438\u043D\u0430\u0442\u044C"
@@ -300,6 +350,7 @@ MonoBehaviour:
       var01: "\u0432\u0441\u043F\u043E\u043C\u043D\u0438\u043B"
       var02: remembered
   - id: pamirsti
+    theme: mind
     infinitive:
       target: "pamir\u0161ti"
       var01: "\u0437\u0430\u0431\u044B\u0432\u0430\u0442\u044C"
@@ -312,7 +363,22 @@ MonoBehaviour:
       target: "pamir\u0161o"
       var01: "\u0437\u0430\u0431\u044B\u043B"
       var02: forgot
+  - id: tiketi
+    theme: mind
+    infinitive:
+      target: "tik\u0117ti"
+      var01: "\u0432\u0435\u0440\u0438\u0442\u044C"
+      var02: to believe
+    presentTense:
+      target: tiki
+      var01: "\u0432\u0435\u0440\u0438\u0442"
+      var02: believes
+    pastTense:
+      target: "tik\u0117jo"
+      var01: "\u0432\u0435\u0440\u0438\u043B"
+      var02: believed
   - id: matyti
+    theme: perception
     infinitive:
       target: matyti
       var01: "\u0432\u0438\u0434\u0435\u0442\u044C"
@@ -326,6 +392,7 @@ MonoBehaviour:
       var01: "\u0432\u0438\u0434\u0435\u043B"
       var02: saw
   - id: ziureti
+    theme: perception
     infinitive:
       target: "\u017Ei\u016Br\u0117ti"
       var01: "\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C"
@@ -339,6 +406,7 @@ MonoBehaviour:
       var01: "\u0441\u043C\u043E\u0442\u0440\u0435\u043B"
       var02: watched
   - id: skaityti
+    theme: perception
     infinitive:
       target: skaityti
       var01: "\u0447\u0438\u0442\u0430\u0442\u044C"
@@ -352,6 +420,7 @@ MonoBehaviour:
       var01: "\u0447\u0438\u0442\u0430\u043B"
       var02: read
   - id: rasyti
+    theme: perception
     infinitive:
       target: "ra\u0161yti"
       var01: "\u043F\u0438\u0441\u0430\u0442\u044C"
@@ -365,6 +434,7 @@ MonoBehaviour:
       var01: "\u043F\u0438\u0441\u0430\u043B"
       var02: wrote
   - id: klausyti
+    theme: perception
     infinitive:
       target: klausyti
       var01: "\u0441\u043B\u0443\u0448\u0430\u0442\u044C(\u0441\u044F)"
@@ -378,6 +448,7 @@ MonoBehaviour:
       var01: "\u0441\u043B\u0443\u0448\u0430\u043B(\u0441\u044F)"
       var02: listened to
   - id: girdeti
+    theme: perception
     infinitive:
       target: "gird\u0117ti"
       var01: "\u0441\u043B\u044B\u0448\u0430\u0442\u044C"
@@ -391,6 +462,7 @@ MonoBehaviour:
       var01: "\u0441\u043B\u044B\u0448\u0430\u043B"
       var02: heard
   - id: eiti
+    theme: movement
     infinitive:
       target: eiti
       var01: "\u0438\u0434\u0442\u0438"
@@ -404,6 +476,7 @@ MonoBehaviour:
       var01: "\u0448\u0451\u043B"
       var02: went
   - id: ateiti
+    theme: movement
     infinitive:
       target: ateiti
       var01: "\u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442\u044C"
@@ -417,6 +490,7 @@ MonoBehaviour:
       var01: "\u043F\u0440\u0438\u0448\u0451\u043B"
       var02: came
   - id: iseiti
+    theme: movement
     infinitive:
       target: "i\u0161eiti"
       var01: "\u0443\u0445\u043E\u0434\u0438\u0442\u044C"
@@ -430,6 +504,7 @@ MonoBehaviour:
       var01: "\u0443\u0448\u0451\u043B"
       var02: left
   - id: grizti
+    theme: movement
     infinitive:
       target: "gr\u012F\u017Eti"
       var01: "\u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0442\u044C\u0441\u044F"
@@ -443,6 +518,7 @@ MonoBehaviour:
       var01: "\u0432\u0435\u0440\u043D\u0443\u043B\u0441\u044F"
       var02: returned
   - id: vaziuoti
+    theme: movement
     infinitive:
       target: "va\u017Eiuoti"
       var01: "\u0435\u0445\u0430\u0442\u044C"
@@ -456,6 +532,7 @@ MonoBehaviour:
       var01: "\u0435\u0445\u0430\u043B"
       var02: went
   - id: vykti
+    theme: movement
     infinitive:
       target: vykti
       var01: "\u043F\u0440\u043E\u0438\u0441\u0445\u043E\u0434\u0438\u0442\u044C"
@@ -469,6 +546,7 @@ MonoBehaviour:
       var01: "\u043F\u0440\u043E\u0438\u0437\u043E\u0448\u0451\u043B"
       var02: took place
   - id: skristi
+    theme: movement
     infinitive:
       target: skristi
       var01: "\u043B\u0435\u0442\u0435\u0442\u044C"
@@ -482,6 +560,7 @@ MonoBehaviour:
       var01: "\u043B\u0435\u0442\u0435\u043B"
       var02: flew
   - id: begti
+    theme: movement
     infinitive:
       target: "b\u0117gti"
       var01: "\u0431\u0435\u0436\u0430\u0442\u044C"
@@ -495,6 +574,7 @@ MonoBehaviour:
       var01: "\u0431\u0435\u0436\u0430\u043B"
       var02: ran
   - id: valgyti
+    theme: food
     infinitive:
       target: valgyti
       var01: "\u0435\u0441\u0442\u044C"
@@ -508,6 +588,7 @@ MonoBehaviour:
       var01: "\u0435\u043B"
       var02: ate
   - id: gerti
+    theme: food
     infinitive:
       target: gerti
       var01: "\u043F\u0438\u0442\u044C"
@@ -521,6 +602,7 @@ MonoBehaviour:
       var01: "\u043F\u0438\u043B"
       var02: drank
   - id: virti
+    theme: food
     infinitive:
       target: virti
       var01: "\u0432\u0430\u0440\u0438\u0442\u044C\u0441\u044F"
@@ -534,6 +616,7 @@ MonoBehaviour:
       var01: "\u0432\u0430\u0440\u0438\u043B\u043E\u0441\u044C"
       var02: boiled
   - id: gaminti
+    theme: food
     infinitive:
       target: gaminti
       var01: "\u0433\u043E\u0442\u043E\u0432\u0438\u0442\u044C (\u0435\u0434\u0443)"
@@ -547,6 +630,7 @@ MonoBehaviour:
       var01: "\u0433\u043E\u0442\u043E\u0432\u0438\u043B"
       var02: cooked
   - id: pirkti
+    theme: commerce
     infinitive:
       target: pirkti
       var01: "\u043F\u043E\u043A\u0443\u043F\u0430\u0442\u044C"
@@ -560,6 +644,7 @@ MonoBehaviour:
       var01: "\u043A\u0443\u043F\u0438\u043B"
       var02: bought
   - id: parduoti
+    theme: commerce
     infinitive:
       target: parduoti
       var01: "\u043F\u0440\u043E\u0434\u0430\u0432\u0430\u0442\u044C"
@@ -573,6 +658,7 @@ MonoBehaviour:
       var01: "\u043F\u0440\u043E\u0434\u0430\u043B"
       var02: sold
   - id: moketi
+    theme: commerce
     infinitive:
       target: "mok\u0117ti"
       var01: "\u0443\u043C\u0435\u0442\u044C"
@@ -586,6 +672,7 @@ MonoBehaviour:
       var01: "\u0443\u043C\u0435\u043B"
       var02: knew how
   - id: kainuoti
+    theme: commerce
     infinitive:
       target: kainuoti
       var01: "\u0441\u0442\u043E\u0438\u0442\u044C"
@@ -599,6 +686,7 @@ MonoBehaviour:
       var01: "\u0441\u0442\u043E\u0438\u043B\u043E"
       var02: cost
   - id: duoti
+    theme: commerce
     infinitive:
       target: duoti
       var01: "\u0434\u0430\u0432\u0430\u0442\u044C"
@@ -612,6 +700,7 @@ MonoBehaviour:
       var01: "\u0434\u0430\u043B"
       var02: gave
   - id: imti
+    theme: commerce
     infinitive:
       target: imti
       var01: "\u0431\u0440\u0430\u0442\u044C"
@@ -625,6 +714,7 @@ MonoBehaviour:
       var01: "\u0432\u0437\u044F\u043B"
       var02: took
   - id: gauti
+    theme: commerce
     infinitive:
       target: gauti
       var01: "\u043F\u043E\u043B\u0443\u0447\u0430\u0442\u044C"
@@ -638,6 +728,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u043B\u0443\u0447\u0438\u043B"
       var02: received
   - id: deti
+    theme: action
     infinitive:
       target: "d\u0117ti"
       var01: "\u043A\u043B\u0430\u0441\u0442\u044C"
@@ -651,6 +742,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u043B\u043E\u0436\u0438\u043B"
       var02: put
   - id: daryti
+    theme: action
     infinitive:
       target: daryti
       var01: "\u0434\u0435\u043B\u0430\u0442\u044C"
@@ -664,6 +756,7 @@ MonoBehaviour:
       var01: "\u0434\u0435\u043B\u0430\u043B"
       var02: did
   - id: padaryti
+    theme: action
     infinitive:
       target: padaryti
       var01: "\u0441\u0434\u0435\u043B\u0430\u0442\u044C"
@@ -677,6 +770,7 @@ MonoBehaviour:
       var01: "\u0441\u0434\u0435\u043B\u0430\u043B"
       var02: made
   - id: pradeti
+    theme: action
     infinitive:
       target: "prad\u0117ti"
       var01: "\u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C"
@@ -690,6 +784,7 @@ MonoBehaviour:
       var01: "\u043D\u0430\u0447\u0430\u043B"
       var02: began
   - id: baigti
+    theme: action
     infinitive:
       target: baigti
       var01: "\u0437\u0430\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0442\u044C"
@@ -702,59 +797,8 @@ MonoBehaviour:
       target: "baig\u0117"
       var01: "\u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B"
       var02: finished
-  - id: laukti
-    infinitive:
-      target: laukti
-      var01: "\u0436\u0434\u0430\u0442\u044C"
-      var02: to wait
-    presentTense:
-      target: laukia
-      var01: "\u0436\u0434\u0451\u0442"
-      var02: waits
-    pastTense:
-      target: "lauk\u0117"
-      var01: "\u0436\u0434\u0430\u043B"
-      var02: waited
-  - id: ieskoti
-    infinitive:
-      target: "ie\u0161koti"
-      var01: "\u0438\u0441\u043A\u0430\u0442\u044C"
-      var02: to look for
-    presentTense:
-      target: "ie\u0161ko"
-      var01: "\u0438\u0449\u0435\u0442"
-      var02: looks for
-    pastTense:
-      target: "ie\u0161kojo"
-      var01: "\u0438\u0441\u043A\u0430\u043B"
-      var02: looked for
-  - id: rasti
-    infinitive:
-      target: rasti
-      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442\u044C"
-      var02: to find
-    presentTense:
-      target: randa
-      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442"
-      var02: finds
-    pastTense:
-      target: rado
-      var01: "\u043D\u0430\u0448\u0451\u043B"
-      var02: found
-  - id: padeti
-    infinitive:
-      target: "pad\u0117ti"
-      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0442\u044C"
-      var02: to help
-    presentTense:
-      target: padeda
-      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442"
-      var02: helps
-    pastTense:
-      target: "pad\u0117jo"
-      var01: "\u043F\u043E\u043C\u043E\u0433"
-      var02: helped
   - id: naudoti
+    theme: action
     infinitive:
       target: naudoti
       var01: "\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C"
@@ -768,6 +812,7 @@ MonoBehaviour:
       var01: "\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043B"
       var02: used
   - id: veikti
+    theme: action
     infinitive:
       target: veikti
       var01: "\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C"
@@ -780,7 +825,64 @@ MonoBehaviour:
       target: "veik\u0117"
       var01: "\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u043B"
       var02: acted
+  - id: laukti
+    theme: search_help
+    infinitive:
+      target: laukti
+      var01: "\u0436\u0434\u0430\u0442\u044C"
+      var02: to wait
+    presentTense:
+      target: laukia
+      var01: "\u0436\u0434\u0451\u0442"
+      var02: waits
+    pastTense:
+      target: "lauk\u0117"
+      var01: "\u0436\u0434\u0430\u043B"
+      var02: waited
+  - id: ieskoti
+    theme: search_help
+    infinitive:
+      target: "ie\u0161koti"
+      var01: "\u0438\u0441\u043A\u0430\u0442\u044C"
+      var02: to look for
+    presentTense:
+      target: "ie\u0161ko"
+      var01: "\u0438\u0449\u0435\u0442"
+      var02: looks for
+    pastTense:
+      target: "ie\u0161kojo"
+      var01: "\u0438\u0441\u043A\u0430\u043B"
+      var02: looked for
+  - id: rasti
+    theme: search_help
+    infinitive:
+      target: rasti
+      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442\u044C"
+      var02: to find
+    presentTense:
+      target: randa
+      var01: "\u043D\u0430\u0445\u043E\u0434\u0438\u0442"
+      var02: finds
+    pastTense:
+      target: rado
+      var01: "\u043D\u0430\u0448\u0451\u043B"
+      var02: found
+  - id: padeti
+    theme: search_help
+    infinitive:
+      target: "pad\u0117ti"
+      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0442\u044C"
+      var02: to help
+    presentTense:
+      target: padeda
+      var01: "\u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442"
+      var02: helps
+    pastTense:
+      target: "pad\u0117jo"
+      var01: "\u043F\u043E\u043C\u043E\u0433"
+      var02: helped
   - id: stoveti
+    theme: position
     infinitive:
       target: "stov\u0117ti"
       var01: "\u0441\u0442\u043E\u044F\u0442\u044C"
@@ -794,6 +896,7 @@ MonoBehaviour:
       var01: "\u0441\u0442\u043E\u044F\u043B"
       var02: stood
   - id: sedeti
+    theme: position
     infinitive:
       target: "s\u0117d\u0117ti"
       var01: "\u0441\u0438\u0434\u0435\u0442\u044C"
@@ -807,6 +910,7 @@ MonoBehaviour:
       var01: "\u0441\u0438\u0434\u0435\u043B"
       var02: sat
   - id: miegoti
+    theme: position
     infinitive:
       target: miegoti
       var01: "\u0441\u043F\u0430\u0442\u044C"
@@ -820,6 +924,7 @@ MonoBehaviour:
       var01: "\u0441\u043F\u0430\u043B"
       var02: slept
   - id: keltis
+    theme: position
     infinitive:
       target: keltis
       var01: "\u0432\u0441\u0442\u0430\u0432\u0430\u0442\u044C"
@@ -833,6 +938,7 @@ MonoBehaviour:
       var01: "\u0432\u0441\u0442\u0430\u043B"
       var02: got up
   - id: susitikti
+    theme: social
     infinitive:
       target: susitikti
       var01: "\u0432\u0441\u0442\u0440\u0435\u0447\u0430\u0442\u044C\u0441\u044F"
@@ -846,6 +952,7 @@ MonoBehaviour:
       var01: "\u0432\u0441\u0442\u0440\u0435\u0442\u0438\u043B\u0441\u044F"
       var02: met
   - id: susipazinti
+    theme: social
     infinitive:
       target: "susipa\u017Einti"
       var01: "\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F"
@@ -859,6 +966,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u043B\u0441\u044F"
       var02: got acquainted
   - id: skambinti
+    theme: social
     infinitive:
       target: skambinti
       var01: "\u0437\u0432\u043E\u043D\u0438\u0442\u044C"
@@ -871,33 +979,8 @@ MonoBehaviour:
       target: skambino
       var01: "\u043F\u043E\u0437\u0432\u043E\u043D\u0438\u043B"
       var02: called
-  - id: dekoti
-    infinitive:
-      target: "d\u0117koti"
-      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442\u044C"
-      var02: to thank
-    presentTense:
-      target: "d\u0117koja"
-      var01: "\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u0442"
-      var02: thanks
-    pastTense:
-      target: "d\u0117kojo"
-      var01: "\u043F\u043E\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u0438\u043B"
-      var02: thanked
-  - id: prasyti
-    infinitive:
-      target: "pra\u0161yti"
-      var01: "\u043F\u0440\u043E\u0441\u0438\u0442\u044C"
-      var02: to ask for
-    presentTense:
-      target: "pra\u0161o"
-      var01: "\u043F\u0440\u043E\u0441\u0438\u0442"
-      var02: asks for
-    pastTense:
-      target: "pra\u0161\u0117"
-      var01: "\u043F\u0440\u043E\u0441\u0438\u043B"
-      var02: asked for
   - id: myleti
+    theme: emotion
     infinitive:
       target: "myl\u0117ti"
       var01: "\u043B\u044E\u0431\u0438\u0442\u044C"
@@ -911,6 +994,7 @@ MonoBehaviour:
       var01: "\u043B\u044E\u0431\u0438\u043B"
       var02: loved
   - id: dziaugtis
+    theme: emotion
     infinitive:
       target: "d\u017Eiaugtis"
       var01: "\u0440\u0430\u0434\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
@@ -924,6 +1008,7 @@ MonoBehaviour:
       var01: "\u0440\u0430\u0434\u043E\u0432\u0430\u043B\u0441\u044F"
       var02: was glad
   - id: bijoti
+    theme: emotion
     infinitive:
       target: bijoti
       var01: "\u0431\u043E\u044F\u0442\u044C\u0441\u044F"
@@ -936,20 +1021,8 @@ MonoBehaviour:
       target: bijojo
       var01: "\u0431\u043E\u044F\u043B\u0441\u044F"
       var02: was afraid
-  - id: tiketi
-    infinitive:
-      target: "tik\u0117ti"
-      var01: "\u0432\u0435\u0440\u0438\u0442\u044C"
-      var02: to believe
-    presentTense:
-      target: tiki
-      var01: "\u0432\u0435\u0440\u0438\u0442"
-      var02: believes
-    pastTense:
-      target: "tik\u0117jo"
-      var01: "\u0432\u0435\u0440\u0438\u043B"
-      var02: believed
   - id: tikti
+    theme: choice
     infinitive:
       target: tikti
       var01: "\u043F\u043E\u0434\u0445\u043E\u0434\u0438\u0442\u044C"
@@ -963,6 +1036,7 @@ MonoBehaviour:
       var01: "\u043F\u043E\u0434\u043E\u0448\u0451\u043B"
       var02: suited
   - id: rinktis
+    theme: choice
     infinitive:
       target: rinktis
       var01: "\u0432\u044B\u0431\u0438\u0440\u0430\u0442\u044C"
@@ -976,6 +1050,7 @@ MonoBehaviour:
       var01: "\u0432\u044B\u0431\u0438\u0440\u0430\u043B"
       var02: chose
   - id: rengtis
+    theme: hygiene
     infinitive:
       target: rengtis
       var01: "\u043E\u0434\u0435\u0432\u0430\u0442\u044C\u0441\u044F"
@@ -989,6 +1064,7 @@ MonoBehaviour:
       var01: "\u043E\u0434\u0435\u043B\u0441\u044F"
       var02: got dressed
   - id: plauti
+    theme: hygiene
     infinitive:
       target: plauti
       var01: "\u043C\u044B\u0442\u044C"
@@ -1002,6 +1078,7 @@ MonoBehaviour:
       var01: "\u043C\u044B\u043B"
       var02: washed
   - id: praustis
+    theme: hygiene
     infinitive:
       target: praustis
       var01: "\u0443\u043C\u044B\u0432\u0430\u0442\u044C\u0441\u044F"
@@ -1015,6 +1092,7 @@ MonoBehaviour:
       var01: "\u0443\u043C\u044B\u043B\u0441\u044F"
       var02: washed (oneself)
   - id: maudytis
+    theme: hygiene
     infinitive:
       target: maudytis
       var01: "\u043A\u0443\u043F\u0430\u0442\u044C\u0441\u044F"
@@ -1028,6 +1106,7 @@ MonoBehaviour:
       var01: "\u043A\u0443\u043F\u0430\u043B\u0441\u044F"
       var02: bathed
   - id: valyti
+    theme: hygiene
     infinitive:
       target: valyti
       var01: "\u0447\u0438\u0441\u0442\u0438\u0442\u044C"
@@ -1041,6 +1120,7 @@ MonoBehaviour:
       var01: "\u0447\u0438\u0441\u0442\u0438\u043B"
       var02: cleaned
   - id: atidaryti
+    theme: objects
     infinitive:
       target: atidaryti
       var01: "\u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0442\u044C"
@@ -1054,6 +1134,7 @@ MonoBehaviour:
       var01: "\u043E\u0442\u043A\u0440\u044B\u043B"
       var02: opened
   - id: uzdaryti
+    theme: objects
     infinitive:
       target: "u\u017Edaryti"
       var01: "\u0437\u0430\u043A\u0440\u044B\u0432\u0430\u0442\u044C"
@@ -1067,6 +1148,7 @@ MonoBehaviour:
       var01: "\u0437\u0430\u043A\u0440\u044B\u043B"
       var02: closed
   - id: nesti
+    theme: objects
     infinitive:
       target: "ne\u0161ti"
       var01: "\u043D\u0435\u0441\u0442\u0438"
@@ -1080,6 +1162,7 @@ MonoBehaviour:
       var01: "\u043D\u0451\u0441"
       var02: carried
   - id: vesti
+    theme: objects
     infinitive:
       target: vesti
       var01: "\u0432\u0435\u0441\u0442\u0438"
