@@ -14,6 +14,13 @@ using UnityEngine.UI;
 // all 3 of its forms are answered correctly in a row.
 public class WordBuilderField : MonoBehaviour
 {
+    [System.Serializable]
+    public class ThemeIcon
+    {
+        public string theme;
+        public Sprite icon;
+    }
+
     [Header("Data")]
     [SerializeField] VerbSet verbSet;
     [SerializeField] GameSession session;
@@ -37,6 +44,9 @@ public class WordBuilderField : MonoBehaviour
     [SerializeField] LocalizedString successMessage;
     [Tooltip("Prefix shown above the player's wrong attempt in the HelperPanel's example line, with the incorrect letters underlined.")]
     [SerializeField] LocalizedString mistakesLabel;
+    [Tooltip("Shows an icon for the current block's theme (dual coding — a visual anchor alongside the translation). Hidden if the theme has no entry below.")]
+    [SerializeField] Image themeImage;
+    [SerializeField] List<ThemeIcon> themeIcons;
 
     [Header("Grouping")]
     [Tooltip("Chance to continue picking the previous block's theme (if any same-theme blocks remain) instead of a fully random one, forming short 2-3 runs of related verbs.")]
@@ -128,6 +138,8 @@ public class WordBuilderField : MonoBehaviour
         currentBlock = PickNextBlock();
         currentFormIndex = 0;
 
+        UpdateThemeImage();
+
         answeredForms.Clear();
         UpdateProgressText();
 
@@ -166,6 +178,24 @@ public class WordBuilderField : MonoBehaviour
         activeTheme = picked.theme;
         themeStreakLeft = Random.Range(1, 3); // 1-2 MORE after this one => a run of 2-3 total
         return picked;
+    }
+
+    void UpdateThemeImage()
+    {
+        if (themeImage == null) return;
+
+        Sprite icon = null;
+        foreach (var entry in themeIcons)
+        {
+            if (entry.theme == currentBlock.theme)
+            {
+                icon = entry.icon;
+                break;
+            }
+        }
+
+        themeImage.sprite = icon;
+        themeImage.enabled = icon != null;
     }
 
     void UpdateHelpCountText()
