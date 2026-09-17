@@ -17,39 +17,31 @@ MonoBehaviour:
     target: ai
     var01: as
     var02: as
-    example: {fileID: 0}
   - id: nom_1
     target: iai (M)
-    var01: is
-    var02: is
-    example: {fileID: 0}
+    var01: is (M)
+    var02: is (M)
   - id: nom_2
     target: iai
     var01: ys
     var02: ys
-    example: {fileID: 0}
   - id: nom_3
     target: os
     var01: a
     var02: a
-    example: {fileID: 0}
   - id: nom_4
     target: "\u0117s"
     var01: "\u0117"
     var02: "\u0117"
-    example: {fileID: 0}
   - id: nom_5
     target: "\u016Bs"
     var01: us
     var02: us
-    example: {fileID: 0}
   - id: nom_6
     target: ys (F)
-    var01: is
-    var02: is
-    example: {fileID: 0}
+    var01: is (F)
+    var02: is (F)
   - id: nom_7
     target: erys
     var01: "uo/\u0117"
     var02: "uo/\u0117"
-    example: {fileID: 0}

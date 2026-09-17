@@ -1,0 +1,20 @@
+{
+  "pairs": [
+    { "id": "question_kas",     "target": "Kas?",     "var01": "Кто?",            "var02": "Who?" },
+    { "id": "question_kas_yra", "target": "Kas yra?", "var01": "Что это?",         "var02": "What is it?" },
+    { "id": "question_kur",     "target": "Kur?",     "var01": "Где?",             "var02": "Where?" },
+    { "id": "question_kur_yra", "target": "Kur yra?", "var01": "Где находится?",   "var02": "Where is it?" },
+    { "id": "question_kada",    "target": "Kada?",    "var01": "Когда?",            "var02": "When?" },
+    { "id": "question_kaip",    "target": "Kaip?",    "var01": "Как?",              "var02": "How?" },
+    { "id": "question_kodel",   "target": "Kodėl?",   "var01": "Почему?",            "var02": "Why?" },
+    { "id": "question_kiek",    "target": "Kiek?",    "var01": "Сколько?",           "var02": "How many / how much?" },
+    { "id": "question_koks",    "target": "Koks?",    "var01": "Какой?",             "var02": "What kind of?" },
+    { "id": "question_kokia",   "target": "Kokia?",   "var01": "Какая?",             "var02": "What kind of?" },
+    { "id": "question_kuris",   "target": "Kuris?",   "var01": "Который?",            "var02": "Which?" },
+    { "id": "question_kuri",    "target": "Kuri?",    "var01": "Которая?",            "var02": "Which?" },
+    { "id": "question_kieno",   "target": "Kieno?",   "var01": "Чей?",               "var02": "Whose?" },
+    { "id": "question_kam",     "target": "Kam?",     "var01": "Кому?",              "var02": "To whom?" },
+    { "id": "question_ka",      "target": "Ką?",      "var01": "Что?",               "var02": "What?" },
+    { "id": "question_ko",      "target": "Ko?",      "var01": "Чего?/О чём?",    "var02": "What?/About what?" }
+  ]
+}

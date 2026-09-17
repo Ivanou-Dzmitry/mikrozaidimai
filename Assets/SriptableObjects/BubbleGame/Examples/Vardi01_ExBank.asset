@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9c903fb2484648b63cc59e12accef, type: 3}
+  m_Name: Vardi01_ExBank
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleBank
+  entries:
+  - key: ai
+    sentences:
+    - "vyras \u2192 vyrai"
+    - "vaikas \u2192 vaikai"
+    - "namas \u2192 namai"
+    - "stalas \u2192 stalai"
+    - "miestas \u2192 miestai"
+    - "darbas \u2192 darbai"
+    - "draugas \u2192 draugai"
+    - "telefonas \u2192 telefonai"
+    - "vakaras \u2192 vakarai"
+  - key: iai (M)
+    sentences:
+    - "kelias \u2192 keliai"
+    - "sve\u010Dias \u2192 sve\u010Diai"
+    - "velnias \u2192 velniai"
+    - "elnias \u2192 elniai"
+  - key: iai
+    sentences:
+    - "brolis \u2192 broliai"
+    - "medis \u2192 med\u017Eiai"
+    - "dantis \u2192 dantys"
+    - "vagis \u2192 vagys"
+    - "\u017Eodis \u2192 \u017Eod\u017Eiai"
+    - "s\u016Bris \u2192 s\u016Briai"
+    - "arklys \u2192 arkliai"
+    - "traukinys \u2192 traukiniai"
+    - "mokinys \u2192 mokiniai"
+    - "karys \u2192 kariai"
+    - "pavyzdys \u2192 pavyzd\u017Eiai"
+    - "pirkinys \u2192 pirkiniai"
+    - "e\u017Eys \u2192 e\u017Eiai"
+  - key: os
+    sentences:
+    - "mama \u2192 mamos"
+    - "diena \u2192 dienos"
+    - "knyga \u2192 knygos"
+    - "ranka \u2192 rankos"
+    - "galva \u2192 galvos"
+    - "mokykla \u2192 mokyklos"
+    - "\u0161eima \u2192 \u0161eimos"
+    - "siena \u2192 sienos"
+  - key: "\u0117s"
+    sentences:
+    - "gatv\u0117 \u2192 gatv\u0117s"
+    - "up\u0117 \u2192 up\u0117s"
+    - "\u017Eem\u0117 \u2192 \u017Eem\u0117s"
+    - "saul\u0117 \u2192 saul\u0117s"
+    - "k\u0117d\u0117 \u2192 k\u0117d\u0117s"
+    - "savait\u0117 \u2192 savait\u0117s"
+  - key: "\u016Bs"
+    sentences:
+    - "s\u016Bnus \u2192 s\u016Bn\u016Bs"
+    - "alus \u2192 al\u016Bs"
+    - "medus \u2192 med\u016Bs"
+    - "dangus \u2192 dang\u016Bs"
+    - "lietus \u2192 liet\u016Bs"
+  - key: ys (F)
+    sentences:
+    - "moteris \u2192 moterys"
+    - "akis \u2192 akys"
+    - "avis \u2192 avys"
+    - "pilis \u2192 pilys"
+    - "\u0161irdis \u2192 \u0161irdys"
+    - "nosis \u2192 nosys"
+    - "mintis \u2192 mintys"
+    - "ausis \u2192 ausys"
+  - key: erys
+    sentences:
+    - "sesuo \u2192 seserys"

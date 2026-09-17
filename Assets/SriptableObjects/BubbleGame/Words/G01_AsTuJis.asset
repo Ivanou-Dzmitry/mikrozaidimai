@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc73352b6f2d20489f748797dee0c70, type: 3}
+  m_Name: G01_AsTuJis
+  m_EditorClassIdentifier: Assembly-CSharp::WordSet
+  pairs:
+  - id: pronoun_as
+    lt: "a\u0161"
+    ru: "\u044F"
+    eng: I
+  - id: pronoun_tu
+    lt: tu
+    ru: "\u0442\u044B"
+    eng: you
+  - id: pronoun_jis
+    lt: jis
+    ru: "\u043E\u043D"
+    eng: he
+  - id: pronoun_ji
+    lt: ji
+    ru: "\u043E\u043D\u0430"
+    eng: she
+  - id: pronoun_mes
+    lt: mes
+    ru: "\u043C\u044B"
+    eng: we
+  - id: pronoun_jus
+    lt: "j\u016Bs"
+    ru: "\u0432\u044B"
+    eng: you
+  - id: pronoun_jie
+    lt: jie
+    ru: "\u043E\u043D\u0438-\u043C"
+    eng: they-m
+  - id: pronoun_jos
+    lt: jos
+    ru: "\u043E\u043D\u0438-\u0436"
+    eng: they-f

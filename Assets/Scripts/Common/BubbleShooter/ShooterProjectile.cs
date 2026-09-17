@@ -14,6 +14,10 @@ public class ShooterProjectile : MonoBehaviour
     [SerializeField] RandomGradientColor randomColor;
     [Tooltip("How far above its normal spot the label jumps while being dragged — a finger/thumb on a phone screen otherwise covers it right where you need to read it.")]
     [SerializeField] float labelLiftOffset = 0.8f;
+    [Tooltip("Played once at the moment the ball is released/launched.")]
+    [SerializeField] ParticleSystem launchParticles;
+    [Tooltip("Trail shown only while actually flying — off while being dragged/aimed, otherwise it draws a trail from the drag motion too.")]
+    [SerializeField] TrailRenderer trail;
 
     Rigidbody rb;
     Vector3 labelRestLocalPosition;
@@ -53,6 +57,12 @@ public class ShooterProjectile : MonoBehaviour
         rb.isKinematic = true;
         if (label != null) label.text = pair.GetVariant(Settings.Data.language);
         if (randomColor != null) randomColor.Apply();
+
+        if (trail != null)
+        {
+            trail.emitting = false;
+            trail.Clear();
+        }
     }
 
     public void Launch(Vector3 velocity)
@@ -61,6 +71,9 @@ public class ShooterProjectile : MonoBehaviour
         resolved = false;
         rb.isKinematic = false;
         rb.linearVelocity = velocity;
+
+        if (launchParticles != null) launchParticles.Play();
+        if (trail != null) trail.emitting = true;
     }
 
     void OnCollisionEnter(Collision collision)

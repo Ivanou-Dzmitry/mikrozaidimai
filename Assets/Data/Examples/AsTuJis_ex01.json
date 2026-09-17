@@ -1,0 +1,60 @@
+{
+  "entries": [
+    {
+      "key": "aš",
+      "sentences": [
+        "Aš esu čia.",
+        "Aš dirbu."
+      ]
+    },
+    {
+      "key": "tu",
+      "sentences": [
+        "Tu esi čia.",
+        "Tu dirbi."
+      ]
+    },
+    {
+      "key": "jis",
+      "sentences": [
+        "Jis yra čia.",
+        "Jis dirba."
+      ]
+    },
+    {
+      "key": "ji",
+      "sentences": [
+        "Ji yra čia.",
+        "Ji dirba."
+      ]
+    },
+    {
+      "key": "mes",
+      "sentences": [
+        "Mes esame čia.",
+        "Mes dirbame."
+      ]
+    },
+    {
+      "key": "jūs",
+      "sentences": [
+        "Jūs esate čia.",
+        "Jūs dirbate."
+      ]
+    },
+    {
+      "key": "jie",
+      "sentences": [
+        "Jie yra čia.",
+        "Jie dirba."
+      ]
+    },
+    {
+      "key": "jos",
+      "sentences": [
+        "Jos yra čia.",
+        "Jos dirba."
+      ]
+    }
+  ]
+}

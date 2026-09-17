@@ -12,6 +12,8 @@ public class GameInfo : ScriptableObject
     public LocalizedString title;
     public LocalizedString description;
     public WordSet wordSet;
+    [Tooltip("Optional pool of example sentences shown in the hint panel on a wrong answer — resolved by looking the word up in here, not wired per-pair.")]
+    public ExampleBank exampleBank;
     [Tooltip("Only needed if this game's bubble MESH/shape differs from the default — for just a different color, use Appearance.bubbleGradient on the same shared prefab instead.")]
     public WordBubble bubblePrefab;
     public AppearanceSettings appearance = new AppearanceSettings();

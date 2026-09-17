@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9c903fb2484648b63cc59e12accef, type: 3}
+  m_Name: Q01_ExBank
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleBank
+  entries:
+  - key: Kas?
+    sentences:
+    - Kas tu esi?
+    - Kas ten eina?
+  - key: Kas yra?
+    sentences:
+    - Kas tai yra?
+    - Kas yra ant stalo?
+  - key: Kur?
+    sentences:
+    - Kur tu eini?
+    - Kur tu gyveni?
+  - key: Kur yra?
+    sentences:
+    - Kur yra tualetas?
+    - Kur yra stotis?
+  - key: Kada?
+    sentences:
+    - Kada tu ateisi?
+    - Kada prasideda pamoka?
+  - key: Kaip?
+    sentences:
+    - Kaip tu jautiesi?
+    - Kaip sekasi?
+  - key: Kodėl?
+    sentences:
+    - Kodėl tu verki?
+    - Kodėl tu vėluoji?
+  - key: Kiek?
+    sentences:
+    - Kiek tai kainuoja?
+    - Kiek tau metų?
+  - key: Koks?
+    sentences:
+    - Koks tavo vardas?
+    - Koks šiandien oras?
+  - key: Kokia?
+    sentences:
+    - Kokia spalva tau patinka?
+    - Kokia šiandien diena?
+  - key: Kuris?
+    sentences:
+    - Kuris automobilis tavo?
+    - Kuris draugas atvyko?
+  - key: Kuri?
+    sentences:
+    - Kuri knyga geresnė?
+    - Kuri suknelė tau patinka?
+  - key: Kieno?
+    sentences:
+    - Kieno tai knyga?
+    - Kieno čia automobilis?
+  - key: Kam?
+    sentences:
+    - Kam tu skambini?
+    - Kam tu rašai laišką?
+  - key: Ką?
+    sentences:
+    - Ką tu darai?
+    - Ką tu valgai?
+  - key: Ko?
+    sentences:
+    - Ko tu nori?
+    - Ko tu bijai?

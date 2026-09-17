@@ -1,0 +1,61 @@
+{
+  "entries": [
+    {
+      "key": "o",
+      "sentences": [
+        "vyras → vyro",
+        "namas → namo",
+        "stalas → stalo",
+        "miestas → miesto",
+        "draugas → draugo"
+      ]
+    },
+    {
+      "key": "io",
+      "sentences": [
+        "brolis → brolio",
+        "kelias → kelio",
+        "žodis → žodžio",
+        "medis → medžio",
+        "sūris → sūrio"
+      ]
+    },
+    {
+      "key": "os",
+      "sentences": [
+        "mama → mamos",
+        "knyga → knygos",
+        "ranka → rankos",
+        "mokykla → mokyklos",
+        "šeima → šeimos"
+      ]
+    },
+    {
+      "key": "ės",
+      "sentences": [
+        "gatvė → gatvės",
+        "upė → upės",
+        "žemė → žemės",
+        "saulė → saulės",
+        "savaitė → savaitės"
+      ]
+    },
+    {
+      "key": "aus",
+      "sentences": [
+        "sūnus → sūnaus",
+        "alus → alaus",
+        "medus → medaus",
+        "dangus → dangaus",
+        "lietus → lietaus"
+      ]
+    },
+    {
+      "key": "ers",
+      "sentences": [
+        "sesuo → sesers",
+        "duktė → dukters"
+      ]
+    }
+  ]
+}

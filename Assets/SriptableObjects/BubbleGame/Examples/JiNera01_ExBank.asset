@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9c903fb2484648b63cc59e12accef, type: 3}
+  m_Name: JiNera01_ExBank
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleBank
+  entries:
+  - key: nesu
+    sentences:
+    - "A\u0161 nesu \u010Dia."
+    - "A\u0161 nesu studentas."
+  - key: nesi
+    sentences:
+    - "Tu nesi \u010Dia."
+    - Tu nesi studentas.
+  - key: "n\u0117ra"
+    sentences:
+    - "Jis n\u0117ra \u010Dia."
+    - "Jis n\u0117ra studentas."
+  - key: "n\u0117ra"
+    sentences:
+    - "Ji n\u0117ra \u010Dia."
+    - "Ji n\u0117ra student\u0117."
+  - key: nesame
+    sentences:
+    - "Mes nesame \u010Dia."
+    - Mes nesame studentai.
+  - key: nesate
+    sentences:
+    - "J\u016Bs nesate \u010Dia."
+    - "J\u016Bs nesate studentai."
+  - key: "n\u0117ra"
+    sentences:
+    - "Jie n\u0117ra \u010Dia."
+    - "Jie n\u0117ra studentai."
+  - key: "n\u0117ra"
+    sentences:
+    - "Jos n\u0117ra \u010Dia."
+    - "Jos n\u0117ra student\u0117s."

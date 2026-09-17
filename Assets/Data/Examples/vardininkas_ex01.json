@@ -1,0 +1,98 @@
+{
+  "entries": [
+    {
+      "key": "ai",
+      "sentences": [
+        "vyras → vyrai",
+        "vaikas → vaikai",
+        "namas → namai",
+        "stalas → stalai",
+        "miestas → miestai",
+        "darbas → darbai",
+        "draugas → draugai",
+        "telefonas → telefonai",
+        "vakaras → vakarai"
+      ]
+    },
+    {
+      "key": "iai (M)",
+      "sentences": [
+        "kelias → keliai",
+        "svečias → svečiai",
+        "velnias → velniai",
+        "elnias → elniai"
+      ]
+    },
+    {
+      "key": "iai",
+      "sentences": [
+        "brolis → broliai",
+        "medis → medžiai",
+        "dantis → dantys",
+        "vagis → vagys",
+        "žodis → žodžiai",
+        "sūris → sūriai",
+        "arklys → arkliai",
+        "traukinys → traukiniai",
+        "mokinys → mokiniai",
+        "karys → kariai",
+        "pavyzdys → pavyzdžiai",
+        "pirkinys → pirkiniai",
+        "ežys → ežiai"
+      ]
+    },
+    {
+      "key": "os",
+      "sentences": [
+        "mama → mamos",
+        "diena → dienos",
+        "knyga → knygos",
+        "ranka → rankos",
+        "galva → galvos",
+        "mokykla → mokyklos",
+        "šeima → šeimos",
+        "siena → sienos"
+      ]
+    },
+    {
+      "key": "ės",
+      "sentences": [
+        "gatvė → gatvės",
+        "upė → upės",
+        "žemė → žemės",
+        "saulė → saulės",
+        "kėdė → kėdės",
+        "savaitė → savaitės"
+      ]
+    },
+    {
+      "key": "ūs",
+      "sentences": [
+        "sūnus → sūnūs",
+        "alus → alūs",
+        "medus → medūs",
+        "dangus → dangūs",
+        "lietus → lietūs"
+      ]
+    },
+    {
+      "key": "ys (F)",
+      "sentences": [
+        "moteris → moterys",
+        "akis → akys",
+        "avis → avys",
+        "pilis → pilys",
+        "širdis → širdys",
+        "nosis → nosys",
+        "mintis → mintys",
+        "ausis → ausys"
+      ]
+    },
+    {
+      "key": "erys",
+      "sentences": [
+        "sesuo → seserys"
+      ]
+    }
+  ]
+}

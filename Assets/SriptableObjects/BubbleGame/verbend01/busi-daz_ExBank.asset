@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9c903fb2484648b63cc59e12accef, type: 3}
+  m_Name: busi-daz_ExBank
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleBank
+  entries:
+  - key: davau
+    sentences:
+    - "A\u0161 dirbdavau."
+    - "A\u0161 mokydavausi."
+  - key: davai
+    sentences:
+    - Tu dirbdavai.
+    - Tu mokydavaisi.
+  - key: davo
+    sentences:
+    - Jis dirbdavo.
+    - Ji mokydavosi.
+  - key: davome
+    sentences:
+    - Mes dirbdavome.
+    - "Mes mokydavom\u0117s."
+  - key: davote
+    sentences:
+    - "J\u016Bs dirbdavote."
+    - "J\u016Bs mokydavot\u0117s."
+  - key: davo
+    sentences:
+    - Jie dirbdavo.
+    - Jos mokydavosi.

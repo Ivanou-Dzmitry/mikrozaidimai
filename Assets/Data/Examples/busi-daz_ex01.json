@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "key": "davau",
+      "sentences": [
+        "Aš dirbdavau.",
+        "Aš mokydavausi."
+      ]
+    },
+    {
+      "key": "davai",
+      "sentences": [
+        "Tu dirbdavai.",
+        "Tu mokydavaisi."
+      ]
+    },
+    {
+      "key": "davo",
+      "sentences": [
+        "Jis dirbdavo.",
+        "Ji mokydavosi."
+      ]
+    },
+    {
+      "key": "davome",
+      "sentences": [
+        "Mes dirbdavome.",
+        "Mes mokydavomės."
+      ]
+    },
+    {
+      "key": "davote",
+      "sentences": [
+        "Jūs dirbdavote.",
+        "Jūs mokydavotės."
+      ]
+    },
+    {
+      "key": "davo",
+      "sentences": [
+        "Jie dirbdavo.",
+        "Jos mokydavosi."
+      ]
+    }
+  ]
+}

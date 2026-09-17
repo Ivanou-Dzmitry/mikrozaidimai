@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2cc73352b6f2d20489f748797dee0c70, type: 3}
-  m_Name: busi01_ws
+  m_Name: busi01_WS
   m_EditorClassIdentifier: Assembly-CSharp::WordSet
   pairs:
   - id: buisi_01_0

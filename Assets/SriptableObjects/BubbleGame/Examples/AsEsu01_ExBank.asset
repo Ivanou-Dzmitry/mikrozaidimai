@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a9c903fb2484648b63cc59e12accef, type: 3}
+  m_Name: AsEsu01_ExBank
+  m_EditorClassIdentifier: Assembly-CSharp::ExampleBank
+  entries:
+  - key: esu
+    sentences:
+    - "A\u0161 esu \u010Dia."
+    - "A\u0161 esu studentas."
+  - key: esi
+    sentences:
+    - "Tu esi \u010Dia."
+    - Tu esi studentas.
+  - key: yra
+    sentences:
+    - "Jis yra \u010Dia."
+    - Jis yra mokytojas.
+  - key: yra
+    sentences:
+    - "Ji yra \u010Dia."
+    - "Ji yra student\u0117."
+  - key: esame
+    sentences:
+    - "Mes esame \u010Dia."
+    - Mes esame studentai.
+  - key: esate
+    sentences:
+    - "J\u016Bs esate \u010Dia."
+    - "J\u016Bs esate mokytojai."
+  - key: yra
+    sentences:
+    - "Jie yra \u010Dia."
+    - Jie yra studentai.
+  - key: yra
+    sentences:
+    - "Jos yra \u010Dia."
+    - "Jos yra student\u0117s."

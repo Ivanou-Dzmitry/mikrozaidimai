@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "key": "siu",
+      "sentences": [
+        "Aš dirbsiu.",
+        "Aš mokysiuosi."
+      ]
+    },
+    {
+      "key": "si",
+      "sentences": [
+        "Tu dirbsi.",
+        "Tu mokysiesi."
+      ]
+    },
+    {
+      "key": "s",
+      "sentences": [
+        "Jis dirbs.",
+        "Ji mokysis."
+      ]
+    },
+    {
+      "key": "sime",
+      "sentences": [
+        "Mes dirbsime.",
+        "Mes mokysimės."
+      ]
+    },
+    {
+      "key": "site",
+      "sentences": [
+        "Jūs dirbsite.",
+        "Jūs mokysitės."
+      ]
+    },
+    {
+      "key": "s",
+      "sentences": [
+        "Jie dirbs.",
+        "Jos mokysis."
+      ]
+    }
+  ]
+}

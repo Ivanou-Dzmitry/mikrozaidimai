@@ -1,0 +1,60 @@
+{
+  "entries": [
+    {
+      "key": "esu",
+      "sentences": [
+        "Aš esu čia.",
+        "Aš esu studentas."
+      ]
+    },
+    {
+      "key": "esi",
+      "sentences": [
+        "Tu esi čia.",
+        "Tu esi studentas."
+      ]
+    },
+    {
+      "key": "yra",
+      "sentences": [
+        "Jis yra čia.",
+        "Jis yra mokytojas."
+      ]
+    },
+    {
+      "key": "yra",
+      "sentences": [
+        "Ji yra čia.",
+        "Ji yra studentė."
+      ]
+    },
+    {
+      "key": "esame",
+      "sentences": [
+        "Mes esame čia.",
+        "Mes esame studentai."
+      ]
+    },
+    {
+      "key": "esate",
+      "sentences": [
+        "Jūs esate čia.",
+        "Jūs esate mokytojai."
+      ]
+    },
+    {
+      "key": "yra",
+      "sentences": [
+        "Jie yra čia.",
+        "Jie yra studentai."
+      ]
+    },
+    {
+      "key": "yra",
+      "sentences": [
+        "Jos yra čia.",
+        "Jos yra studentės."
+      ]
+    }
+  ]
+}

@@ -20,6 +20,8 @@ public class BubbleField : MonoBehaviour
     [SerializeField] WordSet wordSet;
     [Tooltip("Used only when launched directly (e.g. testing in the editor) — a game button's GameLaunchConfig.Current.bubblePrefab takes priority.")]
     [SerializeField] WordBubble bubblePrefab;
+    [Tooltip("Used only when launched directly (e.g. testing in the editor) — a game button's GameLaunchConfig.Current.exampleBank takes priority. Optional either way.")]
+    [SerializeField] ExampleBank exampleBank;
     [SerializeField] ShooterProjectile projectilePrefab;
     [SerializeField] Transform shooterOrigin;
     [SerializeField] BoxCollider playField;
@@ -99,6 +101,11 @@ public class BubbleField : MonoBehaviour
         if (GameLaunchConfig.Current != null && GameLaunchConfig.Current.bubblePrefab != null)
         {
             bubblePrefab = GameLaunchConfig.Current.bubblePrefab;
+        }
+
+        if (GameLaunchConfig.Current != null && GameLaunchConfig.Current.exampleBank != null)
+        {
+            exampleBank = GameLaunchConfig.Current.exampleBank;
         }
 
         if (GameLaunchConfig.Current != null && GameLaunchConfig.Current.appearance.rowSpacingMultiplier > 0f)
@@ -352,9 +359,7 @@ public class BubbleField : MonoBehaviour
             if (HelperPanel.Instance != null)
             {
                 string variant = projectile.Pair.GetVariant(Settings.Data.language);
-
-                ExamplePair example = projectile.Pair.example != null ? projectile.Pair.example.GetRandom() : null;
-                string exampleText = example != null ? $"{example.from} → {example.to}" : null;
+                string exampleText = exampleBank != null ? exampleBank.GetExample(projectile.Pair.target) : null;
 
                 HelperPanel.Instance.ShowHint(variant, projectile.Pair.target, exampleText);
             }

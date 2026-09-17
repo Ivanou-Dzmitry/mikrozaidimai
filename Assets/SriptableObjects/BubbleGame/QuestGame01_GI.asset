@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9bc7f44f34fb9468e8077fccce41b4, type: 3}
+  m_Name: QuestGame01_GI
+  m_EditorClassIdentifier: Assembly-CSharp::GameInfo
+  gameId: Quest01
+  title:
+    m_TableReference:
+      m_TableCollectionName: GUID:f612ad86a0d79cc4b9b6b08859f96d32
+    m_TableEntryReference:
+      m_KeyId: 4318348328464384
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  wordSet: {fileID: 11400000, guid: 07bef7e740dffce4b8e7b6680e0f4bb6, type: 2}
+  exampleBank: {fileID: 11400000, guid: beb0e48704454ccd814ebddf69e16700, type: 2}
+  bubblePrefab: {fileID: 2483069116360678100, guid: 7a35c48af4bc2cc45bda0ff6b50e3d85, type: 3}
+  appearance:
+    bubbleGradient:
+      serializedVersion: 2
+      key0: {r: 0.4339623, g: 0, b: 0.31432897, a: 1}
+      key1: {r: 0.53120846, g: 0, b: 0.6, a: 1}
+      key2: {r: 0.76729554, g: 0, b: 0.22424334, a: 0}
+      key3: {r: 0.83137256, g: 0.7070682, b: 0.10196078, a: 0}
+      key4: {r: 0.8805031, g: 0.2364117, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 150
+      ctime1: 16271
+      ctime2: 32743
+      ctime3: 50761
+      ctime4: 65535
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 5
+      m_NumAlphaKeys: 2
+    rowSpacingMultiplier: 1
+  references:
+    version: 2
+    RefIds: []

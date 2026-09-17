@@ -32,6 +32,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   wordSet: {fileID: 11400000, guid: 0360b4e972aecdc418e08decad824257, type: 2}
+  exampleBank: {fileID: 11400000, guid: 91e468482915db743b41252fc2ee33d1, type: 2}
   bubblePrefab: {fileID: 2483069116360678100, guid: 5374fab23ff55fa438b97c74099e25c0, type: 3}
   appearance:
     bubbleGradient:

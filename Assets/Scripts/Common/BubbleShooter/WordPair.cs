@@ -6,10 +6,8 @@ using UnityEngine.Serialization;
 // picked by UI language via GetVariant() — for real vocabulary they hold the RU/EN
 // translation, but for non-translation content (e.g. grammar endings) they can just
 // hold the same value, since not every WordSet is about translating between languages.
-// example is optional: a direct reference to an ExampleSet asset for a "here's
-// how it's used" hint — drag it in the Inspector, not a typed key, so it can't
-// go stale or mismatch a typo (JSON import can't set this; it's asset wiring,
-// not content data, so it's set by hand per pair that needs it).
+// An example sentence (if any) is resolved at runtime by looking target up in the
+// game's ExampleBank (GameInfo.exampleBank) — no per-pair wiring here to go stale.
 [Serializable]
 public class WordPair
 {
@@ -23,8 +21,6 @@ public class WordPair
 
     [FormerlySerializedAs("eng")]
     public string var02;
-
-    public ExampleSet example;
 
     public string GetVariant(string languageCode)
     {

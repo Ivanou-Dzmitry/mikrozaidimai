@@ -1,0 +1,60 @@
+{
+  "entries": [
+    {
+      "key": "nesu",
+      "sentences": [
+        "Aš nesu čia.",
+        "Aš nesu studentas."
+      ]
+    },
+    {
+      "key": "nesi",
+      "sentences": [
+        "Tu nesi čia.",
+        "Tu nesi studentas."
+      ]
+    },
+    {
+      "key": "nėra",
+      "sentences": [
+        "Jis nėra čia.",
+        "Jis nėra studentas."
+      ]
+    },
+    {
+      "key": "nėra",
+      "sentences": [
+        "Ji nėra čia.",
+        "Ji nėra studentė."
+      ]
+    },
+    {
+      "key": "nesame",
+      "sentences": [
+        "Mes nesame čia.",
+        "Mes nesame studentai."
+      ]
+    },
+    {
+      "key": "nesate",
+      "sentences": [
+        "Jūs nesate čia.",
+        "Jūs nesate studentai."
+      ]
+    },
+    {
+      "key": "nėra",
+      "sentences": [
+        "Jie nėra čia.",
+        "Jie nėra studentai."
+      ]
+    },
+    {
+      "key": "nėra",
+      "sentences": [
+        "Jos nėra čia.",
+        "Jos nėra studentės."
+      ]
+    }
+  ]
+}
