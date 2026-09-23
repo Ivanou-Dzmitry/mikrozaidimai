@@ -37,12 +37,15 @@ public class HelperPanel : MonoBehaviour
 
     Coroutine activeRoutine;
     bool paused;
+    PulseAlpha pausePulse;
 
     bool HasControls => pauseButton != null || skipButton != null;
 
     void Awake()
     {
         Instance = this;
+        // optional: if the pause button has a PulseAlpha on it, it blinks while paused
+        if (pauseButton != null) pausePulse = pauseButton.GetComponent<PulseAlpha>();
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         if (gameSession == null) gameSession = FindFirstObjectByType<GameSession>();
         canvasGroup.alpha = 0f;
@@ -75,7 +78,13 @@ public class HelperPanel : MonoBehaviour
 
     void TogglePause()
     {
-        paused = !paused;
+        SetPaused(!paused);
+    }
+
+    void SetPaused(bool value)
+    {
+        paused = value;
+        if (pausePulse != null) pausePulse.SetPulsing(value);
     }
 
     void Skip()
@@ -93,7 +102,7 @@ public class HelperPanel : MonoBehaviour
             activeRoutine = null;
         }
         canvasGroup.alpha = 0f;
-        paused = false;
+        SetPaused(false);
         SetInteractive(false);
 
         if (wasShowing) Hidden?.Invoke();
@@ -132,7 +141,7 @@ public class HelperPanel : MonoBehaviour
         text.text = message;
 
         if (activeRoutine != null) StopCoroutine(activeRoutine);
-        paused = false;
+        SetPaused(false);
         SetInteractive(true);
         activeRoutine = StartCoroutine(ShowThenFade(Settings.Data.helperDuration));
         return true;

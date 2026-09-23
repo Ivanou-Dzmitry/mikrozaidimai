@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'v 0.0.5
+  m_text: 'v 0.0.6
 
 '
   m_isRightToLeft: 0
@@ -2338,7 +2338,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1888487312514307379, guid: 6959755fd75a6774fa72cbb201e6a6ed, type: 3}
       propertyPath: m_text
-      value: JiNera01
+      value: JiNera01_GI
       objectReference: {fileID: 0}
     - target: {fileID: 1906930087621979825, guid: 6959755fd75a6774fa72cbb201e6a6ed, type: 3}
       propertyPath: m_IsActive
@@ -3330,7 +3330,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1888487312514307379, guid: 6959755fd75a6774fa72cbb201e6a6ed, type: 3}
       propertyPath: m_text
-      value: AsEsu01
+      value: AsEsu01_GI
       objectReference: {fileID: 0}
     - target: {fileID: 1906930087621979825, guid: 6959755fd75a6774fa72cbb201e6a6ed, type: 3}
       propertyPath: m_IsActive
