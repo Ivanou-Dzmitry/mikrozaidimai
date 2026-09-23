@@ -73,7 +73,6 @@ public class WordBuilderField : MonoBehaviour
     bool inputEnabled = true;
     int helpUsesLeft;
     int blocksCompleted;
-    int totalAttempts;
     string activeTheme;
     int themeStreakLeft;
 
@@ -81,15 +80,8 @@ public class WordBuilderField : MonoBehaviour
     // For a stats screen ("1 / 80"), not tied to score/records.
     public event System.Action<int, int> ProgressChanged;
 
-    // Fires every time a block gets resolved one way or another (passed OR
-    // failed/skipped) — a block that fails and comes back later counts again
-    // each time it's retried, so this is "how many 3-word rounds I've gone
-    // through", not just successful ones.
-    public event System.Action<int> AttemptsChanged;
-
     public int BlocksCompleted => blocksCompleted;
     public int TotalBlocks => verbSet.blocks.Count;
-    public int TotalAttempts => totalAttempts;
 
     void Awake()
     {
@@ -372,8 +364,9 @@ public class WordBuilderField : MonoBehaviour
         blocksCompleted++;
         ProgressChanged?.Invoke(blocksCompleted, TotalBlocks);
 
-        totalAttempts++;
-        AttemptsChanged?.Invoke(totalAttempts);
+        // one try = one 3-word round resolved; a failed block that comes back
+        // later counts again each retry
+        session?.AddAttempt();
 
         string message = LocalizationUtil.Resolve(successMessage, "Great");
         string forms = string.Join(" - ", answeredForms);
@@ -404,8 +397,7 @@ public class WordBuilderField : MonoBehaviour
         failQueue.Add(currentBlock);
         SetInputEnabled(false);
 
-        totalAttempts++;
-        AttemptsChanged?.Invoke(totalAttempts);
+        session?.AddAttempt(missed: true);
 
         string mistakes = !string.IsNullOrEmpty(wrongAttempt) ? BuildMistakesText(wrongAttempt, form.target) : null;
 

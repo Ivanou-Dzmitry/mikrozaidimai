@@ -343,6 +343,8 @@ public class BubbleField : MonoBehaviour
             activeBubbles.Remove(target);
             rowOccupancy[target.Row][target.Column] = false;
             Destroy(target.gameObject);
+            // counted before AddScore/Win so the final winning shot is included
+            session.AddAttempt();
             session.AddScore(1);
             PlayFeedback(correctSound, correctEffectPrefab, hitPosition);
 
@@ -354,6 +356,7 @@ public class BubbleField : MonoBehaviour
         }
         else
         {
+            session.AddAttempt(missed: true);
             PlayFeedback(wrongSound, wrongEffectPrefab, hitPosition);
 
             if (HelperPanel.Instance != null)

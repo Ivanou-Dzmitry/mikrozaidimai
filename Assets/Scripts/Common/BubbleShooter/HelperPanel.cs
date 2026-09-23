@@ -34,6 +34,8 @@ public class HelperPanel : MonoBehaviour
     [SerializeField] Button pauseButton;
     [Tooltip("Hides the hint right away even if its time isn't up — whatever is waiting on Hidden (e.g. the next word) proceeds immediately. Leave empty if this scene doesn't need it.")]
     [SerializeField] Button skipButton;
+    [Tooltip("Display-only countdown: full when the hint appears, drains to empty over its visible time, and freezes while paused. Leave empty if not needed.")]
+    [SerializeField] Slider timerSlider;
 
     Coroutine activeRoutine;
     bool paused;
@@ -46,6 +48,8 @@ public class HelperPanel : MonoBehaviour
         Instance = this;
         // optional: if the pause button has a PulseAlpha on it, it blinks while paused
         if (pauseButton != null) pausePulse = pauseButton.GetComponent<PulseAlpha>();
+        // display only — the player must not be able to drag the countdown
+        if (timerSlider != null) timerSlider.interactable = false;
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         if (gameSession == null) gameSession = FindFirstObjectByType<GameSession>();
         canvasGroup.alpha = 0f;
@@ -147,6 +151,13 @@ public class HelperPanel : MonoBehaviour
         return true;
     }
 
+    // fill 1 = full, 0 = empty, mapped onto the slider's own min/max so it
+    // works even if they aren't 0..1
+    void SetTimerFill(float fill)
+    {
+        if (timerSlider != null) timerSlider.value = Mathf.Lerp(timerSlider.minValue, timerSlider.maxValue, fill);
+    }
+
     void SetInteractive(bool on)
     {
         // no buttons -> stay fully click-through no matter what
@@ -160,12 +171,16 @@ public class HelperPanel : MonoBehaviour
         canvasGroup.alpha = 1f;
 
         // manual timer instead of WaitForSeconds so Pause can freeze it
+        // (and the slider, which just mirrors it, freezes with it)
         float visibleTime = 0f;
+        SetTimerFill(1f);
         while (visibleTime < visibleDuration)
         {
             if (!paused) visibleTime += Time.deltaTime;
+            SetTimerFill(1f - Mathf.Clamp01(visibleTime / visibleDuration));
             yield return null;
         }
+        SetTimerFill(0f);
 
         float t = 0f;
         while (t < fadeDuration)

@@ -22,9 +22,16 @@ public abstract class GameSession : MonoBehaviour
     public int Score { get; private set; }
     public int Record { get; private set; }
     public float ElapsedTime { get; private set; }
+    // How many tries the player has made this session, right or wrong — what
+    // counts as one is up to each game (a shot in Game 1, a 3-word round in Game 2).
+    public int Attempts { get; private set; }
+    // The attempts that failed (a wrong shot in Game 1, a failed/skipped 3-word round in Game 2).
+    public int Misses { get; private set; }
     public GameState State { get; private set; } = GameState.None;
 
     public event Action<int> ScoreChanged;
+    public event Action<int> AttemptsChanged;
+    public event Action<int> MissesChanged;
     public event Action<GameState> StateChanged;
 
     protected virtual void Awake()
@@ -65,6 +72,20 @@ public abstract class GameSession : MonoBehaviour
     {
         Score = value;
         ScoreChanged?.Invoke(Score);
+    }
+
+    // One call per try: pass missed = true when it failed, so Attempts and
+    // Misses can't drift apart (Attempts - Misses = successful tries).
+    public void AddAttempt(bool missed = false)
+    {
+        Attempts++;
+        AttemptsChanged?.Invoke(Attempts);
+
+        if (missed)
+        {
+            Misses++;
+            MissesChanged?.Invoke(Misses);
+        }
     }
 
     public void Play()
