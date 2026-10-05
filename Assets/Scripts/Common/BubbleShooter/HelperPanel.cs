@@ -48,8 +48,21 @@ public class HelperPanel : MonoBehaviour
         Instance = this;
         // optional: if the pause button has a PulseAlpha on it, it blinks while paused
         if (pauseButton != null) pausePulse = pauseButton.GetComponent<PulseAlpha>();
-        // display only — the player must not be able to drag the countdown
-        if (timerSlider != null) timerSlider.interactable = false;
+        if (timerSlider != null)
+        {
+            // display only — the player must not be able to drag the countdown
+            timerSlider.interactable = false;
+
+            // A slider copied from the volume settings (the _Slider prefab) carries a
+            // VolumeSlider, which would turn this countdown into the SFX volume (and
+            // save it) — silencing every UI sound once the timer reaches 0.
+            var volumeSlider = timerSlider.GetComponent<VolumeSlider>();
+            if (volumeSlider != null)
+            {
+                Debug.LogWarning("[HelperPanel] Timer Slider has a VolumeSlider on it, which would overwrite the sound volume. Disabled it — remove that component from the timer slider.", timerSlider);
+                volumeSlider.enabled = false;
+            }
+        }
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         if (gameSession == null) gameSession = FindFirstObjectByType<GameSession>();
         canvasGroup.alpha = 0f;
