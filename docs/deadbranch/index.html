@@ -392,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.38";   // keep in sync with the VERSION file
+const VERSION = "0.0.39";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2018,8 +2018,13 @@ function draw() {
         ctx.globalAlpha = 1;
       }
       if (!t.harvest && G.builder.base === n) {
-        const k = 1.12 + .03 * Math.sin(G.t * 6);
-        capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2, false, n.tilt);
+        const a0 = ctx.globalAlpha;   // a ripple like a raindrop: a ring appears at the word, slowly spreads a little and fades; two rings, half a period apart
+        for (const off of [0, .5]) {
+          const u = (G.t / 2.8 + off) % 1, k = 1.04 + u * .3;
+          ctx.globalAlpha = a0 * Math.min(1, u * 10) * Math.pow(1 - u, 1.4) * .95;
+          capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2 - u, false, n.tilt);
+        }
+        ctx.globalAlpha = a0;
       }
     }
     if (t.ripe && !t.harvest) {
