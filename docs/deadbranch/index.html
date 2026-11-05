@@ -349,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.10";   // keep in sync with the VERSION file
+const VERSION = "0.0.11";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1315,6 +1315,29 @@ function pickOrbit(px, py) {   // px, py: pixels inside the canvas; true when a 
   return true;
 }
 const ORB = 1.8;   // the floating letters are big: there is room, and they are the thing to tap
+// an empty field (no word yet, nothing typed): a reticle in the middle and letters that appear and fade round it, so it is clear that this is where the words will grow
+const idle = { items: [], next: 0 };
+function drawIdle(cw, wy, rr) {
+  if (G.over || G.builder.letters.length || allNodes().length) { idle.items.length = 0; return; }
+  const cx = cw / 2, cy = (wy + 70) / 2, R0 = Math.max(70, Math.min(rr * 3.4, cw * .28, (wy - 90) * .4)), t = G.t;
+  if (t > idle.next) { idle.next = t + .28; if (idle.items.length < 11) idle.items.push({ ch: ALPHA[Math.floor(Math.random() * ALPHA.length)], a: Math.random() * 6.2832, d: R0 * (.6 + Math.random() * .95), t0: t, life: 2.2 + Math.random() * 1.4 }); }
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();
+  for (let i = idle.items.length - 1; i >= 0; i--) {
+    const o = idle.items[i], u = (t - o.t0) / o.life;
+    if (u > 1) { idle.items.splice(i, 1); continue; }
+    const k = Math.sin(Math.PI * u), d = o.d * (1 + u * .1);
+    ctx.globalAlpha = k * .75;
+    glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.55 + .3 * k), o.ch, T.key[0], T.key[2], T.key[4], 1.5, false);
+  }
+  const pulse = .55 + .25 * Math.sin(t * 2.2), r1 = R0 * .3 * (1 + .04 * Math.sin(t * 2.2));
+  ctx.strokeStyle = T.halo; ctx.fillStyle = T.halo; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.globalAlpha = pulse;
+  ctx.beginPath(); ctx.arc(cx, cy, r1, 0, 6.2832); ctx.stroke();
+  ctx.beginPath(); for (let q = 0; q < 4; q++) { const c = Math.cos(q * Math.PI / 2), s = Math.sin(q * Math.PI / 2); ctx.moveTo(cx + c * R0 * .16, cy + s * R0 * .16); ctx.lineTo(cx + c * R0 * .46, cy + s * R0 * .46); } ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, 6.2832); ctx.fill();
+  ctx.globalAlpha = pulse * .55; ctx.setLineDash([4, 9]); ctx.lineDashOffset = -t * 6;
+  ctx.beginPath(); ctx.arc(cx, cy, R0 * 1.7, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]);
+  ctx.restore();
+}
 function drawOrbit(cw, wy, SX, SY, ks) {
   if (!G.orbit.size) return;
   const tb = SR * ks * .95, tok = G.orbitAll ? tb : tb * ORB, top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
@@ -1940,6 +1963,7 @@ function draw() {
   ctx.globalAlpha = 1; for (const f of late) f();
   ctx.restore();
 
+  drawIdle(cw, wy, rr);
   drawOrbit(cw, wy, SX, SY, ks);
 
   // picked letters fly from the swarm to their places in the new word
