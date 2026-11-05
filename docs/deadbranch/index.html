@@ -41,13 +41,13 @@
   html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
   html.wide #tray { padding-left:calc(50% - 280px + 12px); padding-right:calc(50% - 280px + 12px); }
   #helpb { font-size:20px; font-weight:700; }
-  #help { position:absolute; inset:0; z-index:12; display:none; background:#050a10f5; }
+  #help { position:absolute; inset:0; z-index:12; border-bottom:1px solid #1d3547; display:none; background:#050a10f5; }
   #help.open { display:block; }
-  #help .card { height:100%; overflow:auto; touch-action:pan-y; -webkit-overflow-scrolling:touch; user-select:text; padding:max(16px,env(safe-area-inset-top)) 18px 90px; max-width:600px; margin:0 auto; font-size:16px; line-height:1.5; }
+  #help .card { height:100%; overflow:auto; touch-action:pan-y; -webkit-overflow-scrolling:touch; user-select:text; padding:max(16px,env(safe-area-inset-top)) 18px 80px; max-width:600px; margin:0 auto; font-size:16px; line-height:1.5; }
   #help h2 { margin:0 0 10px; font-size:26px; } #help h3 { margin:18px 0 6px; font-size:17px; color:var(--sky); }
   #help p { margin:0 0 8px; } #help ul, #help ol { margin:0 0 8px; padding-left:22px; } #help li { margin:0 0 5px; }
   #help .lg { display:grid; grid-template-columns:64px 1fr; gap:6px 12px; margin:0 0 8px; } #help .lg b { font-size:17px; color:var(--gold); white-space:nowrap; }
-  #helpok { position:absolute; left:50%; bottom:max(16px,env(safe-area-inset-bottom)); transform:translateX(-50%); min-width:220px; height:48px; }
+  #helpok { position:absolute; left:50%; bottom:14px; transform:translateX(-50%); min-width:220px; height:48px; }
   html.lab #help { background:#eef5f8f7; color:#12303f; } html.lab #help h3 { color:#1b7cb8; } html.lab #help .lg b { color:#b45309; }
   #panel { position:absolute; top:52px; right:10px; z-index:6; background:#0c1722f2; border:1px solid #1d3547; border-radius:12px; padding:12px; display:none; min-width:220px; font-size:14px; }
   #panel.open { display:block; }
@@ -239,7 +239,7 @@ const I18N = {
 <ol>
 <li>Tap letters at the bottom to spell a word of 2+ letters and press <b>Grow ✓</b>.</li>
 <li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. One word can have up to 3 shoots.</li>
-<li><b>+</b> starts a new word, <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
+<li>Under the word you are working on there are buttons: <b>+</b> starts a new word, <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
 </ol>
 <h3>What gives points</h3>
 <p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. When a branch is finished you get a harvest bonus of +25% of its points.</p>
@@ -289,7 +289,7 @@ const I18N = {
 <ol>
 <li>Нажимайте на буквы внизу, чтобы составить слово из 2+ букв, и нажмите <b>Расти ✓</b>.</li>
 <li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. У одного слова может быть до 3 побегов.</li>
-<li><b>+</b> начинает новое слово, <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
+<li>Под словом, с которым вы работаете, есть кнопки: <b>+</b> начинает новое слово, <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
 </ol>
 <h3>За что дают очки</h3>
 <p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Когда ветка закончена, вы получаете бонус урожая: +25% от её очков.</p>
@@ -356,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.20";   // keep in sync with the VERSION file
+const VERSION = "0.0.21";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2124,9 +2124,15 @@ window.addEventListener("pagehide", saveGame);
 /* ---------- boot ---------- */
 loadSettings();
 $("lang").value = LANG; applyLang();
-const openHelp = () => { $("help").classList.add("open"); $("help").querySelector(".card").scrollTop = 0; };
+const openHelp = () => {   // the help leaves the letter band free: a tap on the field or a letter closes it and is still played
+  const r = cv.getBoundingClientRect(), h = $("help");
+  h.style.bottom = Math.max(0, innerHeight - r.bottom + bandPx()) + "px";
+  h.classList.add("open"); h.querySelector(".card").scrollTop = 0;
+};
 const closeHelp = () => { $("help").classList.remove("open"); try { localStorage.setItem("db_help", "1"); } catch (e) {} };
 $("helpb").onclick = openHelp; $("helpok").onclick = closeHelp;
+cv.addEventListener("pointerdown", () => { if ($("help").classList.contains("open")) closeHelp(); }, true);
+document.addEventListener("keydown", () => { if ($("help").classList.contains("open")) closeHelp(); });
 { let seen = false; try { seen = !!localStorage.getItem("db_help"); } catch (e) {} if (!seen) openHelp(); }
 $("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); };
 { let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
