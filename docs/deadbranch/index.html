@@ -39,7 +39,7 @@
   html.wide #coords, html.wide #fps { left:calc(50% - 280px + 12px); }
   html.wide #panel { right:calc(50% - 280px + 10px); }
   html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
-  html.wide #tray > * { width:min(560px,100%); align-self:center; }
+  html.wide #tray { padding-left:calc(50% - 280px + 12px); padding-right:calc(50% - 280px + 12px); }
   #helpb { font-size:20px; font-weight:700; }
   #help { position:absolute; inset:0; z-index:12; display:none; background:#050a10f5; }
   #help.open { display:block; }
@@ -54,8 +54,8 @@
   #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
   #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
-  #tray { flex:none; display:flex; flex-direction:column-reverse; gap:6px; padding:6px 12px max(14px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
-  #wzone { height:36px; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; }
+  #tray { flex:none; display:flex; flex-direction:row; align-items:center; gap:10px; padding:6px 12px max(30px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
+  #wzone { flex:1 1 0; height:36px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px; min-width:0; }
   #word { flex:none; max-width:55%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
   #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:1 1 0; height:30px; min-width:0; }
   #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
@@ -70,8 +70,14 @@
   #btns .btn { height:32px; border-radius:11px; }
   .btn.ic { flex:none; width:48px; padding:0; display:flex; align-items:center; justify-content:center; }
   .btn.ic svg { width:20px; height:20px; }
-  #go { flex:0 0 112px; font-size:17px; padding:0 10px; }   /* about half the old length; the group sits on the side of the thumb */
-  body.lefty #btns { flex-direction:row-reverse; }
+  body.lefty #tray { flex-direction:row-reverse; }
+  /* Grow and erase float just under the word being worked on: the finger does not have to travel to the bottom */
+  #act { position:absolute; left:0; top:0; z-index:5; display:flex; gap:10px; opacity:0; pointer-events:none; transition:opacity .15s; }
+  #act.on { opacity:1; } #act.on .btn { pointer-events:auto; }
+  #act .btn { height:56px; border-radius:14px; }
+  #act #back { width:56px; } #act #back svg { width:24px; height:24px; }
+  #act #go { flex:0 0 92px; font-size:19px; padding:0; }
+  body.lefty #act { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
   #word .hint { color:#8aa3b5; font-size:16px; font-weight:400; letter-spacing:0; text-transform:none; }
@@ -169,6 +175,10 @@
 <div id="toasts"></div>
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
+<div id="act">
+  <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
+  <button class="btn go" id="go" data-i18n="go"></button>
+</div>
 <div id="tray">
   <div id="wzone">
     <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint"></span></div>
@@ -181,8 +191,6 @@
   <div id="btns">
     <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
     <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
-    <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
-    <button class="btn go" id="go" data-i18n="go"></button>
   </div>
 </div>
 <div id="help"><div class="card"><div id="helptext"></div></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
@@ -349,7 +357,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.16";   // keep in sync with the VERSION file
+const VERSION = "0.0.17";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1385,6 +1393,11 @@ function drawOrbit(cw, wy, SX, SY, ks) {
       }
       for (const o of items) {
         o.tx = Math.max(xl, Math.min(xr, o.tx)); o.ty = Math.max(top, Math.min(bottom, o.ty));
+        const ar = G.actRect;
+        if (ar) {   // keep clear of the Grow / erase buttons
+          const x0 = ar.x0 - m, x1 = ar.x1 + m, y0 = ar.y0 - m, y1 = ar.y1 + m;
+          if (o.tx > x0 && o.tx < x1 && o.ty > y0 && o.ty < y1) { const l = o.tx - x0, r = x1 - o.tx, u = o.ty - y0, d = y1 - o.ty, mn = Math.min(l, r, u, d); if (mn === l) o.tx = x0; else if (mn === r) o.tx = x1; else if (mn === u) o.ty = y0; else o.ty = y1; }
+        }
         for (const n of nodes) {
           const x0 = SX(n.box.x0) - m, x1 = SX(n.box.x1) + m, y0 = SY(n.box.y1) - m, y1 = SY(n.box.y0) + m;
           if (o.tx > x0 && o.tx < x1 && o.ty > y0 && o.ty < y1) {   // inside another word's box: leave through the nearest side
@@ -1990,6 +2003,7 @@ function draw() {
   ctx.globalAlpha = 1; for (const f of late) f();
   ctx.restore();
 
+  G.actPos = G.focus ? { x: SX(G.focus.x), y: SY(G.focus.y) + (CAPH + 38) * sc, wy, cw } : null;
   drawIdle(cw, wy, rr);
   drawOrbit(cw, wy, SX, SY, ks);
 
@@ -2011,6 +2025,17 @@ function draw() {
 let last = performance.now();
 let lastDraw = 0;
 const fpsStat = { n: 0, ms: 0, t0: 0 };
+let actOn = false;
+function placeActions() {   // the Grow / erase group sits a little under the word being worked on (and the floating hint letters keep clear of it)
+  const el = $("act"), b = G.builder, p = G.actPos, show = !!p && !G.over && (b.letters.length > 0 || !!b.base);
+  if (show !== actOn) { actOn = show; el.classList.toggle("on", show); }
+  if (!show) { G.actRect = null; return; }
+  const w = el.offsetWidth || 160, h = el.offsetHeight || 56;
+  const x = Math.max(8, Math.min(p.cw - w - 8, p.x - w / 2)), y = Math.max(76, Math.min(p.wy - h - 10, p.y));
+  const tf = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+  if (el._tf !== tf) { el._tf = tf; el.style.transform = tf; }
+  G.actRect = { x0: x, x1: x + w, y0: y, y1: y + h };
+}
 function frame(now) {
   requestAnimationFrame(frame);
   if (now - lastDraw < 1000 / Q.fps - 3) return;   // the quality profile caps the frame rate (fewer frames, less heat)
@@ -2018,7 +2043,7 @@ function frame(now) {
   { const d = cvDpr(); if (cv.width !== Math.round(cv.clientWidth * d) || cv.height !== Math.round(cv.clientHeight * d)) resize(); }
   const dt = Math.min(.04, (now - last) / 1000); last = now;
   const w0 = performance.now(); update(dt);
-  try { draw(); } catch (e) { G.err = String((e && e.message) || e) + " @" + (String((e && e.stack) || "").split("\n")[1] || "").replace(/^.*[\/(]/, "").slice(0, 40); cv.width = cv.width; }   // an error in the middle of a frame leaves a clip on the canvas and old frames stop being erased: reset the canvas state and show the error in the FPS line
+  try { draw(); placeActions(); } catch (e) { G.err = String((e && e.message) || e) + " @" + (String((e && e.stack) || "").split("\n")[1] || "").replace(/^.*[\/(]/, "").slice(0, 40); cv.width = cv.width; }   // an error in the middle of a frame leaves a clip on the canvas and old frames stop being erased: reset the canvas state and show the error in the FPS line
   const spent = performance.now() - w0;
   fpsStat.n++; fpsStat.ms += spent;
   if (now - fpsStat.t0 >= 500) {   // a small counter: frames per second, the time one frame costs the processor, the canvas size
