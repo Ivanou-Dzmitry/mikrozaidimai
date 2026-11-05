@@ -55,10 +55,10 @@
   #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
   #tray { flex:none; display:flex; flex-direction:row; align-items:center; gap:10px; padding:6px 12px max(30px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
-  #wzone { flex:1 1 0; height:36px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px; min-width:0; }
-  #word { flex:none; max-width:55%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  #wzone { flex:1 1 0; height:44px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px; min-width:0; }
+  #word { flex:none; max-width:55%; height:42px; line-height:42px; text-align:center; font-size:32px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
   #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:1 1 0; height:30px; min-width:0; }
-  #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
+  #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:16px; font-weight:400; color:#b4d3e6; }
   #ru:empty { display:none; }
   .chip { flex:none; position:relative; overflow:hidden; height:30px; padding:0 12px; border-radius:15px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:13px; font-weight:600; }
   .chip[hidden] { display:none; }
@@ -75,7 +75,7 @@
   #act { position:absolute; left:0; top:0; z-index:5; display:flex; gap:10px; opacity:0; pointer-events:none; transition:opacity .15s; }
   #act.on { opacity:1; } #act.on .btn { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
-  #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
+  #act #back, #act #hintb, #act #newb { width:56px; } #act #back svg, #act #hintb svg, #act #newb svg { width:24px; height:24px; }
   #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
   #act #go:disabled { opacity:.55; box-shadow:none; }
   body.lefty #act { flex-direction:row-reverse; }
@@ -177,6 +177,7 @@
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
 <div id="act">
+  <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
   <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
   <button class="btn go" id="go" data-i18n="go"></button>
@@ -189,9 +190,6 @@
       <button class="chip" id="nowrd" hidden data-i18n="nowrd" data-i18n-title="t_nowrd"></button>
       <button class="chip" id="yesw" hidden data-i18n="yesw" data-i18n-title="t_yesw"></button>
     </div>
-  </div>
-  <div id="btns">
-    <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </div>
 </div>
 <div id="help"><div class="card"><div id="helptext"></div></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
@@ -358,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.18";   // keep in sync with the VERSION file
+const VERSION = "0.0.20";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1418,7 +1416,8 @@ function drawOrbit(cw, wy, SX, SY, ks) {
     if (o.dx == null || o.snap) { o.dx = tx; o.dy = ty; o.snap = false; } else { o.dx += (tx - o.dx) * .2; o.dy += (ty - o.dy) * .2; }   // letters appear in place (no flying in from the side)
     o.sx = o.dx; o.sy = o.dy;
     ctx.globalAlpha = Math.min(1, e); o.pulse = Math.max(0, o.pulse - .05);
-    glyph(o.sx, o.sy, tok * (1 + o.pulse * .25), o.ch, T.key[0], T.key[2], T.key[4], 2);
+    const dots = o.ch === "\u2026", cons = !dots && !VOWEL.has(o.ch);   // "…" calls the whole keyboard: a dark blue button, plainly not a letter; consonants are a shade darker than vowels
+    glyph(o.sx, o.sy, tok * (1 + o.pulse * .25), o.ch, dots ? (T.lab ? "#1d4f94" : "#2a5ca3") : cons ? (T.lab ? "rgba(200,221,234,.94)" : "#0a1d2d") : T.key[0], dots ? "#0d2a55" : T.key[2], dots ? "#fff" : T.key[4], 2);
   }
   ctx.globalAlpha = 1;
 }
