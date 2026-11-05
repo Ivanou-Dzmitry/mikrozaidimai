@@ -356,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.21";   // keep in sync with the VERSION file
+const VERSION = "0.0.22";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1562,13 +1562,14 @@ function glyph(x, y, r, ch, fill, stroke, tc, lw, glass) {
     ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832);
   }
   ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke();
-  if (T.lab && Q.glass === 1 && glass !== false) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill(); }   // flat glint only
+  const glint = !VOWEL.has(ch);   // vowels are plain: the white glint looked odd on them
+  if (T.lab && Q.glass === 1 && glass !== false && glint) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill(); }   // flat glint only
   if (T.lab && Q.glass === 2 && glass !== false) {   // glass: soft light from the top left, a glint
     ctx.save(); ctx.clip();
     const gl = ctx.createLinearGradient(x - r, y - r, x + r * .6, y + r * 1.1);
     gl.addColorStop(0, "rgba(255,255,255,.7)"); gl.addColorStop(.5, "rgba(255,255,255,.1)"); gl.addColorStop(1, "rgba(90,170,215,.18)");
     ctx.fillStyle = gl; ctx.fillRect(x - r * 1.5, y - r * 1.5, r * 3, r * 3);
-    ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill();
+    if (glint) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill(); }
     ctx.restore();
   }
   ctx.fillStyle = tc; ctx.font = fontWeightOf(ch) + " " + Math.round(r * 1.05) + "px system-ui,sans-serif";
