@@ -391,7 +391,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.36";   // keep in sync with the VERSION file
+const VERSION = "0.0.37";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1404,7 +1404,7 @@ function drawOrbit(cw, wy0, SX, SY, ks) {
   const items = [...G.orbit.values()];
   for (const o of items) {
     let tx, ty;
-    if (G.orbitAll && o.ch === "\u2026") { tx = cw / 2 + 4 * cs + tb * 1.4; ty = wy - 16 - tb - 3 * rs; }   // the close button sits beside the top row of the keyboard
+    if (G.orbitAll && o.ch === "\u2026") { tx = Math.min(cw - tb - 8, cw / 2 + 3.5 * cs); ty = wy - 16 - tb - 3 * rs - rs; }   // the close button sits just above the keyboard's top-right corner, always on screen
     else if (G.orbitAll) { const col = o.gi % 8, row = Math.floor(o.gi / 8); tx = cw / 2 + (col - 3.5) * cs; ty = wy - 16 - tb - (3 - row) * rs; }   // every letter: a small keyboard over the lower part of the field
     else {
       const a = colW / 2 - tok - 8, b = H / 2, cyo = top + H / 2, tm = 1.4;   // two arcs of one big oval round the word, the word keeps the middle
