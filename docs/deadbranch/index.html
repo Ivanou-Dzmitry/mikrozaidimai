@@ -356,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.22";   // keep in sync with the VERSION file
+const VERSION = "0.0.23";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1362,9 +1362,10 @@ function drawIdle(cw, wy, rr) {
   ctx.restore();
 }
 function drawOrbit(cw, wy, SX, SY, ks) {
-  if (!G.orbit.size) return;
+  if (!G.orbit.size) { G.orbitTop = null; return; }
   const tb = SR * ks * .95, tok = G.orbitAll ? tb : tb * ORB, top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
-  const colW = Math.min(cw, KW * ks * 1.12), cs = Math.min(tb * 2 + 8, (colW - 24) / 8), rs = tb * 2 + 8;   // colW: the play column (all of the screen on a phone)
+  const colW = Math.min(cw, KW * ks * 1.12), cs = Math.min(tb * 2 + 8, (colW - 24) / 8), rs = tb * 2 + 8;
+  G.orbitTop = G.orbitAll ? wy - 16 - 2 * tb - 3 * rs : null;   // top of the all-letters keyboard (the action buttons must not lie on it)   // colW: the play column (all of the screen on a phone)
   const items = [...G.orbit.values()];
   for (const o of items) {
     let tx, ty;
@@ -2004,7 +2005,7 @@ function draw() {
   ctx.globalAlpha = 1; for (const f of late) f();
   ctx.restore();
 
-  G.actPos = G.focus ? { x: SX(G.focus.x), y: SY(G.focus.y) + (CAPH + 38) * sc, wy, cw } : null;
+  G.actPos = G.focus ? { x: SX(G.focus.x), y: SY(G.focus.y) + (CAPH + 38) * sc, yTop: SY(G.focus.y) - CAPH * sc, wy, cw } : null;
   drawIdle(cw, wy, rr);
   drawOrbit(cw, wy, SX, SY, ks);
 
@@ -2032,7 +2033,9 @@ function placeActions() {   // the Grow / erase group sits a little under the wo
   if (show !== actOn) { actOn = show; el.classList.toggle("on", show); }
   if (!show) { G.actRect = null; return; }
   const w = el.offsetWidth || 160, h = el.offsetHeight || 56;
-  const x = Math.max(8, Math.min(p.cw - w - 8, p.x - w / 2)), y = Math.max(76, Math.min(p.wy - h - 10, p.y));
+  let y0 = p.y;
+  if (G.orbitTop != null && y0 + h > G.orbitTop - 6) y0 = Math.min(p.yTop - h - 10, G.orbitTop - h - 6);   // the full keyboard is open: the buttons go above the word instead of onto the keyboard
+  const x = Math.max(8, Math.min(p.cw - w - 8, p.x - w / 2)), y = Math.max(76, Math.min(p.wy - h - 10, y0));
   const tf = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
   if (el._tf !== tf) { el._tf = tf; el.style.transform = tf; }
   G.actRect = { x0: x, x1: x + w, y0: y, y1: y + h };
