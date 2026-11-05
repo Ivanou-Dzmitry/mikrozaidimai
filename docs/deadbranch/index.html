@@ -349,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.12";   // keep in sync with the VERSION file
+const VERSION = "0.0.13";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1320,14 +1320,14 @@ const idle = { items: [], next: 0 };
 function drawIdle(cw, wy, rr) {
   if (G.over || G.builder.letters.length || allNodes().length) { idle.items.length = 0; return; }
   const cx = cw / 2, cy = (wy + 70) / 2, R0 = Math.max(70, Math.min(rr * 3.4, cw * .28, (wy - 90) * .4)), t = G.t;
-  if (t > idle.next) { idle.next = t + .55; if (idle.items.length < 7) idle.items.push({ ch: ALPHA[Math.floor(Math.random() * ALPHA.length)], a: Math.random() * 6.2832, d: R0 * (.6 + Math.random() * .95), t0: t, life: 2.2 + Math.random() * 1.4 }); }
+  if (t > idle.next) { idle.next = t + 1.2; if (idle.items.length < 4) idle.items.push({ ch: ALPHA[Math.floor(Math.random() * ALPHA.length)], a: Math.random() * 6.2832, d: R0 * (.8 + Math.random() * .9), t0: t, life: 3.2 + Math.random() * 1.6 }); }
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();
   for (let i = idle.items.length - 1; i >= 0; i--) {
     const o = idle.items[i], u = (t - o.t0) / o.life;
     if (u > 1) { idle.items.splice(i, 1); continue; }
     const k = Math.sin(Math.PI * u), d = o.d * (1 + u * .1);
     ctx.globalAlpha = k * .75;
-    glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.4 + .22 * k), o.ch, T.key[0], T.key[2], T.key[4], 1.5, false);
+    glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.8 + .35 * k), o.ch, T.key[0], T.key[2], T.key[4], 1.5, false);
   }
   const pulse = .55 + .25 * Math.sin(t * 2.2), arm = R0 * .26;   // just a plus sign
   ctx.strokeStyle = T.halo; ctx.lineWidth = 1.8; ctx.lineCap = "round"; ctx.globalAlpha = pulse;
@@ -1661,9 +1661,9 @@ function bond(x0, y0, x1, y1, order, gap) {
 }
 
 // the laboratory behind everything, kept abstract: faint tile seams, a soft band of light, a few thin cables
-// x (share of the width), length (share of the field height), sway phase, thickness, opacity, lean (share of the width), bend: six cables that differ in length, weight and curve
-const CABLES = [[.04, .5, 0, 1.2, .16, .05, .6], [.11, .88, 1.3, 2.6, .28, .03, -.8], [.2, .3, 4.1, 1, .12, -.04, .5],
-                [.8, .62, 2.1, 2, .22, -.06, .9], [.9, .38, 3.4, 1.4, .15, .02, -.6], [.965, .92, 5.2, 2.9, .3, -.035, .4]];
+// x (share of the width), length (share of the field height), sway phase, thickness, opacity, lean (share of the width), bend, wave (px): six cables that differ in length, weight and curve; three of them ripple
+const CABLES = [[.04, .5, 0, 1.2, .11, .05, .6, 0], [.11, .88, 1.3, 2.6, .2, .03, -.8, 7], [.2, .3, 4.1, 1, .084, -.04, .5, 0],
+                [.8, .62, 2.1, 2, .154, -.06, .9, 9], [.9, .38, 3.4, 1.4, .105, .02, -.6, 0], [.965, .92, 5.2, 2.9, .21, -.035, .4, 6]];
 function labBackdrop(g, cw, ch, wy, px, py, withCables) {   // g: the context to draw on (the screen, or an offscreen layer)
   g.save(); g.beginPath(); g.rect(0, 0, cw, ch); g.clip();
   const pw = Math.max(48, 105 * keyScale()), ph = pw, ox = ((-px * .2) % pw + pw) % pw, oy = ((py * .2) % ph + ph) % ph;
@@ -1683,10 +1683,20 @@ function labBackdrop(g, cw, ch, wy, px, py, withCables) {   // g: the context to
 
 function labCables(g, cw, wy) {   // thin cables that sway a little
   g.lineCap = "round";
-  for (const [fx, len, ph, w, al, lean, bend] of CABLES) {
+  for (const [fx, len, ph, w, al, lean, bend, wv] of CABLES) {
     const x0 = fx * cw, sw = Math.sin(G.t * .5 + ph) * 6, x1 = x0 + lean * cw + sw, y1 = wy * len, bd = bend * cw * .02;
     g.strokeStyle = "rgba(40,75,98," + al + ")"; g.lineWidth = w;
-    g.beginPath(); g.moveTo(x0, -8); g.bezierCurveTo(x0 + sw * .4 + bd, y1 * .4, x1 - sw - bd * .7, y1 * .8, x1, y1); g.stroke();
+    const c1x = x0 + sw * .4 + bd, c1y = y1 * .4, c2x = x1 - sw - bd * .7, c2y = y1 * .8;
+    g.beginPath();
+    if (!wv) { g.moveTo(x0, -8); g.bezierCurveTo(c1x, c1y, c2x, c2y, x1, y1); }
+    else {   // a ripple runs down the cable
+      for (let i = 0; i <= 28; i++) {
+        const u = i / 28, v = 1 - u, X = v * v * v * x0 + 3 * v * v * u * c1x + 3 * v * u * u * c2x + u * u * u * x1, Y = v * v * v * -8 + 3 * v * v * u * c1y + 3 * v * u * u * c2y + u * u * u * y1;
+        const ox = Math.sin(u * 9 - G.t * 1.5 + ph) * wv * Math.sin(Math.PI * Math.min(1, u * 1.15));
+        if (i) g.lineTo(X + ox, Y); else g.moveTo(X + ox, Y);
+      }
+    }
+    g.stroke();
   }
 }
 // the still part of the background (sky, tiles, the band of light, beams) is drawn once into its own canvas on the lighter profiles
