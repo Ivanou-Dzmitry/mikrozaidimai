@@ -155,6 +155,7 @@
   </label>
   <label><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr" checked></label>
   <label><span data-i18n="hints"></span> <input type="checkbox" id="hints" checked></label>
+  <label><span data-i18n="haptics"></span> <input type="checkbox" id="haptics" checked></label>
   <label><span data-i18n="pressureT"></span> <input type="checkbox" id="pressure"></label>
   <label><span data-i18n="best"></span> <b id="best">0</b></label>
   <button id="fs" style="width:100%;margin-top:6px" data-i18n="fullscreen"></button>
@@ -208,7 +209,7 @@ const I18N = {
     hand:"Hand", o_right:"right", o_left:"left", tier:"Dictionary", o_t1:"hard", o_t2:"medium", o_t3:"easy",
     agony:"End timer", o_g2:"hard · 2 s", o_g10:"medium · 10 s", o_g30:"easy · 30 s",
     ripe:"Time to harvest", o_r8:"hard · 8 s", o_r15:"medium · 15 s", o_r30:"easy · 30 s",
-    onlytr:"Only words with translation", hints:"Hints", pressureT:"Timer pressure", best:"Best",
+    onlytr:"Only words with translation", hints:"Hints", haptics:"Haptic feedback", pressureT:"Timer pressure", best:"Best",
     fullscreen:"Fullscreen", fsauto:"Fullscreen on first touch", restart:"New game", resetlists:"Reset my word marks",
     sources:"Data sources",
     sourcesText:"Hunspell lt_LT dictionary (A. Agejevas et al., BSD); word frequencies from FrequencyWords / OpenSubtitles (CC BY-SA); English and Russian Wiktionary dumps from kaikki.org (CC BY-SA), including verb forms; a noun list and the database of the author's study app; some translations were made by AI (Claude) and checked against Wiktionary. Details: CREDITS.md",
@@ -258,7 +259,7 @@ const I18N = {
     hand:"Рука", o_right:"правая", o_left:"левая", tier:"Словарь", o_t1:"жёсткий", o_t2:"средний", o_t3:"лёгкий",
     agony:"Таймер конца", o_g2:"сложный · 2 с", o_g10:"средний · 10 с", o_g30:"лёгкий · 30 с",
     ripe:"Время до урожая", o_r8:"сложное · 8 с", o_r15:"среднее · 15 с", o_r30:"лёгкое · 30 с",
-    onlytr:"Только слова с переводом", hints:"Подсказки", pressureT:"Давление по таймеру", best:"Рекорд",
+    onlytr:"Только слова с переводом", hints:"Подсказки", haptics:"Вибро-отклик", pressureT:"Давление по таймеру", best:"Рекорд",
     fullscreen:"Во весь экран", fsauto:"Весь экран по первому касанию", restart:"Новая игра", resetlists:"Сбросить мои отметки слов",
     sources:"Источники данных",
     sourcesText:"Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md",
@@ -310,6 +311,20 @@ function applyLang() {
   $("helptext").innerHTML = tr("helpHtml");
   document.documentElement.lang = LANG;
 }
+const HAPTIC = { tap: 12, ok: [14, 40, 22], bad: [40, 50, 40], gold: [18, 50, 18, 50, 36] };   // vibration patterns, ms
+let hapLabel = null;
+function haptic(kind) {   // Android: the Vibration API; iPhone (Safari 17.4+): toggling a hidden "switch" checkbox gives a tick; iPad has no haptic motor at all
+  const el = $("haptics"); if (!el || !el.checked) return;
+  const pat = HAPTIC[kind] || HAPTIC.tap;
+  if (navigator.vibrate) { try { navigator.vibrate(pat); } catch (e) {} return; }
+  try {
+    if (!hapLabel) {
+      hapLabel = document.createElement("label"); hapLabel.setAttribute("aria-hidden", "true"); hapLabel.style.cssText = "position:fixed;left:-99px;top:-99px;opacity:0;pointer-events:none";
+      const i = document.createElement("input"); i.type = "checkbox"; i.setAttribute("switch", ""); hapLabel.appendChild(i); document.body.appendChild(hapLabel);
+    }
+    hapLabel.click();
+  } catch (e) {}
+}
 function rrPath(x, y, w, h, r) {   // rounded rectangle from plain arcs: ctx.roundRect flickered between round and sharp corners on iPad Safari
   r = Math.max(0, Math.min(r, w / 2, h / 2)); const P = Math.PI;
   ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arc(x + w - r, y + r, r, -P / 2, 0);
@@ -334,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.8";   // keep in sync with the VERSION file
+const VERSION = "0.0.9";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -753,6 +768,7 @@ function success(s, base, L, rootX, from) {
     if (WORDS.has(p) && !G.used.has(p)) award(p, true, tree, got);
   }
   award(s, false, tree, got);
+  haptic("ok");
   G.tH = Math.min(TH_MAX, Math.max(G.tH, node.y + node.hh + 14));   // make room if the branch had to grow taller
   fitTree(tree);
   node.words = got;   // freed again if this node dies: only words standing in living branches are taken
@@ -763,6 +779,7 @@ function success(s, base, L, rootX, from) {
 }
 
 function fail(s, base, L, why) {
+  haptic("bad");
   G.streak = 0;
   const alt = FOLD.get(fold(s));
   toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? tr("maybe", alt[0]) : ""), "bad");
@@ -805,6 +822,7 @@ function checkHarvest(tree) {
   if (!wasRipe) toast(tr("branchesEnded", ripeT()), "gold");
 }
 function harvest(tree) {
+  haptic("gold");
   tree.harvest = true; tree.t = 0; G.harvested++;
   const bb = { x0: 1e9, x1: -1e9, y0: 1e9, y1: -1e9 };
   for (const n of tree.nodes) { bb.x0 = Math.min(bb.x0, n.box.x0, n.x - n.w / 2); bb.x1 = Math.max(bb.x1, n.box.x1, n.x + n.w / 2); bb.y0 = Math.min(bb.y0, n.box.y0); bb.y1 = Math.max(bb.y1, n.box.y1); }
@@ -934,7 +952,7 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
   if (bestL && b.letters.length < 14) {
     if (!b.letters.length && !b.base) b.rootX = placeRoot(nodeW("aa"), 2, null).x;
     b.letters.push(bestL.ch); b.src.push(bestL); bestL.pulse = 1; updateTray();
-    if (navigator.vibrate) navigator.vibrate(8);
+    haptic("tap");
   }
 }
 // letters (the band) react at once; in the branch field a tap is told from a swipe, which pulls the field around
@@ -1293,7 +1311,7 @@ function pickOrbit(px, py) {   // px, py: pixels inside the canvas; true when a 
   const b = G.builder; if (b.letters.length >= 14) return true;
   const V = fieldView(), wyPix = cv.clientHeight - bandPx();
   b.letters.push(best.ch); b.src.push({ ch: best.ch, field: true, x: V.x + (best.sx - cv.clientWidth / 2) / V.sc, y: V.b + (wyPix - best.sy) / V.sc });
-  best.pulse = 1; updateTray(); if (navigator.vibrate) navigator.vibrate(8);
+  best.pulse = 1; updateTray(); haptic("tap");
   return true;
 }
 const ORB = 1.8;   // the floating letters are big: there is room, and they are the thing to tap
@@ -2000,7 +2018,7 @@ function restoreGame(d) {
   b.rootX = sb.rootX; b.newMode = sb.newMode;
   ensureBase(); updateTray(); updateHud();
 }
-const SET_IDS = ["tier", "agony", "ripe", "assist", "quality"], SET_CHECKS = ["onlytr", "hints", "pressure", "fsauto", "showfps"];
+const SET_IDS = ["tier", "agony", "ripe", "assist", "quality"], SET_CHECKS = ["onlytr", "hints", "haptics", "pressure", "fsauto", "showfps"];
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem("db_settings") || "{}");
