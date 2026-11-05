@@ -41,6 +41,21 @@
   html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
   html.wide #tray { padding-left:calc(50% - 280px + 12px); padding-right:calc(50% - 280px + 12px); }
   #helpb { font-size:20px; font-weight:700; }
+  #fb { position:absolute; inset:0; z-index:13; display:none; align-items:center; justify-content:center; background:#050a10cc; }
+  #fb.open { display:flex; }
+  #fb .box { width:min(440px,92%); background:#0c1722; border:1px solid #1d3547; border-radius:16px; padding:16px; user-select:text; touch-action:manipulation; }
+  #fb h3 { margin:0 0 10px; font-size:19px; }
+  #fb .types { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 10px; }
+  #fb .types button { height:34px; padding:0 12px; border-radius:17px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:14px; font-weight:600; }
+  #fb .types button.on { background:#1b7cb8; border-color:#1b7cb8; color:#fff; }
+  #fb textarea { width:100%; height:110px; resize:none; border-radius:10px; border:1px solid #2a4a62; background:#10202e; color:var(--fg); font:16px/1.4 system-ui,sans-serif; padding:10px; user-select:text; }
+  #fb .note { margin:8px 0 12px; font-size:12px; color:var(--dim); }
+  #fb .row { display:flex; gap:10px; justify-content:flex-end; }
+  #fb .row .btn { height:44px; min-width:110px; }
+  html.lab #fb { background:#cfe0eacc; } html.lab #fb .box { background:#fff; border-color:#9bb8c8; color:#12303f; }
+  html.lab #fb .types button { background:#fff; border-color:#9bb8c8; color:#0f2f44; } html.lab #fb .types button.on { background:#1b7cb8; color:#fff; border-color:#1b7cb8; }
+  html.lab #fb textarea { background:#f4f9fb; border-color:#9bb8c8; color:#0f2f44; }
+  #fbh { margin:6px 0 14px; width:100%; height:44px; }
   #help { position:absolute; inset:0; z-index:12; border-bottom:1px solid #1d3547; display:none; background:#050a10f5; }
   #help.open { display:block; }
   #help .card { height:100%; overflow:auto; touch-action:pan-y; -webkit-overflow-scrolling:touch; user-select:text; padding:max(16px,env(safe-area-inset-top)) 18px 80px; max-width:600px; margin:0 auto; font-size:16px; line-height:1.5; }
@@ -169,6 +184,7 @@
   <label><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
   <button id="restart" style="width:100%;margin-top:6px" data-i18n="restart"></button>
   <button id="resetlists" style="width:100%;margin-top:6px" data-i18n="resetlists"></button>
+  <button id="fbb" style="width:100%;margin-top:6px" data-i18n="fbOpen"></button>
   <div id="ver" style="margin-top:8px;font-size:11px;color:#6b8294;text-align:center"></div>
   <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer" data-i18n="sources"></summary><span data-i18n="sourcesText"></span></details>
 </div>
@@ -192,7 +208,14 @@
     </div>
   </div>
 </div>
-<div id="help"><div class="card"><div id="helptext"></div></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
+<div id="fb"><div class="box">
+  <h3 data-i18n="fbTitle"></h3>
+  <div class="types"><button data-t="word" data-i18n="fb_word"></button><button data-t="translation" data-i18n="fb_tr"></button><button data-t="bug" data-i18n="fb_bug"></button><button data-t="idea" data-i18n="fb_idea"></button></div>
+  <textarea id="fbtext" maxlength="800"></textarea>
+  <div class="note" data-i18n="fbNote"></div>
+  <div class="row"><button class="btn sec" id="fbcancel" data-i18n="fbCancel"></button><button class="btn go" id="fbsend" data-i18n="fbSend"></button></div>
+</div></div>
+<div id="help"><div class="card"><div id="helptext"></div><button class="btn sec" id="fbh" data-i18n="fbOpen"></button></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
 <div id="over"><h1 data-i18n="overTitle"></h1><div class="score" id="fscore">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px" data-i18n="again"></button></div>
 
 <script src="words.js?v=20"></script>
@@ -233,7 +256,7 @@ const I18N = {
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"words: %0 · best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
-    restored:"Game restored", a_help:"How to play", helpClose:"Got it", helpHtml:`<h2>How to play</h2>
+    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
 <h3>What to do</h3>
 <ol>
@@ -283,7 +306,7 @@ const I18N = {
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"слов: %0 · рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
-    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", helpHtml:`<h2>Как играть</h2>
+    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
 <h3>Что делать</h3>
 <ol>
@@ -315,7 +338,7 @@ function applyLang() {
   document.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = tr(e.dataset.i18n); });
   document.querySelectorAll("[data-i18n-title]").forEach(e => { e.title = tr(e.dataset.i18nTitle); });
   document.querySelectorAll("[data-i18n-aria]").forEach(e => { e.setAttribute("aria-label", tr(e.dataset.i18nAria)); });
-  $("helptext").innerHTML = tr("helpHtml");
+  $("helptext").innerHTML = tr("helpHtml"); $("fbtext").placeholder = tr("fbPh");
   document.documentElement.lang = LANG;
 }
 const HAPTIC = { tap: 12, ok: [14, 40, 22], bad: [40, 50, 40], gold: [18, 50, 18, 50, 36] };   // vibration patterns, ms
@@ -356,7 +379,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.28";   // keep in sync with the VERSION file
+const VERSION = "0.0.29";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2141,6 +2164,25 @@ window.addEventListener("pagehide", saveGame);
 /* ---------- boot ---------- */
 loadSettings();
 $("lang").value = LANG; applyLang();
+// feedback: the message goes to the developer's Google Form (one text field) without leaving the game
+const FB_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe-PO7hDVbckje8ebuOQ5O0VpgdC7dAvTRPDnoUp7yZJCUcQg/formResponse", FB_FIELD = "entry.486355045";
+let fbType = "word", fbLast = 0;
+const fbContext = () => { const b = G.builder; return (b.base ? b.base.str : "") + b.letters.join(""); };
+function openFeedback() { $("fb").classList.add("open"); $("fbtext").value = ""; setFbType(fbType); }
+function setFbType(t) { fbType = t; document.querySelectorAll("#fb .types button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); }
+document.querySelectorAll("#fb .types button").forEach(b => { b.onclick = () => setFbType(b.dataset.t); });
+$("fbb").onclick = () => { $("panel").classList.remove("open"); openFeedback(); };
+$("fbh").onclick = openFeedback;
+$("fbcancel").onclick = () => $("fb").classList.remove("open");
+$("fbsend").onclick = async () => {
+  const text = $("fbtext").value.trim(); if (!text) { $("fbtext").focus(); return; }
+  if (Date.now() - fbLast < 20000) { toast(tr("fbWait"), "bad"); return; }
+  const msg = "[" + fbType + "] " + text + "\n---\nword: " + (fbContext() || "-") + "\nv" + VERSION + " | " + LANG + " | " + innerWidth + "x" + innerHeight + "@" + (devicePixelRatio || 1) + " | " + $("quality").value;
+  try {
+    await fetch(FB_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ [FB_FIELD]: msg }) });
+    fbLast = Date.now(); $("fb").classList.remove("open"); toast(tr("fbThanks"), "gold");
+  } catch (e) { toast(tr("fbFail"), "bad"); }
+};
 const openHelp = () => {   // the help leaves the letter band free: a tap on the field or a letter closes it and is still played
   const r = cv.getBoundingClientRect(), h = $("help");
   h.style.bottom = Math.max(0, innerHeight - r.bottom + bandPx()) + "px";
