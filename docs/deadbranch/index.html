@@ -349,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.14";   // keep in sync with the VERSION file
+const VERSION = "0.0.15";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1320,14 +1320,14 @@ const idle = { items: [], next: 0 };
 function drawIdle(cw, wy, rr) {
   if (G.over || G.builder.letters.length || allNodes().length) { idle.items.length = 0; return; }
   const cx = cw / 2, cy = (wy + 70) / 2, R0 = Math.max(70, Math.min(rr * 3.4, cw * .28, (wy - 90) * .4)), t = G.t;
-  if (t > idle.next) { idle.next = t + 1.2; if (idle.items.length < 4) idle.items.push({ ch: ALPHA[Math.floor(Math.random() * ALPHA.length)], a: Math.random() * 6.2832, d: R0 * (.8 + Math.random() * .9), t0: t, life: 3.2 + Math.random() * 1.6 }); }
+  if (t > idle.next) { idle.next = t + 1.9; if (idle.items.length < 3) idle.items.push({ ch: ALPHA[Math.floor(Math.random() * ALPHA.length)], a: Math.random() * 6.2832, d: R0 * (.8 + Math.random() * .9), t0: t, life: 5 + Math.random() * 1.2, sc: Math.random() < .35 ? 1.7 + Math.random() * .4 : 1 + Math.random() * .35 }); }
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();
   for (let i = idle.items.length - 1; i >= 0; i--) {
     const o = idle.items[i], u = (t - o.t0) / o.life;
     if (u > 1) { idle.items.splice(i, 1); continue; }
     const k = Math.sin(Math.PI * u), d = o.d * (1 + u * .1);
     ctx.globalAlpha = k * .7;   // barely there: pale fill, no rim, light grey letter
-    glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.8 + .35 * k), o.ch, T.lab ? "rgba(255,255,255,.5)" : "rgba(255,255,255,.1)", "rgba(0,0,0,0)", T.lab ? "rgba(115,140,155,.9)" : "rgba(190,215,230,.75)", 0, false);
+    glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.8 + .35 * k) * o.sc, o.ch, T.lab ? "rgba(255,255,255,.5)" : "rgba(255,255,255,.1)", "rgba(0,0,0,0)", T.lab ? "rgba(160,180,192,.9)" : "rgba(215,230,240,.85)", 0, false);
   }
   const pulse = .55 + .25 * Math.sin(t * 2.2), arm = R0 * .26;   // just a plus sign
   ctx.strokeStyle = T.halo; ctx.lineWidth = 1.8; ctx.lineCap = "round"; ctx.globalAlpha = pulse;
