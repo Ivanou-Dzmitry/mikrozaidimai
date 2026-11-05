@@ -392,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.42";   // keep in sync with the VERSION file
+const VERSION = "0.0.43";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1853,10 +1853,17 @@ function draw() {
   // the border between the branch space and the letter space is a wide, slowly drifting sine wave
   {
     const amp = G.waveAmp * ks, wl = 230 * ks, ph = G.t * .5, y0 = wy, x0 = 0, x1 = cw;
-    ctx.beginPath();
-    for (let px = x0; px <= x1 + 1; px += 3) { const yy = y0 + Math.sin((px - x0) / wl * 6.2832 + ph) * amp; if (px === x0) ctx.moveTo(px, yy); else ctx.lineTo(px, yy); }
-    ctx.strokeStyle = T.wave; ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.stroke();
-    ctx.lineJoin = "miter";
+    // the line is a thin filled ribbon whose thickness drifts along it (thicker in places, thinner in others), so it is not one flat stroke
+    const topY = [], botY = [], xs = [];
+    for (let px = x0; px <= x1 + 3; px += 3) {
+      const yy = y0 + Math.sin((px - x0) / wl * 6.2832 + ph) * amp, u = (px - x0) / wl;
+      const w = Math.max(1, 2.7 + 1.5 * Math.sin(u * 1.7 + G.t * .3) + .9 * Math.sin(u * 3.9 - G.t * .45 + 1));
+      xs.push(px); topY.push(yy - w / 2); botY.push(yy + w / 2);
+    }
+    ctx.beginPath(); ctx.moveTo(xs[0], topY[0]);
+    for (let i = 1; i < xs.length; i++) ctx.lineTo(xs[i], topY[i]);
+    for (let i = xs.length - 1; i >= 0; i--) ctx.lineTo(xs[i], botY[i]);
+    ctx.closePath(); ctx.fillStyle = T.wave; ctx.fill();
   }
   // the floor: a thin, almost black strip at the very bottom
   ctx.fillStyle = T.floor; ctx.fillRect(bleft, ch - FLOOR * ks, bright - bleft, FLOOR * ks);
