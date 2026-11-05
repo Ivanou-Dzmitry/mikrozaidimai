@@ -1933,7 +1933,7 @@ loadSettings();
 $("lang").value = LANG; applyLang();
 $("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); };
 { let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
-  if (!stored) $("quality").value = (navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) < 900) ? "low" : "high"; }   // a phone starts on the light profile
+  if (!stored) $("quality").value = "high"; }   // everyone starts on High (the light profile looked blurry)
 applyQuality();
 const SAVED = readSave();   // read before reset(), which clears the stored game
 buildLex(+$("tier").value);
