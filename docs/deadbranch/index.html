@@ -342,18 +342,24 @@ function applyLang() {
   document.documentElement.lang = LANG;
 }
 const HAPTIC = { tap: 12, ok: [14, 40, 22], bad: [40, 50, 40], gold: [18, 50, 18, 50, 36] };   // vibration patterns, ms
-let hapLabel = null;
-function haptic(kind) {   // Android: the Vibration API; iPhone (Safari 17.4+): toggling a hidden "switch" checkbox gives a tick; iPad has no haptic motor at all
-  const el = $("haptics"); if (!el || !el.checked) return;
-  const pat = HAPTIC[kind] || HAPTIC.tap;
-  if (navigator.vibrate) { try { navigator.vibrate(pat); } catch (e) {} return; }
+let hapLabel = null, tickPending = 0, inGesture = false;
+function iosTick() {   // iPhone (Safari 17.4+): toggling a hidden "switch" checkbox from a user gesture gives a haptic tick
   try {
     if (!hapLabel) {
-      hapLabel = document.createElement("label"); hapLabel.setAttribute("aria-hidden", "true"); hapLabel.style.cssText = "position:fixed;left:-99px;top:-99px;opacity:0;pointer-events:none";
-      const i = document.createElement("input"); i.type = "checkbox"; i.setAttribute("switch", ""); hapLabel.appendChild(i); document.body.appendChild(hapLabel);
+      hapLabel = document.createElement("label"); hapLabel.setAttribute("aria-hidden", "true"); hapLabel.style.display = "none";
+      const i = document.createElement("input"); i.type = "checkbox"; i.setAttribute("switch", ""); hapLabel.appendChild(i); document.head.appendChild(hapLabel);
     }
     hapLabel.click();
   } catch (e) {}
+}
+// iOS only accepts it inside a finished touch (touchend / click), not on pointerdown: a tick asked for earlier waits for the finger to lift
+const gestureEnd = () => { inGesture = true; setTimeout(() => { inGesture = false; }, 0); if (tickPending && performance.now() - tickPending < 700) { tickPending = 0; iosTick(); } else tickPending = 0; };
+for (const ev of ["pointerup", "touchend", "click"]) document.addEventListener(ev, gestureEnd, true);
+function haptic(kind) {   // Android: the Vibration API; iPhone: iosTick; iPad has no haptic motor at all
+  const el = $("haptics"); if (!el || !el.checked) return;
+  const pat = HAPTIC[kind] || HAPTIC.tap;
+  if (navigator.vibrate) { try { navigator.vibrate(pat); } catch (e) {} return; }
+  if (inGesture) iosTick(); else tickPending = performance.now();
 }
 function rrPath(x, y, w, h, r) {   // rounded rectangle from plain arcs: ctx.roundRect flickered between round and sharp corners on iPad Safari
   r = Math.max(0, Math.min(r, w / 2, h / 2)); const P = Math.PI;
@@ -379,7 +385,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.29";   // keep in sync with the VERSION file
+const VERSION = "0.0.30";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -982,7 +988,7 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
   if (bestL && b.letters.length < 14) {
     if (!b.letters.length && !b.base) b.rootX = placeRoot(nodeW("aa"), 2, null).x;
     b.letters.push(bestL.ch); b.src.push(bestL); bestL.pulse = 1; updateTray();
-    haptic("tap");
+    haptic("tap"); closeHint();
   }
 }
 // letters (the band) react at once; in the branch field a tap is told from a swipe, which pulls the field around
@@ -1101,7 +1107,8 @@ $("hintb").onclick = () => {
   clearTimeout(window.__hintTO);
   window.__hintTO = setTimeout(() => $("hintpanel").classList.remove("open"), 10000);
 };
-$("hintpanel").addEventListener("click", ev => { if (ev.target.closest("#hintx")) { clearTimeout(window.__hintTO); $("hintpanel").classList.remove("open"); G.hintT = 0; } });   // × closes the hint and its marks on the words
+function closeHint() { clearTimeout(window.__hintTO); $("hintpanel").classList.remove("open"); G.hintT = 0; }   // also closes when a letter is tapped: the hint has been read, typing begins
+$("hintpanel").addEventListener("click", ev => { if (ev.target.closest("#hintx")) closeHint(); });   // × closes the hint and its marks on the words
 $("gear").onclick = () => $("panel").classList.toggle("open");
 const applyHand = () => document.body.classList.toggle("lefty", HAND === "left");
 const applyQuality = () => {
@@ -1341,7 +1348,7 @@ function pickOrbit(px, py) {   // px, py: pixels inside the canvas; true when a 
   const b = G.builder; if (b.letters.length >= 14) return true;
   const V = fieldView(), wyPix = cv.clientHeight - bandPx();
   b.letters.push(best.ch); b.src.push({ ch: best.ch, field: true, x: V.x + (best.sx - cv.clientWidth / 2) / V.sc, y: V.b + (wyPix - best.sy) / V.sc });
-  best.pulse = 1; updateTray(); haptic("tap");
+  best.pulse = 1; updateTray(); haptic("tap"); closeHint();
   return true;
 }
 const ORB = 1.8;   // the floating letters are big: there is room, and they are the thing to tap
