@@ -215,7 +215,7 @@ const I18N = {
     showfps:"FPS counter", assist:"Letter assist", o_aoff:"off", o_avalid:"valid only", o_adecoy:"valid + 3 decoys",
     hand:"Hand", o_right:"right", o_left:"left", tier:"Dictionary", o_t1:"hard", o_t2:"medium", o_t3:"easy",
     agony:"End timer", o_g2:"hard · 2 s", o_g10:"medium · 10 s", o_g30:"easy · 30 s",
-    ripe:"Time to harvest", o_r8:"hard · 8 s", o_r15:"medium · 15 s", o_r30:"easy · 30 s",
+    ripe:"Time until the branch closes", o_r8:"hard · 8 s", o_r15:"medium · 15 s", o_r30:"easy · 30 s",
     onlytr:"Only words with translation", hints:"Hints", haptics:"Haptic feedback", pressureT:"Timer pressure", best:"Best",
     fullscreen:"Fullscreen", fsauto:"Fullscreen on first touch", restart:"New game", resetlists:"Reset my word marks",
     sources:"Data sources",
@@ -225,14 +225,14 @@ const I18N = {
     t_back:"Erase a letter. Hold: finish the branch (or erase the whole word)", a_back:"Erase", go:"Grow ✓",
     overTitle:"Letters crushed", again:"Again",
     addLetters:"Add letters", need2:"At least 2 letters needed", alreadyLive:"already in a live branch", maybe:"maybe %0?",
-    branchesEnded:"Branches ended: harvest in %0 s", harvested:"Harvest collected! +%0", pickFirst:"Pick a branch word first",
+    branchesEnded:"Branch ended: it closes in %0 s", harvested:"Branch closed! +%0", pickFirst:"Pick a branch word first",
     holdBack:"Hold ⌫ to finish the branch", typeMark:"Type the word you want to mark", notInGame:"This word isn't in the game anyway",
     verified:"This word has a verified translation and can't be marked", marked:"«%0» marked as non-existent and no longer accepted",
     typeAdd:"Type the word you want to add", alreadyIn:"This word is already in the game", added:"«%0» added to the game (no translation)",
     listsReset:"Your marks were reset", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"words: %0 · best: %1",
-    noMore:"No more words", locked:"Locked in", ripeTitle:"Harvest in %0 s", ripeSub:"Branches reached the end · You can add a sprout",
+    noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
     restored:"Game restored", a_help:"How to play", helpClose:"Got it", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
 <h3>What to do</h3>
@@ -242,20 +242,20 @@ const I18N = {
 <li>Under the word you are working on there are buttons: <b>+</b> starts a new word, <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
 </ol>
 <h3>What gives points</h3>
-<p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. When a branch is finished you get a harvest bonus of +25% of its points.</p>
+<p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. When a branch is finished you get a bonus for closing it: +25% of its points.</p>
 <h3>The numbers at the top</h3>
 <div class="lg"><b>485</b><span>Your score.</span>
 <b>★☆☆</b><span>Dictionary difficulty (a setting): 3 red stars = hard dictionary with rare words, 1 green star = easy dictionary with common words.</span>
 <b>×1.3</b><span>Streak multiplier. Every correct word in a row adds +0.1 to the points (up to ×2.0). A mistake drops it back to ×1.0.</span>
 <b>words 18</b><span>How many words you have found.</span>
-<b>🌿 7</b><span>How many branches you have harvested.</span>
+<b>🌿 7</b><span>How many branches you have closed.</span>
 <b>pressure</b><span>How full the letter area is. Fallen letters lie at the bottom and take its space. When the bar is full, a countdown "letters crushed" starts, and if it runs out the game is over. It stops when there is room again.</span></div>
 <h3>Mistakes</h3>
 <p>A word that does not exist resets the streak, and its letters fall to the bottom. If it was the only shoot of a word, that word dies too and its letters fall as well (its words can be built again).</p>
-<h3>Why does a branch "ripen"?</h3>
-<p>A branch is finished when none of its tips can grow any more: there are no longer words, or you fixed the word by holding ⌫. Then you see "Branches reached the end · Harvest in N s": you have N seconds (a setting) to add one more shoot to an inner word that can still take one. When the time is up, or at once if nothing can grow, the branch ripens: you get +25% of its points, a leaf is added to the counter and the branch moves to the archive on the left. "Locked in" under a word means you finished it yourself; "No more words" means there is no longer word for it.</p>
+<h3>When does a branch close?</h3>
+<p>A branch is finished when none of its tips can grow any more: there are no longer words, or you fixed the word by holding ⌫. Then you see "Branch reached the end · Branch closes in N s": you have N seconds (a setting) to add one more shoot to an inner word that can still take one. When the time is up, or at once if nothing can grow, the branch is closed: you get +25% of its points, a leaf is added to the counter and the branch moves to the archive on the left. "Locked in" under a word means you finished it yourself; "No more words" means there is no longer word for it.</p>
 <h3>Old branches</h3>
-<p>Harvested branches wait on the left, beside the field. You can look at them only while you are not building a branch: drag the field to the left or tap one.</p>`
+<p>Closed branches wait on the left, beside the field. You can look at them only while you are not building a branch: drag the field to the left or tap one.</p>`
   },
   ru: {
     t_diff:"сложность словаря", t_streak:"множитель за серию", words:"слов", t_branches:"собранные ветки", pressure:"давление",
@@ -265,7 +265,7 @@ const I18N = {
     showfps:"Счётчик FPS", assist:"Подсказка букв", o_aoff:"нет", o_avalid:"только подходящие", o_adecoy:"подходящие + 3 лишних",
     hand:"Рука", o_right:"правая", o_left:"левая", tier:"Словарь", o_t1:"жёсткий", o_t2:"средний", o_t3:"лёгкий",
     agony:"Таймер конца", o_g2:"сложный · 2 с", o_g10:"средний · 10 с", o_g30:"лёгкий · 30 с",
-    ripe:"Время до урожая", o_r8:"сложное · 8 с", o_r15:"среднее · 15 с", o_r30:"лёгкое · 30 с",
+    ripe:"Время до завершения ветки", o_r8:"сложное · 8 с", o_r15:"среднее · 15 с", o_r30:"лёгкое · 30 с",
     onlytr:"Только слова с переводом", hints:"Подсказки", haptics:"Вибро-отклик", pressureT:"Давление по таймеру", best:"Рекорд",
     fullscreen:"Во весь экран", fsauto:"Весь экран по первому касанию", restart:"Новая игра", resetlists:"Сбросить мои отметки слов",
     sources:"Источники данных",
@@ -275,14 +275,14 @@ const I18N = {
     t_back:"Стереть букву. Удерживай: завершить ветку (или стереть всё слово)", a_back:"Стереть", go:"Расти ✓",
     overTitle:"Буквы сжаты", again:"Ещё раз",
     addLetters:"Добавь буквы", need2:"Нужно хотя бы 2 буквы", alreadyLive:"уже есть в живой ветке", maybe:"может, %0?",
-    branchesEnded:"Ветви закончились: урожай через %0 с", harvested:"Урожай собран! +%0", pickFirst:"Сначала выбери слово ветки",
+    branchesEnded:"Ветка закончилась: завершится через %0 с", harvested:"Ветка завершена! +%0", pickFirst:"Сначала выбери слово ветки",
     holdBack:"Удерживай ⌫, чтобы завершить ветку", typeMark:"Набери слово, которое хочешь отметить", notInGame:"Этого слова и так нет в игре",
     verified:"У слова есть проверенный перевод, отметить его нельзя", marked:"«%0» отмечено как несуществующее и больше не принимается",
     typeAdd:"Набери слово, которое хочешь добавить", alreadyIn:"Это слово уже есть в игре", added:"«%0» добавлено в игру (без перевода)",
     listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"слов: %0 · рекорд: %1",
-    noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Урожай через %0 с", ripeSub:"Ветви дошли до конца · Можно добавить побег",
+    noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
     restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
 <h3>Что делать</h3>
@@ -292,20 +292,20 @@ const I18N = {
 <li>Под словом, с которым вы работаете, есть кнопки: <b>+</b> начинает новое слово, <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
 </ol>
 <h3>За что дают очки</h3>
-<p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Когда ветка закончена, вы получаете бонус урожая: +25% от её очков.</p>
+<p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Когда ветка закончена, вы получаете бонус за завершение: +25% от её очков.</p>
 <h3>Цифры сверху</h3>
 <div class="lg"><b>485</b><span>Ваш счёт.</span>
 <b>★☆☆</b><span>Сложность словаря (настройка): 3 красные звезды: трудный словарь с редкими словами, 1 зелёная звезда: лёгкий словарь с частыми словами.</span>
 <b>×1.3</b><span>Множитель серии. Каждое правильное слово подряд прибавляет +0.1 к очкам (до ×2.0). Ошибка сбрасывает его до ×1.0.</span>
 <b>слов 18</b><span>Сколько слов вы нашли.</span>
-<b>🌿 7</b><span>Сколько веток вы собрали (урожай).</span>
+<b>🌿 7</b><span>Сколько веток вы завершили.</span>
 <b>давление</b><span>Насколько заполнена область букв. Упавшие буквы лежат внизу и занимают в ней место. Когда шкала заполнена, запускается обратный отсчёт «буквы сжаты», и если он закончится, игра окончена. Он останавливается, когда место снова появляется.</span></div>
 <h3>Ошибки</h3>
 <p>Слово, которого нет, сбрасывает серию, а его буквы падают вниз. Если это был единственный побег слова, то слово тоже погибает и его буквы тоже падают (его слова можно собрать снова).</p>
-<h3>Почему ветка «созревает»?</h3>
-<p>Ветка завершена, когда ни один её конец не может расти дальше: длиннее слов нет, или вы закрепили слово удержанием ⌫. Тогда вы видите «Ветви дошли до конца · Урожай через N с»: у вас есть N секунд (настройка), чтобы добавить ещё один побег к внутреннему слову, которое ещё может его принять. Когда время вышло, или сразу, если расти нечему, ветка созревает: вы получаете +25% её очков, к счётчику добавляется листочек, а ветка уходит в архив слева. Надпись «Зафиксировано» под словом значит, что вы закончили его сами, а «Больше слов нет»: длиннее слов не существует.</p>
+<h3>Когда ветка завершается?</h3>
+<p>Ветка завершена, когда ни один её конец не может расти дальше: длиннее слов нет, или вы закрепили слово удержанием ⌫. Тогда вы видите «Ветка дошла до конца · Ветка завершится через N с»: у вас есть N секунд (настройка), чтобы добавить ещё один побег к внутреннему слову, которое ещё может его принять. Когда время вышло, или сразу, если расти нечему, ветка завершена: вы получаете +25% её очков, к счётчику добавляется листочек, а ветка уходит в архив слева. Надпись «Зафиксировано» под словом значит, что вы закончили его сами, а «Больше слов нет»: длиннее слов не существует.</p>
 <h3>Старые ветки</h3>
-<p>Собранные ветки ждут слева, рядом с полем. Смотреть их можно только когда вы не собираете ветку: потяните поле влево или нажмите на одну из них.</p>`
+<p>Завершённые ветки ждут слева, рядом с полем. Смотреть их можно только когда вы не собираете ветку: потяните поле влево или нажмите на одну из них.</p>`
   }
 };
 let LANG = "en"; try { LANG = localStorage.getItem("db_lang") || LANG; } catch (e) {}
@@ -356,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.25";   // keep in sync with the VERSION file
+const VERSION = "0.0.26";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1785,8 +1785,9 @@ function draw() {
     ctx.fillStyle = pg; ctx.fillRect(0, wy, cw, band);
   }
   for (const p of DUST) {
-    ctx.globalAlpha = p.a * (.6 + .4 * Math.sin(G.t * .5 + p.ph));
-    ctx.fillStyle = T.dust; ctx.fillRect(Math.round(p.x * cw), Math.round(p.y * ch), p.s, p.s);
+    ctx.globalAlpha = Math.min(1, p.a * (T.lab ? 1.5 : 1) * (.6 + .4 * Math.sin(G.t * .5 + p.ph)));
+    ctx.fillStyle = T.lab && p.y < .55 ? "#4f86a8" : T.dust;   // on the light laboratory sky white specks vanish: the upper ones are blue-grey
+    ctx.fillRect(Math.round(p.x * cw), Math.round(p.y * ch), p.s + (T.lab && p.s < 3 ? 1 : 0), p.s + (T.lab && p.s < 3 ? 1 : 0));
   }
   ctx.globalAlpha = 1;
   
