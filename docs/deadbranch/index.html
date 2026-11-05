@@ -94,7 +94,7 @@
   #act { position:absolute; left:0; top:0; z-index:5; display:flex; gap:10px; opacity:0; pointer-events:none; transition:opacity .15s; }
   #act.on { opacity:1; } #act.on .btn { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
-  #act #back, #act #hintb, #act #newb { width:56px; } #act #back svg, #act #hintb svg, #act #newb svg { width:24px; height:24px; }
+  #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
   #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
   #act #go:disabled { opacity:.55; box-shadow:none; }
   body.lefty #act { flex-direction:row-reverse; }
@@ -200,7 +200,6 @@
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
 <div id="act">
-  <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
   <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
   <button class="btn go" id="go" data-i18n="go"></button>
@@ -251,7 +250,7 @@ const I18N = {
     sources:"Data sources",
     sourcesText:"Hunspell lt_LT dictionary (A. Agejevas et al., BSD); word frequencies from FrequencyWords / OpenSubtitles (CC BY-SA); English and Russian Wiktionary dumps from kaikki.org (CC BY-SA), including verb forms; a noun list and the database of the author's study app; some translations were made by AI (Claude) and checked against Wiktionary. Details: CREDITS.md",
     nowrd:"✗ Not a word", t_nowrd:"Mark: there is no such word", yesw:"✓ It is a word", t_yesw:"It is a word: add it to the game",
-    t_newb:"Start a new word (new branch)", a_newb:"New branch", t_hintb:"Hint: which branches can still grow", a_hintb:"Hint",
+    t_hintb:"Hint: which branches can still grow", a_hintb:"Hint",
     t_back:"Erase a letter. Hold: finish the branch (or erase the whole word)", a_back:"Erase", go:"Grow ✓",
     overTitle:"Letters crushed", again:"Again",
     addLetters:"Add letters", need2:"At least 2 letters needed", alreadyLive:"already in a live branch", maybe:"maybe %0?",
@@ -269,7 +268,7 @@ const I18N = {
 <ol>
 <li>Tap letters at the bottom to spell a word of 2+ letters and press <b>Grow ✓</b>.</li>
 <li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. One word can have up to 3 shoots.</li>
-<li>Under the word you are working on there are buttons: <b>+</b> starts a new word, <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
+<li>A new word starts by itself when the current branch is closed. Under the word you are working on there are buttons: <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
 </ol>
 <h3>What gives points</h3>
 <p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. When a branch is finished you get a bonus for closing it: +25% of its points.</p>
@@ -301,7 +300,7 @@ const I18N = {
     sources:"Источники данных",
     sourcesText:"Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md",
     nowrd:"✗ Нет такого слова", t_nowrd:"Отметить: такого слова нет", yesw:"✓ Такое слово есть", t_yesw:"Такое слово есть: добавить в игру",
-    t_newb:"Начать новое слово (новую ветку)", a_newb:"Новая ветка", t_hintb:"Подсказка: какие ветки ещё могут расти", a_hintb:"Подсказка",
+    t_hintb:"Подсказка: какие ветки ещё могут расти", a_hintb:"Подсказка",
     t_back:"Стереть букву. Удерживай: завершить ветку (или стереть всё слово)", a_back:"Стереть", go:"Расти ✓",
     overTitle:"Буквы сжаты", again:"Ещё раз",
     addLetters:"Добавь буквы", need2:"Нужно хотя бы 2 буквы", alreadyLive:"уже есть в живой ветке", maybe:"может, %0?",
@@ -319,7 +318,7 @@ const I18N = {
 <ol>
 <li>Нажимайте на буквы внизу, чтобы составить слово из 2+ букв, и нажмите <b>Расти ✓</b>.</li>
 <li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. У одного слова может быть до 3 побегов.</li>
-<li>Под словом, с которым вы работаете, есть кнопки: <b>+</b> начинает новое слово, <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
+<li>Новое слово начинается само, когда текущая ветка завершена. Под словом, с которым вы работаете, есть кнопки: <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
 </ol>
 <h3>За что дают очки</h3>
 <p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Когда ветка закончена, вы получаете бонус за завершение: +25% от её очков.</p>
@@ -392,7 +391,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.35";   // keep in sync with the VERSION file
+const VERSION = "0.0.36";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1070,12 +1069,6 @@ $("yesw").onclick = () => {
   updateTray();
 };
 $("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast(tr("listsReset"), "gold"); };
-$("newb").onclick = () => {
-  const b = G.builder;
-  b.newMode = !b.newMode;
-  if (b.newMode) { b.base = null; b.letters = []; b.src = []; b.rootX = null; } else ensureBase();
-  updateTray();
-};
 // hint: shows which words can still grow (how many unused longer words start with them) and which are finished
 $("hintb").onclick = () => {
   const nodes = allNodes().filter(n => n.alive && !n.tree.harvest);
@@ -1155,7 +1148,6 @@ function updateTray() {
   else if (!ls && !bs) hint.textContent = tr("wordHint");
   else if (!ls) hint.textContent = tr("plusLetters");
   else hint.textContent = "";
-  $("newb").style.background = b.newMode ? "#fbbf24" : ""; $("newb").style.color = b.newMode ? "#1a1204" : "";
   if ($("hints").checked && ls) {
     if (WORDS.has(s) && !G.used.has(s)) w.className = "word";
     else if (!PRE.has(s) && !(WORDS.has(s))) w.className = "dead";
