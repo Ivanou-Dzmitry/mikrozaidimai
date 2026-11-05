@@ -1,7 +1,7 @@
 {
   "name": "Dead Branch",
   "short_name": "Dead Branch",
-  "description": "Слова из букв, растущие молекулой (литовский).",
+  "description": "Educational word game for learning Lithuanian: build words that grow like molecules. Play on a phone or a PC. / Обучающая игра для изучения литовского языка. Играть можно на телефоне и на ПК.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
