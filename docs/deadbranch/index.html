@@ -392,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.40";   // keep in sync with the VERSION file
+const VERSION = "0.0.41";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2020,7 +2020,7 @@ function draw() {
       if (!t.harvest && G.builder.base === n) {
         const a0 = ctx.globalAlpha;   // a ripple like a raindrop: a ring appears at the word, slowly spreads a little and fades; two rings, half a period apart
         for (const off of [0, .5]) {
-          const u = (G.t / 4.4 + off) % 1, e = 1 - (1 - u) * (1 - u), k = 1.02 + .6 * e;   // slow and smooth: it slows down as it spreads, like rings on water
+          const u = (G.t / 6.3 + off) % 1, e = 1 - (1 - u) * (1 - u), k = 1.02 + .6 * e;   // slow and smooth: it slows down as it spreads, like rings on water
           ctx.globalAlpha = a0 * Math.min(1, u * 12) * Math.pow(1 - u, 2) * .9;
           capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2.2 - 1.4 * u, false, n.tilt);
         }
