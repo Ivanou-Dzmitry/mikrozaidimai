@@ -278,7 +278,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.1";   // keep in sync with the VERSION file
+const VERSION = "0.0.2";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1862,7 +1862,7 @@ function frame(now) {
   const w0 = performance.now(); update(dt); draw(); const spent = performance.now() - w0;
   fpsStat.n++; fpsStat.ms += spent;
   if (now - fpsStat.t0 >= 500) {   // a small counter: frames per second, the time one frame costs the processor, the canvas size
-    if ($("showfps").checked) setText($("fps"), "FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " ms \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value);
+    if ($("showfps").checked) setText($("fps"), "v" + VERSION + " \u00b7 FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " ms \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value);
     else setText($("fps"), "");
     fpsStat.n = 0; fpsStat.ms = 0; fpsStat.t0 = now;
   }
