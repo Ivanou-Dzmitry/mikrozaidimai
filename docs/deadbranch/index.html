@@ -392,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.41";   // keep in sync with the VERSION file
+const VERSION = "0.0.42";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1364,8 +1364,20 @@ function drawBubbles(cw, ch) {
   const t = G.t;
   if (t < bubNext - 60) bubNext = 0;   // a new game restarts the clock
   if (t > bubNext && bubbles.length < 3) {
-    bubNext = t + 4 + Math.random() * 6;
-    bubbles.push({ x: .08 * cw + Math.random() * .84 * cw, r: 20 + Math.random() * 62, sq: .82 + Math.random() * .36, rot: (Math.random() - .5) * .8, vy: 14 + Math.random() * 12, ph: Math.random() * 6.28, wob: 6 + Math.random() * 12, t0: t });
+    // a new bubble starts where no rising one is near (best of a few random tries) and not right after another one
+    const r = 20 + Math.random() * 62; let bestX = -1, bestGap = -1e9;
+    for (let k = 0; k < 14; k++) {
+      const x = r + 8 + Math.random() * Math.max(1, cw - 2 * r - 16);
+      let gap = 1e9; for (const o of bubbles) gap = Math.min(gap, Math.abs(x - o.x) - (r + o.r) * 1.25);
+      if (gap > bestGap) { bestGap = gap; bestX = x; }
+    }
+    if (bestGap < 0) bubNext = t + 1.5;   // no free place now: try again soon
+    else {
+      bubNext = t + 6 + Math.random() * 7;
+      const R = () => Math.random();
+      bubbles.push({ x: bestX, r, sq: .86 + R() * .28, rot: (R() - .5) * .8, vy: 14 + R() * 12, ph: R() * 6.28, wob: 6 + R() * 12, t0: t,
+        a2: .045 + R() * .04, w2: .5 + R() * .5, p2: R() * 6.28, a3: .025 + R() * .03, w3: .4 + R() * .5, p3: R() * 6.28, a5: .01 + R() * .015, p5: R() * 6.28 });
+    }
   }
   ctx.save(); ctx.lineWidth = 1.2;
   for (let i = bubbles.length - 1; i >= 0; i--) {
@@ -1373,7 +1385,13 @@ function drawBubbles(cw, ch) {
     if (age < 0 || y < -b.r) { bubbles.splice(i, 1); continue; }
     const x = b.x + Math.sin(age * .5 + b.ph) * b.wob;
     ctx.strokeStyle = T.lab ? "rgba(255,255,255,.15)" : "rgba(190,225,245,.09)"; ctx.fillStyle = T.lab ? "rgba(255,255,255,.026)" : "rgba(190,225,245,.019)";
-    ctx.beginPath(); ctx.ellipse(x, y, b.r, b.r * b.sq, b.rot, 0, 6.2832); ctx.fill(); ctx.stroke();
+    const cr = Math.cos(b.rot), sr = Math.sin(b.rot); ctx.beginPath();   // the outline is never a clean ellipse: a few slow waves run round it
+    for (let k = 0; k <= 44; k++) {
+      const th = k / 44 * 6.2832, w = 1 + b.a2 * Math.sin(2 * th + age * b.w2 + b.p2) + b.a3 * Math.sin(3 * th - age * b.w3 + b.p3) + b.a5 * Math.sin(5 * th + age * .6 + b.p5);
+      const px = Math.cos(th) * b.r * w, py = Math.sin(th) * b.r * b.sq * w, X = x + px * cr - py * sr, Y = y + px * sr + py * cr;
+      if (k) ctx.lineTo(X, Y); else ctx.moveTo(X, Y);
+    }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(x, y, b.r * .72, b.r * .72 * b.sq, b.rot, 3.7, 4.5); ctx.stroke();   // a faint glint arc
   }
   ctx.restore();
