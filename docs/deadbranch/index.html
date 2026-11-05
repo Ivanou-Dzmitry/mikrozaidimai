@@ -312,7 +312,10 @@ const THEMES = {
 // Quality: what the picture may cost. high = everything; med = no blur; low = no blur, no gradients on letters, half the pixels, 30 frames a second.
 const QUAL = { ultra: { dpr: 2, fps: 60, blur: true, glass: 2, cache: false }, high: { dpr: 2, fps: 60, blur: false, glass: 2, cache: false }, med: { dpr: 1.5, fps: 45, blur: false, glass: 1, cache: true }, low: { dpr: 1, fps: 30, blur: false, glass: 0, cache: true } };   // glass: 2 full, 1 a flat highlight, 0 none
 let Q = QUAL.high;
-const cvDpr = () => Math.min(window.devicePixelRatio || 1, Q.dpr);
+const cvDpr = () => {   // the bitmap stays within ~4096 px wide and ~9 Mpx: a 4K window at a high display scale made a huge canvas that Chrome drew with gaps and lost words
+  const w = cv.clientWidth || 1, h = cv.clientHeight || 1;
+  return Math.max(1, Math.min(window.devicePixelRatio || 1, Q.dpr, 4096 / w, Math.sqrt(9e6 / (w * h))));
+};
 let THEME = "lab"; try { THEME = localStorage.getItem("db_theme") || THEME; } catch (e) {}
 if (!THEMES[THEME]) THEME = "lab";
 let T = THEMES[THEME];
