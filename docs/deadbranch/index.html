@@ -75,8 +75,9 @@
   #act { position:absolute; left:0; top:0; z-index:5; display:flex; gap:10px; opacity:0; pointer-events:none; transition:opacity .15s; }
   #act.on { opacity:1; } #act.on .btn { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
-  #act #back { width:56px; } #act #back svg { width:24px; height:24px; }
-  #act #go { flex:0 0 92px; font-size:19px; padding:0; }
+  #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
+  #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
+  #act #go:disabled { opacity:.55; box-shadow:none; }
   body.lefty #act { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
@@ -176,6 +177,7 @@
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
 <div id="act">
+  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
   <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
   <button class="btn go" id="go" data-i18n="go"></button>
 </div>
@@ -190,7 +192,6 @@
   </div>
   <div id="btns">
     <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
   </div>
 </div>
 <div id="help"><div class="card"><div id="helptext"></div></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
@@ -357,7 +358,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.17";   // keep in sync with the VERSION file
+const VERSION = "0.0.18";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1332,14 +1333,14 @@ function drawBubbles(cw, ch) {
   if (t < bubNext - 60) bubNext = 0;   // a new game restarts the clock
   if (t > bubNext && bubbles.length < 3) {
     bubNext = t + 4 + Math.random() * 6;
-    bubbles.push({ x: .08 * cw + Math.random() * .84 * cw, r: 14 + Math.random() * 46, sq: .82 + Math.random() * .36, rot: (Math.random() - .5) * .8, vy: 14 + Math.random() * 12, ph: Math.random() * 6.28, wob: 6 + Math.random() * 12, t0: t });
+    bubbles.push({ x: .08 * cw + Math.random() * .84 * cw, r: 20 + Math.random() * 62, sq: .82 + Math.random() * .36, rot: (Math.random() - .5) * .8, vy: 14 + Math.random() * 12, ph: Math.random() * 6.28, wob: 6 + Math.random() * 12, t0: t });
   }
   ctx.save(); ctx.lineWidth = 1.2;
   for (let i = bubbles.length - 1; i >= 0; i--) {
     const b = bubbles[i], age = t - b.t0, y = ch + b.r - b.vy * age;
     if (age < 0 || y < -b.r) { bubbles.splice(i, 1); continue; }
     const x = b.x + Math.sin(age * .5 + b.ph) * b.wob;
-    ctx.strokeStyle = T.lab ? "rgba(255,255,255,.2)" : "rgba(190,225,245,.12)"; ctx.fillStyle = T.lab ? "rgba(255,255,255,.035)" : "rgba(190,225,245,.025)";
+    ctx.strokeStyle = T.lab ? "rgba(255,255,255,.15)" : "rgba(190,225,245,.09)"; ctx.fillStyle = T.lab ? "rgba(255,255,255,.026)" : "rgba(190,225,245,.019)";
     ctx.beginPath(); ctx.ellipse(x, y, b.r, b.r * b.sq, b.rot, 0, 6.2832); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(x, y, b.r * .72, b.r * .72 * b.sq, b.rot, 3.7, 4.5); ctx.stroke();   // a faint glint arc
   }
