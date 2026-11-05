@@ -123,6 +123,8 @@
   html.lab #hud .sub { color:#35566a; text-shadow:0 1px 0 #fff9; } html.lab #hud .sub svg { color:#13997c; }
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
   html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #act .btn.sec { background:#e4ecf1; border-color:#b8c8d3; color:#46606f; }
+  #act .btn.sec:not(:disabled) { box-shadow:none; }
   html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel label { color:#4d6a7b; } html.lab #panel label.ck { color:#0f2f44; border-color:#c3d6e0; }
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
@@ -390,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.33";   // keep in sync with the VERSION file
+const VERSION = "0.0.34";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1605,7 +1607,7 @@ function glyph(x, y, r, ch, fill, stroke, tc, lw, glass) {
   } else {
     ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832);
   }
-  ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke();
+  ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = lw && !VOWEL.has(ch) && /\p{L}/u.test(ch) ? Math.min(lw, 1) : lw; ctx.strokeStyle = stroke; ctx.stroke();   // consonants have a thin 1 px rim, vowels keep the full one
   const glint = false;   // no white glints on any letter
   if (T.lab && Q.glass === 1 && glass !== false && glint) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill(); }   // flat glint only
   if (T.lab && Q.glass === 2 && glass !== false) {   // glass: soft light from the top left, a glint
