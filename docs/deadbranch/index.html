@@ -392,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.34";   // keep in sync with the VERSION file
+const VERSION = "0.0.35";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1399,7 +1399,7 @@ function drawIdle(cw, wy, rr) {
     glyph(cx + Math.cos(o.a) * d, cy + Math.sin(o.a) * d, rr * (.8 + .35 * k) * o.sc, o.ch, T.lab ? "rgba(255,255,255,.5)" : "rgba(255,255,255,.1)", "rgba(0,0,0,0)", T.lab ? "rgba(160,180,192,.9)" : "rgba(215,230,240,.85)", 0, false);
   }
   const pulse = .55 + .25 * Math.sin(t * 2.2), arm = R0 * .26;   // just a plus sign
-  ctx.strokeStyle = T.halo; ctx.lineWidth = 1.8; ctx.lineCap = "round"; ctx.globalAlpha = pulse;
+  ctx.strokeStyle = T.halo; ctx.lineWidth = 1; ctx.lineCap = "round"; ctx.globalAlpha = pulse;
   ctx.beginPath(); ctx.moveTo(cx - arm, cy); ctx.lineTo(cx + arm, cy); ctx.moveTo(cx, cy - arm); ctx.lineTo(cx, cy + arm); ctx.stroke();
   ctx.restore();
 }
