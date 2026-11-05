@@ -1,0 +1,2 @@
+# Pages serves plain files only: nothing under docs/ goes through Git LFS (the repository tracks other images with it)
+* -filter -diff -merge

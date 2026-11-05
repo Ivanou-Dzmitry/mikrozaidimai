@@ -1,0 +1,1867 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#cfe0ea">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dead Branch">
+<title>Dead Branch — prototype</title>
+<style>
+  :root { --bg:#070b12; --fg:#dff5ff; --dim:#6b8294; --ok:#4ade80; --bad:#f87171; --gold:#fbbf24; --sky:#38bdf8; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { margin:0; height:100%; background:linear-gradient(#0f5a73, #04182b); color:var(--fg); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; touch-action:none; user-select:none; }
+  body { display:flex; flex-direction:column; height:100dvh; max-width:470px; margin:0 auto; position:relative; background:transparent; box-shadow:0 0 50px #0007; }   /* phone-sized column: HUD, field and buttons share one width */
+  #hud { position:absolute; top:0; left:0; right:0; z-index:5; display:flex; align-items:flex-start; gap:12px; padding:max(8px,env(safe-area-inset-top)) 12px 0; pointer-events:none; }
+  #hud::before { content:""; position:absolute; z-index:-1; left:0; right:0; top:0; height:calc(100% + 40px); pointer-events:none;   /* frosted strip: whatever passes under the HUD is blurred and fades out */
+    background:linear-gradient(rgba(4,24,43,.55), rgba(4,24,43,0)); 
+    -webkit-mask-image:linear-gradient(#000 55%, transparent); mask-image:linear-gradient(#000 55%, transparent); }
+  html.q-ultra #hud::before { -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }   /* only the top profile may blur what is under the header */
+  html.lab #hud::before { background:linear-gradient(rgba(238,245,248,.8), rgba(238,245,248,0)); }
+  #coords { position:absolute; left:12px; top:66px; z-index:5; pointer-events:none; font:10px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
+  #fps { position:absolute; left:12px; top:80px; z-index:5; pointer-events:none; font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
+  #coords.home { color:#13997c; opacity:.7; }
+  #hud .big { font-size:26px; font-weight:700; line-height:1; }
+  #hud .sub { font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
+  #hud .sub svg { width:14px; height:14px; color:#86efac; margin-right:-2px; }
+  #hud .grow { flex:1; }
+  #dens { height:8px; border-radius:3px; background:#12202e; overflow:hidden; margin-top:8px; }
+  #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
+  #gear { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:12px; width:44px; height:44px; font-size:20px; }
+  /* wide screens (a monitor, 16:9): the canvas and the laboratory fill the window, the play column sits in the middle */
+  html.wide body { max-width:none; box-shadow:none; }
+  html.wide #hud { left:50%; right:auto; width:min(560px,100%); transform:translateX(-50%); }
+  html.wide #coords, html.wide #fps { left:calc(50% - 280px + 12px); }
+  html.wide #panel { right:calc(50% - 280px + 10px); }
+  html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
+  html.wide #tray > * { width:min(560px,100%); align-self:center; }
+  #panel { position:absolute; top:52px; right:10px; z-index:6; background:#0c1722f2; border:1px solid #1d3547; border-radius:12px; padding:12px; display:none; min-width:220px; font-size:14px; }
+  #panel.open { display:block; }
+  #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
+  #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
+  canvas { flex:1; min-height:0; width:100%; display:block; }
+  #tray { flex:none; display:flex; flex-direction:column; gap:6px; padding:8px 12px max(10px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
+  #wzone { height:70px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:0; }
+  #word { width:100%; height:38px; line-height:38px; text-align:center; font-size:30px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  #sub { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:30px; min-width:0; }
+  #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
+  #ru:empty { display:none; }
+  .chip { flex:none; position:relative; overflow:hidden; height:30px; padding:0 12px; border-radius:15px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:13px; font-weight:600; }
+  .chip[hidden] { display:none; }
+  #back { position:relative; overflow:hidden; }
+  #back i { position:absolute; inset:0 auto 0 0; width:0; background:#0a6a8040; }
+  #back.hold i { width:100%; transition:width .65s linear; }   /* a fill shows how long to hold */
+  #back svg { position:relative; }
+  #btns { display:flex; gap:8px; }
+  #btns .btn { height:56px; }
+  .btn.ic { flex:none; width:58px; padding:0; display:flex; align-items:center; justify-content:center; }
+  .btn.ic svg { width:26px; height:26px; }
+  #go { flex:1; font-size:21px; }
+  body.lefty #btns { flex-direction:row-reverse; }
+  #bs { color:#7f95a7; } #ls { color:var(--fg); }
+  #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
+  #word .hint { color:#8aa3b5; font-size:16px; font-weight:400; letter-spacing:0; text-transform:none; }
+  .btn { border:0; border-radius:14px; height:48px; min-width:48px; padding:0 14px; font-size:16px; font-weight:700; color:#06111a; background:var(--sky); }
+  .btn.sec { background:#16304a; color:var(--fg); border:1px solid #1f3a50; }
+  .btn.go { background:var(--ok); padding:0 18px; box-shadow:0 0 16px #4ade8033; }
+  .btn:disabled { opacity:.35; }
+  #hintpanel { position:absolute; top:86px; left:8px; right:8px; z-index:9; max-height:42%; overflow:auto; display:none; background:#070c12ea; border:1px solid #1d3547; border-radius:10px; padding:12px 56px 12px 14px; font-size:17px; line-height:1.6; pointer-events:auto; }
+  #hintx { position:absolute; top:6px; right:6px; width:42px; height:42px; border-radius:21px; border:1px solid #1d3547; background:#10202e; color:#dff5ff; font-size:26px; line-height:1; padding:0; }   /* the panel can be closed at once */
+  #hintpanel.open { display:block; } #hintpanel b { color:var(--ok); } #hintpanel .fin b { color:var(--gold); } #hintpanel i { color:#bbf7d0; font-style:normal; }
+  #cd { position:absolute; top:46px; left:0; right:0; z-index:5; text-align:center; font-size:20px; font-weight:800; color:var(--bad); text-shadow:0 0 12px #f8717199; pointer-events:none; display:none; }
+  #cd.open { display:block; animation:pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity:.55; } }
+  #toasts { position:absolute; top:70px; left:0; right:0; z-index:5; display:flex; flex-direction:column; align-items:center; gap:6px; pointer-events:none; }
+  .toast { background:#0b1824e6; border:1px solid #1d3547; padding:6px 12px; border-radius:999px; font-size:15px; font-weight:600; animation:fade 2s forwards; }
+  .toast.ok { color:var(--ok); } .toast.bad { color:var(--bad); } .toast.gold { color:var(--gold); }
+  @keyframes fade { 0% { opacity:0; transform:translateY(-6px);} 10% { opacity:1; transform:none;} 80% { opacity:1;} 100% { opacity:0;} }
+  #over { position:absolute; inset:0; z-index:9; background:#050a10e6; display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px; text-align:center; }
+  #over.open { display:flex; }
+  /* the laboratory look */
+  html.lab { background:linear-gradient(#eef5f8,#3b7ba6); color:#12303f; }
+  html.lab body { color:#12303f; box-shadow:0 0 50px #4a6b7e55; }
+  html.lab #hud .sub { color:#35566a; text-shadow:0 1px 0 #fff9; } html.lab #hud .sub svg { color:#13997c; }
+  html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
+  html.lab #gear { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
+  html.lab #tray { background:#eef5f8f2; border-top-color:#b9cfdb; }
+  html.lab #bs { color:#6f8796; } html.lab #ls { color:#0f2f44; } html.lab #word.word #ls { color:#15803d; } html.lab #word.dead #ls { color:#dc2626; }
+  html.lab #word .hint { color:#58707f; } html.lab #ru { color:#3d5a6b; }
+  html.lab .chip { background:#fff; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab .btn.sec { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
+  html.lab .btn.go { background:linear-gradient(#37b1e6,#1b7cb8); color:#fff; box-shadow:0 2px 10px #1b7cb855; }
+  html.lab .btn:disabled { opacity:.5; }
+  html.lab .toast { background:#fffffff0; border-color:#9bb8c8; } html.lab .toast.ok { color:#15803d; } html.lab .toast.bad { color:#dc2626; } html.lab .toast.gold { color:#b45309; }
+  html.lab #cd { color:#dc2626; text-shadow:none; }
+  html.lab #hintx { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
+  html.lab #hintpanel { background:#fffffff7; box-shadow:0 6px 20px #2a4a6a33; border-color:#9bb8c8; color:#0f2f44; } html.lab #hintpanel b { color:#15803d; } html.lab #hintpanel .fin b { color:#b45309; } html.lab #hintpanel i { color:#0f766e; }
+  html.lab #over { background:#e8f1f5ee; color:#0f2f44; } html.lab #over .score { color:#b45309; }
+  #over h1 { margin:0; font-size:30px; } #over .score { font-size:46px; font-weight:800; color:var(--gold); }
+</style>
+</head>
+<body>
+<div id="hud">
+  <div><div class="big" id="score">0</div><div class="sub"><span id="diff" title="сложность словаря"></span><span>·</span><span id="streak" title="множитель за серию">×1.0</span><span>·</span><span>слов <span id="wn">0</span></span><span>·</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l7-7"/></svg><span id="tn" title="собранные ветки">0</span></div></div>
+  <div class="grow"><div class="sub" style="justify-content:flex-end">давление <b id="denst">0%</b></div><div id="dens"><i></i></div></div>
+  <button id="gear" aria-label="settings">⚙</button>
+</div>
+<div id="coords"></div>
+<div id="fps"></div>
+<div id="panel">
+  <label>Раскладка букв
+    <select id="layout"><option value="qwerty">как QWERTY</option><option value="fan">веер под палец</option></select>
+  </label>
+  <label>Оформление
+    <select id="theme"><option value="lab">лаборатория</option><option value="deep">глубина</option></select>
+  </label>
+  <label>Качество
+    <select id="quality"><option value="ultra">максимальное (с размытием)</option><option value="high">высокое</option><option value="med">среднее</option><option value="low">низкое</option></select>
+  </label>
+  <label>Счётчик FPS <input type="checkbox" id="showfps" checked></label>
+  <label>Подсказка букв
+    <select id="assist"><option value="off">нет</option><option value="valid">только подходящие</option><option value="decoy" selected>подходящие + 3 лишних</option></select>
+  </label>
+  <label>Рука
+    <select id="hand"><option value="right">правая</option><option value="left">левая</option></select>
+  </label>
+  <label>Словарь
+    <select id="tier"><option value="1">жёсткий</option><option value="2">средний</option><option value="3" selected>лёгкий</option></select>
+  </label>
+  <label>Таймер конца
+    <select id="agony"><option value="2">сложный · 2 с</option><option value="10">средний · 10 с</option><option value="30" selected>лёгкий · 30 с</option></select>
+  </label>
+  <label>Время до урожая
+    <select id="ripe"><option value="8">сложное · 8 с</option><option value="15">среднее · 15 с</option><option value="30" selected>лёгкое · 30 с</option></select>
+  </label>
+  <label>Только слова с переводом <input type="checkbox" id="onlytr" checked></label>
+  <label>Подсказки <input type="checkbox" id="hints" checked></label>
+  <label>Давление по таймеру <input type="checkbox" id="pressure"></label>
+  <label>Рекорд <b id="best">0</b></label>
+  <button id="fs" style="width:100%;margin-top:6px">Во весь экран</button>
+  <label>Весь экран по первому касанию <input type="checkbox" id="fsauto"></label>
+  <button id="restart" style="width:100%;margin-top:6px">Новая игра</button>
+  <button id="resetlists" style="width:100%;margin-top:6px">Сбросить мои отметки слов</button>
+  <div id="ver" style="margin-top:8px;font-size:11px;color:#6b8294;text-align:center"></div>
+  <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer">Источники данных</summary>
+    Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md</details>
+</div>
+<div id="cd"></div>
+<div id="toasts"></div>
+<div id="hintpanel"></div>
+<canvas id="c"></canvas>
+<div id="tray">
+  <div id="wzone">
+    <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint">Собери слово</span></div>
+    <div id="sub">
+      <div id="ru"></div>
+      <button class="chip" id="nowrd" hidden title="Отметить: такого слова нет">✗ Нет такого слова</button>
+      <button class="chip" id="yesw" hidden title="Такое слово есть: добавить в игру">✓ Такое слово есть</button>
+    </div>
+  </div>
+  <div id="btns">
+    <button class="btn sec ic" id="newb" title="Начать новое слово (новую ветку)" aria-label="Новая ветка"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn sec ic" id="hintb" title="Подсказка: какие ветки ещё могут расти" aria-label="Подсказка"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
+    <button class="btn sec ic" id="back" title="Стереть букву. Удерживай: завершить ветку (или стереть всё слово)" aria-label="Стереть"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
+    <button class="btn go" id="go">Расти ✓</button>
+  </div>
+</div>
+<div id="over"><h1>Буквы сжаты</h1><div class="score" id="fs">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px">Ещё раз</button></div>
+
+<script src="words.js?v=20"></script>
+<script src="ru.js?v=20"></script>
+<script>
+"use strict";
+if (typeof WORDS_TXT === "undefined" || typeof RU_DATA === "undefined") {   // the data files did not load (typical when index.html is opened from a file manager)
+  document.body.innerHTML = '<div style="padding:28px;font:16px/1.5 system-ui,sans-serif;color:#0f2f44;background:#eef5f8;height:100%;overflow:auto">' +
+    '<h2 style="margin:0 0 12px">Не загрузились данные игры</h2>Файлы <b>words.js</b> и <b>ru.js</b> лежат рядом с index.html, но телефон их не подгрузил.<br><br>' +
+    'Откройте вместо этого файл <b>DeadBranch.html</b> из той же папки (в нём всё внутри), либо запустите игру через сервер или хостинг.</div>';
+  throw new Error("data scripts missing");
+}
+/* ---------- constants ---------- */
+const DOCK_K = .55, POP_T = 3, ANGLE_STEP = 15, IDLE_T = 6, SUGG_PAUSE = 6;   // seconds without a tap before the 'where to start' glow appears
+// background dust: tiny square particles in slow Brownian motion (positions are 0..1 screen fractions)
+const DUST = Array.from({ length: 150 }, () => ({
+  x: Math.random(), y: Math.random(), vx: 0, vy: 0,
+  s: [1, 1, 2, 2, 3][Math.floor(Math.random() * 5)], a: .12 + Math.random() * .4, ph: Math.random() * 6.28
+}));
+function dustStep(dt) {
+  for (const p of DUST) {
+    p.vx += (Math.random() - .5) * .0016 * dt * 60; p.vy += (Math.random() - .5) * .0016 * dt * 60;
+    p.vx *= .985; p.vy *= .985;
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.x < 0) p.x += 1; else if (p.x > 1) p.x -= 1;
+    if (p.y < 0) p.y += 1; else if (p.y > 1) p.y -= 1;
+  }
+}
+const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
+const VERSION = "0.0.1";   // keep in sync with the VERSION file
+const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
+const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
+// letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
+const KEY_ROWS = ["ąčęėįšųūž", "ertyuiop", "asdfghjkl", "zcvbnm"], KEY_STAG = [0, .15, -.15, .3], KEY_Y = [.813, .603, .393, .184];   // for the short QWERTY band: the rows sit low, with no empty strip under them
+const bandH = () => LAYOUT === "qwerty" ? 305 : 360;   // height of the letter band; QWERTY needs less, the field gets the rest
+const dmax = () => DENS_MAX * (G.Hs - FLOOR) / 346;   // the crowding limit scales with the band's area, so difficulty stays the same
+/* ---------- looks ---------- */
+// Two looks: "lab" (default: a bright, clinical laboratory with glass, cables and tiled walls) and "deep" (the dark water).
+const THEMES = {
+  deep: {
+    lab: false, first: "#ffffff", sky: ["#0f5a73", "#0a3a58", "#04182b"], fieldTint: "rgba(3,14,26,.38)", band: ["rgba(3,14,26,.38)", "rgba(3,14,26,.38)"],
+    wall: "#1a3347", dust: "#9fd8ff", wave: "rgba(140,210,235,.38)", floor: "rgba(0,0,0,0)", floorLine: "rgba(0,0,0,0)", arcs: "rgba(140,210,235,.09)",
+    dead: ["#0b2134", "#183448", "#2a4a60"], key: ["#10283b", "#1b4a6b", "#38bdf8", "#e0f7ff", "#cfeeff"],   // fill, selected fill, rim, selected rim, letter
+    pv: { bond: "#7dd3fc", atom: "#e6f6ff", fill: "rgba(0,0,0,0)", rim: "#7dd3fc", text: "#e6f6ff" },
+    mol: { bond: "#4fbf84", atom: "#d9f7e5", bondLeaf: "#86efac", atomLeaf: "#f0fff5", bondGold: "#fbbf24", atomGold: "#fff3c4" },
+    lets: { fill: "rgba(0,0,0,0)", rim: "#d9ffe8", text: "#eafff2", gold: "#fbbf24" },
+    halo: "#fff", good: "#4ade80", warn: "#fbbf24", ripeTitle: "#fde68a", ripeSub: "#a8a29e", barBg: "#3b3216", barFg: "#fbbf24",
+    fly: ["#10283b", "#38bdf8", "#cfeeff", "#7dd3fc"]
+  },
+  lab: {
+    lab: true, first: "#000000", sky: ["#eef5f8", "#a9c8db", "#3b7ba6"], fieldTint: "rgba(255,255,255,0)", band: ["rgba(255,255,255,0)", "rgba(255,255,255,0)"],
+    wall: "rgba(255,255,255,.9)", dust: "#ffffff", wave: "rgba(255,255,255,.95)", floor: "rgba(0,0,0,0)", floorLine: "rgba(0,0,0,0)", arcs: "rgba(15,70,110,.14)",
+    dead: ["rgba(120,150,170,.16)", "rgba(110,140,160,.22)", "rgba(90,120,140,.32)"], key: ["rgba(255,255,255,.84)", "#bfe7f8", "#2a86b8", "#0a5f8c", "#0f2f44"],
+    pv: { bond: "#0b1620", atom: "#0b1620", fill: "rgba(0,0,0,0)", rim: "#0a6a80", text: "#0b1620" },
+    mol: { bond: "#0b1620", atom: "#0b1620", bondLeaf: "#0b1620", atomLeaf: "#0a6a80", bondGold: "#0b1620", atomGold: "#0b1620" },   // the branches use only black and one dark cyan
+    lets: { fill: "rgba(0,0,0,0)", rim: "#0a6a80", text: "#0b1620", gold: "#0a6a80" },
+    halo: "rgba(10,106,128,.8)", good: "#0a6a80", warn: "#0a6a80", ripeTitle: "#0a6a80", ripeSub: "#26414d", barBg: "rgba(10,106,128,.2)", barFg: "#0a6a80",
+    fly: ["rgba(255,255,255,.92)", "#2a86b8", "#0f2f44", "#3d93bd"]
+  }
+};
+// Quality: what the picture may cost. high = everything; med = no blur; low = no blur, no gradients on letters, half the pixels, 30 frames a second.
+const QUAL = { ultra: { dpr: 2, fps: 60, blur: true, glass: 2, cache: false }, high: { dpr: 2, fps: 60, blur: false, glass: 2, cache: false }, med: { dpr: 1.5, fps: 45, blur: false, glass: 1, cache: true }, low: { dpr: 1, fps: 30, blur: false, glass: 0, cache: true } };   // glass: 2 full, 1 a flat highlight, 0 none
+let Q = QUAL.high;
+const cvDpr = () => Math.min(window.devicePixelRatio || 1, Q.dpr);
+let THEME = "lab"; try { THEME = localStorage.getItem("db_theme") || THEME; } catch (e) {}
+if (!THEMES[THEME]) THEME = "lab";
+let T = THEMES[THEME];
+document.documentElement.classList.toggle("lab", T.lab);
+const KW = 470;                                                     // width of the letter band in its own units: the band keeps one screen size, whatever the branch field does
+const SR = R * 1.12;                                                 // base radius of swarm letters (big enough for a thumb: ~46 pt on a phone)
+const sizeK = ch => ({ 1: 1.1, 1.25: 1, 1.5: .9 })[WEIGHT[ch] || 1];   // 3 sizes: the more frequent the letter, the bigger it is
+const DIAC = new Set([..."ąčęėįšųūž"]), VOWEL = new Set([..."aąeęėiįyouųū"]);   // vowels: circles, consonants: rounded squares, letters with diacritics: rounded hexagons
+const KEY = {};
+KEY_ROWS.forEach((row, r) => [...row].forEach((ch, c) => { KEY[ch] = { r, c, n: row.length }; }));
+let LAYOUT = "qwerty", HAND = "right";   // the full keyboard only shows for the first word: plain QWERTY (the fan is still an option)
+try { LAYOUT = localStorage.getItem("db_layout") || LAYOUT; HAND = localStorage.getItem("db_hand") || HAND; } catch (e) {}
+const jit = (ch, k) => (((ch.charCodeAt(0) * (k + 7)) % 11) - 5) / 5;   // stable -1..1 per letter
+function qwertyLayout() {
+  const pos = {}, kx = (KW - 2 * SR - 8) / 8;
+  for (const ch in KEY) {
+    const k = KEY[ch], jx = jit(ch, 1) * 2.7, jy = jit(ch, 2) * .3 * SR * sizeK(ch);
+    pos[ch] = { x: (k.c - (k.n - 1) / 2 + KEY_STAG[k.r]) * kx + jx, y: G.Hs * KEY_Y[k.r] + jy };
+  }
+  return pos;
+}
+// Thumb fan: arcs around the bottom corner on the side of the hand. The 12 most frequent letters sit on the three arcs
+// nearest the thumb, the rest further out; every arc reads in alphabet order, left to right.
+const FAN_CORE = [..."aeiklmnorstu"], FAN_RINGS = [3, 4, 5, 7, 7, 6], FAN_R0 = 78, FAN_DR = 58;
+function fanLayout() {
+  const hw = KW / 2 - SR - 6, px = hw, py = FLOOR + SR + 8, top = G.Hs - SR - 6, pos = {};
+  KEYPOS.pivot = { x: HAND === "left" ? -px : px, y: py };
+  const seq = ALPHA.filter(c => FAN_CORE.includes(c)).concat(ALPHA.filter(c => !FAN_CORE.includes(c)));
+  let i = 0;
+  FAN_RINGS.forEach((n, k) => {
+    const rho = FAN_R0 + k * FAN_DR, fmax = Math.min(Math.PI / 2, Math.asin(Math.min(1, (top - py) / rho)));
+    const ring = [];
+    for (let j = 0; j < n; j++) {
+      const ch = seq[i++], f = n > 1 ? fmax * j / (n - 1) : 0;   // f = angle above the horizontal; 0 = far left on this arc
+      ring.push({ ch, x: px - rho * Math.cos(f) + jit(ch, 3) * 2, y: py + rho * Math.sin(f) + jit(ch, 4) * 2 });
+    }
+    if (HAND === "left") { ring.forEach(r => { r.x = -r.x; }); ring.reverse(); }
+    ring.forEach((r, j) => { pos[r.ch] = { x: r.x, y: r.y }; });
+  });
+  return pos;
+}
+const KEYPOS = { id: "", pos: null, pivot: null };
+function homeOf(ch) {
+  const id = LAYOUT + HAND + "/" + G.Hs;
+  if (KEYPOS.id !== id) { KEYPOS.id = id; KEYPOS.pos = LAYOUT === "qwerty" ? qwertyLayout() : fanLayout(); }
+  return KEYPOS.pos[ch];
+}
+const ALPHA = [..."aąbcčdeęėfghiįyjklmnoprsštuųūvzž"];
+const WEIGHT = {};
+for (const c of "aisteurnolkm") WEIGHT[c] = 1;
+for (const c of "dpvjbgėyzcšž") WEIGHT[c] = 1.25;
+for (const c of "ąčęįųūfh") WEIGHT[c] = 1.5;
+
+/* ---------- lexicon ---------- */
+let WORDS = new Set(), PRE = new Set();
+// words the player marked as non-existent (never offered again) / added as existing; kept in the browser
+let BANNED = new Set(), ADDED = new Set();
+try { BANNED = new Set(JSON.parse(localStorage.getItem("db_banned") || "[]")); ADDED = new Set(JSON.parse(localStorage.getItem("db_added") || "[]")); } catch (e) {}
+const saveLists = () => { try { localStorage.setItem("db_banned", JSON.stringify([...BANNED])); localStorage.setItem("db_added", JSON.stringify([...ADDED])); } catch (e) {} };
+function addWordToLex(w) {
+  WORDS.add(w);
+  const f = fold(w); if (f !== w) { const a = FOLD.get(f); if (a) { if (!a.includes(w)) a.push(w); } else FOLD.set(f, [w]); }
+  for (let i = 1; i < w.length; i++) PRE.add(w.slice(0, i));
+}
+const FOLD = new Map();                            // spelling without diacritics -> real words (to tell the player "you need Ū, not U")
+const fold = w => w.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const LEMMA_IDX = new Map();                       // word form -> index into RU_DATA (lemma + russian)
+function ruOf(w) { const i = LEMMA_IDX.get(w); const r = i === undefined ? null : RU_DATA[i]; return r && r[1] && r[1] !== "~" ? r[1] : ""; }
+const LABEL_IDX = new Map();                       // word form -> index into GRAM_DATA ([short, long] grammar label)
+function gramOf(w) { const i = LABEL_IDX.get(w); return i === undefined || typeof GRAM_DATA === "undefined" ? null : GRAM_DATA[i] || null; }
+function subOf(w) { const ru = ruOf(w), g = ru ? gramOf(w) : null; return ru ? ru + (g ? " (" + g[0] + ")" : "") : ""; }   // second line inside a capsule
+function lemmaOf(w) { const i = LEMMA_IDX.get(w); return i === undefined || !RU_DATA[i] ? "" : RU_DATA[i][0]; }
+function buildLex(maxTier) {
+  FOLD.clear();
+  const onlyTr = $("onlytr") ? $("onlytr").checked : false;
+  WORDS = new Set(); PRE = new Set();
+  for (const e of WORDS_TXT.split("|")) {
+    const p = e.split(" "), w = p[0], t = +p[1];
+    if (p[2] && !LEMMA_IDX.has(w)) LEMMA_IDX.set(w, parseInt(p[2], 36));
+    if (p[3] && !LABEL_IDX.has(w)) LABEL_IDX.set(w, parseInt(p[3], 36));
+    if (t > maxTier || BANNED.has(w)) continue;
+    if (onlyTr && !ruOf(w) && !ADDED.has(w)) continue;   // "only words with a translation": nothing the player cannot look up
+    WORDS.add(w);
+    { const f = fold(w); if (f !== w) { const a = FOLD.get(f); if (a) a.push(w); else FOLD.set(f, [w]); } }
+    for (let i = 1; i < w.length; i++) PRE.add(w.slice(0, i));
+  }
+  for (const w of ADDED) if (!BANNED.has(w)) addWordToLex(w);
+}
+
+/* ---------- state ---------- */
+const $ = id => document.getElementById(id);
+const setText = (el, v) => { v = String(v); if (el._v !== v) { el._v = v; el.textContent = v; } };   // writing the same text again still makes the browser repaint
+const cv = $("c"), ctx = cv.getContext("2d");
+const G = {};
+let nodeId = 0, best = 0;
+try { best = +localStorage.getItem("db_best") || 0; } catch (e) {}
+
+function reset() {
+  Object.assign(G, {
+    W: 470, H: 720, tW: 470, tH: 720, Hs: bandH(),
+    swarm: [], dead: [], trees: [], used: new Set(),
+    score: 0, streak: 0, wordsN: 0, over: false, agony: 0, t: 0, pressureT: 0, density: 0,
+    builder: { base: null, letters: [], src: [], rootX: null, newMode: false }, fx: [], hintT: 0, hint: new Map(), dockOff: [0, 0], harvested: 0, idleT: 0, sugg: null, usedVer: 0, waveAmp: 7, waveTarget: 7, waveT: 0
+  });
+  for (const ch of ALPHA) {
+    const h = homeOf(ch);
+    G.swarm.push({ ch, m: ({ 1: 1, 1.25: .7, 1.5: .4 })[WEIGHT[ch] || 1], r: SR * sizeK(ch), x: h.x + (Math.random() - .5) * 16, y: h.y + (Math.random() - .5) * 16, vx: 0, vy: 0, pulse: 0, show: 1 });
+  }
+  $("over").classList.remove("open"); $("cd").classList.remove("open");
+  clearSave();
+  cam.x = 0; cam.b = G.Hs; cam.zoom = 1; cam.bandF = 1; cam.manual = false; G.focus = null; G.orbit = new Map(); G.orbitAll = false; G.okey = ""; G.akey = "";
+  updateTray(); updateHud();
+}
+
+/* ---------- scoring ---------- */
+function wordPoints(s, matryoshka) {
+  const n = s.length, base = n * (n + 1) / 2 - 1;
+  let w = 0; for (const c of s) w += WEIGHT[c] || 1; w /= n;
+  const mult = Math.min(2, 1 + 0.1 * G.streak);
+  return Math.round(base * w * mult * (matryoshka ? 1.5 : 1));
+}
+function award(s, matryoshka, tree, bucket) {
+  const p = wordPoints(s, matryoshka);
+  G.score += p; G.wordsN++; G.streak++; tree.pts += p; G.used.add(s); G.usedVer++; if (bucket) bucket.push(s);
+  toast("+" + p + "  " + s, matryoshka ? "gold" : "ok");
+  return p;
+}
+
+/* ---------- tree helpers ---------- */
+/* A node is one word-step (a capsule). Letters merge into it; a longer word grows from it. */
+const aliveKids = n => n.children.filter(c => c.alive).length;
+const isTerminal = n => !PRE.has(n.str);
+// can a word still grow? true if some unused longer word starts with it (cached until the set of used words changes)
+function canExtend(n) {
+  if (n._v === G.usedVer) return n._c;
+  let ok = false;
+  if (PRE.has(n.str)) for (const w of WORDS) if (w.length > n.str.length && w.startsWith(n.str) && !G.used.has(w)) { ok = true; break; }
+  n._v = G.usedVer; n._c = ok;
+  return ok;
+}
+const CAPK = 2.5, CAPH = R * CAPK;   // the cell of a word is tall enough for a six-atom ring and a small russian line under it
+const RU_MAX = 26;
+// A word is drawn as a molecule: its letters are atoms joined by bonds at multiples of 30 degrees.
+// 2..4 letters: a zigzag chain; 5 or 6: a ring (pentagon / hexagon, alternating double bonds); 7 and more: a ring with a tail leading into it.
+const AF = 20, BL = 34, DXc = BL * Math.cos(Math.PI / 6), DYc = BL * Math.sin(Math.PI / 6);   // atom size, bond length, chain step
+const molCache = new Map();
+function molGeom(s) {
+  let g = molCache.get(s); if (g) return g;
+  const n = s.length, atoms = [], bonds = [];
+  if (n <= 4) {
+    for (let i = 0; i < n; i++) atoms.push({ ch: s[i], x: i * DXc, y: (i % 2 ? -DYc : DYc) / 2 });
+    for (let i = 0; i < n - 1; i++) bonds.push([i, i + 1, i % 2 ? 2 : 1]);
+  } else {
+    const m = Math.min(n, 6), t = n - m, rho = BL / (2 * Math.sin(Math.PI / m));
+    for (let j = 0; j < t; j++) atoms.push({ ch: s[j], x: -rho - (t - j) * DXc, y: (t - j) % 2 ? DYc : 0 });   // the tail climbs into the ring's left atom
+    for (let k = 0; k < m; k++) { const a = Math.PI - 2 * Math.PI * k / m; atoms.push({ ch: s[t + k], x: rho * Math.cos(a), y: rho * Math.sin(a) }); }
+    for (let j = 0; j < t; j++) bonds.push([j, j + 1, 1]);
+    for (let k = 0; k < m - 1; k++) bonds.push([t + k, t + k + 1, k % 2 ? 1 : 2]);
+    bonds.push([t + m - 1, t, 1]);
+  }
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  for (const a of atoms) { x0 = Math.min(x0, a.x); x1 = Math.max(x1, a.x); y0 = Math.min(y0, a.y); y1 = Math.max(y1, a.y); }
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  for (const a of atoms) { a.x -= cx; a.y -= cy; }
+  g = { atoms, bonds, w: x1 - x0 + AF, h: y1 - y0 + AF };
+  molCache.set(s, g);
+  return g;
+}
+function wordGens(n) {   // which step of growth each letter came from, so the weight of the type shows what grew from what
+  if (n._gens && n._gs === n.str) return n._gens;
+  const chain = []; for (let m = n; m; m = m.parent) chain.unshift(m);
+  const g = []; chain.forEach((m, d) => { for (let i = 0; i < m.added.length; i++) g.push(d); });
+  while (g.length < n.str.length) g.push(g.length ? g[g.length - 1] : 0);
+  g.length = n.str.length;
+  n._gens = g; n._gs = n.str; return g;
+}
+const GEN_WEIGHT = [900, 400, 200];   // root word, first growth, every later one
+const molShift = s => subOf(s) ? (s.length >= 5 ? 8 : 2) : 0;   // the molecule rises a little to make room for its translation
+const nodeW = s => { const ru = subOf(s); return Math.max(molGeom(s).w + 16, ru ? Math.min(ru.length, RU_MAX) * 5 + 22 : 0); };
+const UP = 2 * R + 16;
+const tiltFor = id => (((id * 13) % 5) + 1) * (id % 2 ? 1 : -1) * Math.PI / 180;   // 1..5 degrees, like a chemical formula
+// a grown word leans 1..5 degrees along the link it grew from: it rises toward the side its link points to
+function tiltDir(id, parent, pos) {
+  const mag = Math.abs(tiltFor(id));
+  if (!parent) return tiltFor(id);
+  const deg = Math.atan2(pos.y - parent.y, pos.x - parent.x) * 180 / Math.PI;
+  if (Math.abs(deg - 90) < 2) return tiltFor(id);
+  return deg < 90 ? -mag : mag;   // canvas angles are clockwise: negative lifts the right end
+}
+const jitterFor = p => (p.id * 7 + p.children.length * 5) % 9;                      // link length varies by 0..8
+function selectable(n) {
+  return n.alive && !n.done && !n.tree.harvest && aliveKids(n) < MAXKIDS && canExtend(n);
+}
+function allNodes() { const a = []; for (const t of G.trees) if (!t.harvest) for (const n of t.nodes) a.push(n); return a; }
+// each word node owns a fan of small letter circles (its inputs) on the side facing the field centre
+const LRK = .72, LR = R * LRK;
+const fanSpacing = n => n <= 3 ? 52 : 40;
+const hh01 = (ch, i, k) => ((ch.charCodeAt(0) * 131 + i * 71 + k * 53) % 97) / 97;   // stable pseudo-random 0..1 per letter slot
+const halfH = n => Math.max(CAPH, ((n - 1) * fanSpacing(n) + 2 * LR * 1.3) / 2 + 4);
+const sideFor = x => x > 0 ? -1 : 1;
+function boxFor(x, y, w, n) {
+  if (!n) return { x0: x - w / 2, x1: x + w / 2, y0: y - CAPH, y1: y + CAPH };
+  const col = x + sideFor(x) * (w / 2 + 2.4 * R), hh = halfH(n), ext = R * 1.1 + LR * 1.3;
+  return { x0: Math.min(x - w / 2, col - ext), x1: Math.max(x + w / 2, col + ext), y0: y - hh, y1: y + hh };
+}
+function slotsFor(pos, w, chs) {
+  const n = chs.length, sp = fanSpacing(n), sx = pos.x + sideFor(pos.x) * (w / 2 + 2.4 * R);
+  // like a molecule: each source letter sits at its own distance, a bit off the line, in its own size
+  return chs.map((ch, i) => ({
+    ch, s: .85 + hh01(ch, i, 3) * .4,
+    x: sx + (hh01(ch, i, 1) - .5) * 2 * R * 1.1,
+    y: pos.y + ((n - 1) / 2 - i) * sp + (hh01(ch, i, 2) - .5) * sp * .3
+  }));
+}
+function overlapsBox(b, all) {
+  for (const n of all) if (b.x0 < n.box.x1 + 12 && b.x1 > n.box.x0 - 12 && b.y0 < n.box.y1 + 14 && b.y1 > n.box.y0 - 14) return true;
+  return false;
+}
+const LINK_EXTRA = 34;   // word-to-word links are drawn longer than the bare minimum, so branches breathe and overlap less
+const TH_MAX = 2200;   // the field may grow this tall to make room (the camera zooms out, letters stay readable up to here)
+function place(parent, w, n) {
+  // word-to-word links leave at multiples of ANGLE_STEP degrees (0 = right, 90 = up).
+  // 1st shoot prefers straight up, 2nd leans toward the field centre, 3rd to the other side.
+  // A direction is usable only if the word fits INSIDE the walls and nothing overlaps; otherwise the branch stretches upward.
+  const all = allNodes(), hh = halfH(n);
+  const k = aliveKids(parent), toCentre = parent.x > 0 ? -1 : 1;
+  const prefDeg = k === 0 ? 90 : (k === 1 ? 90 - toCentre * 45 : 90 + toCentre * 45);
+  const xl = -G.tW / 2 + 6, xr = G.tW / 2 - 6;
+  let best = null, bs = -1e9;
+  for (let deg = ANGLE_STEP; deg < 180; deg += ANGLE_STEP) {
+    const th = deg * Math.PI / 180, cx = Math.cos(th), sy = Math.sin(th);
+    let d = 20, x = 0, y = 0, bx = null, ok = false;
+    for (; d < 520; d += 6) {   // shortest distance along this direction where the word fits and nothing overlaps
+      x = parent.x + cx * d; y = parent.y + sy * d; bx = boxFor(x, y, w, n);
+      if (bx.x0 < xl || bx.x1 > xr || y + hh > TH_MAX) break;       // this direction runs into a wall or the ceiling
+      if (!overlapsBox(bx, all)) { ok = true; break; }
+    }
+    if (!ok) continue;
+    for (const extra of [LINK_EXTRA, LINK_EXTRA / 2]) {   // lengthen the link when there is room for it
+      const ex = parent.x + cx * (d + extra), ey = parent.y + sy * (d + extra), be = boxFor(ex, ey, w, n);
+      if (be.x0 >= xl && be.x1 <= xr && ey + hh <= TH_MAX && !overlapsBox(be, all)) { x = ex; y = ey; d += extra; break; }
+    }
+    const j = jitterFor(parent) * 1.2, bj = boxFor(x + cx * j, y + sy * j, w, n);
+    if (!overlapsBox(bj, all) && bj.x0 >= xl && bj.x1 <= xr) { x += cx * j; y += sy * j; }
+    let sc = -Math.abs(deg - prefDeg) - d * .15 - Math.max(0, Math.abs(x) - G.tW * .2) * .15;   // stay near the centre
+    for (let t = .15; t < 1; t += .1) {   // the link itself must not run through another word
+      const px = parent.x + (x - parent.x) * t, py = parent.y + (y - parent.y) * t;
+      if (all.some(o => o !== parent && px > o.x - o.w / 2 && px < o.x + o.w / 2 && py > o.y - CAPH && py < o.y + CAPH)) { sc -= 800; break; }
+    }
+    if (y - hh < G.Hs + 4) sc -= 500;
+    if (sc > bs) { bs = sc; best = { x, y }; }
+  }
+  if (!best) {   // nothing fits: straight up, as close as possible (fitTree will push the branch inside the walls)
+    let d = 20, x = parent.x, y = parent.y + d;
+    for (; d < 700; d += 6) { x = parent.x; y = parent.y + d; if (!overlapsBox(boxFor(x, y, w, n), all)) break; }
+    best = { x, y };
+  }
+  return best;
+}
+// keep a whole branch inside the walls: if some word sticks out, the branch is moved inward
+function fitTree(t) {
+  if (!t.nodes.length) return;
+  const b = treeBox(t), left = -G.tW / 2 + 6, right = G.tW / 2 - 6;
+  let dx = 0;
+  if (b.x1 > right) dx = right - b.x1;
+  if (b.x0 + dx < left) dx = b.x1 - b.x0 > right - left ? (left + right) / 2 - (b.x0 + b.x1) / 2 : left - b.x0;
+  if (!dx) return;
+  for (const n of t.nodes) { n.x += dx; n.box.x0 += dx; n.box.x1 += dx; for (const l of n.lets) l.x += dx; }
+}
+function placeRoot(w, n, xHint) {
+  // a new word goes on the lowest free spot: first try the bottom row, then higher rows
+  const all = allNodes(), lim = G.tW / 2 - w / 2 - 4, y0 = G.Hs + halfH(n) + 10;
+  const free = (x, y) => !overlapsBox(boxFor(x, y, w, n), all) && y + halfH(n) < G.tH - 4;
+  if (xHint != null) {
+    const hx = Math.max(-lim, Math.min(lim, xHint));
+    if (free(hx, y0)) return { x: hx, y: y0 };
+  }
+  let fallback = { x: 0, y: y0 };
+  for (let row = 0; row < 6; row++) {
+    const y = y0 + row * R * 4;
+    for (let i = 0; i < 24; i++) {
+      const x = (Math.random() * 2 - 1) * lim;
+      if (free(x, y)) return { x, y };
+    }
+  }
+  return fallback;
+}
+function makeNode(str, added, parent, tree, pos) {
+  const w = nodeW(str), n = parent ? 0 : added.length;   // only a root word keeps its source letters around it
+  const node = { id: nodeId++, str, added, parent, children: [], tree, alive: true, done: false, x: pos.x, y: pos.y, w,
+    hh: halfH(n), born: G.t, box: boxFor(pos.x, pos.y, w, n), lets: n ? slotsFor(pos, w, added) : [], tilt: 0 };
+  node.tilt = tiltDir(node.id, parent, pos);
+  if (parent) parent.children.push(node);
+  tree.nodes.push(node);
+  return node;
+}
+function spawnDead(ch, x, y) {
+  G.dead.push({ ch, x, y, vx: (Math.random() - .5) * 40, vy: 0, r: R * sizeK(ch), ang: Math.random() * 6.2832, av: (Math.random() - .5) * 5 });   // dead letters tumble and rest at any angle
+}
+// a word typed from scratch that starts with an existing open word grows that branch
+function autoBase(s) {
+  let best = null;
+  for (const n of allNodes()) if (selectable(n) && s.length > n.str.length && s.startsWith(n.str) && (!best || n.str.length > best.str.length)) best = n;
+  return best;
+}
+// idle help after a pause:
+//  - nothing on the field: light a short starting word (2-3 letters, one after another)
+//  - words already grow: glow ONE growable word, then ONE letter that can be added to it (never a whole word to press)
+//  - word/letters already picked: the next single letter
+function suggest() {
+  const b = G.builder, pick = a => a[Math.floor(Math.random() * a.length)];
+  // continuations of `pre`, keeping only the shortest ones so the shown letter leads to a quick, reachable word
+  const ext = pre => {
+    let c = [], min = 99;
+    for (const w of WORDS) if (w.length > pre.length && w.startsWith(pre) && !G.used.has(w)) { c.push(w); min = Math.min(min, w.length); }
+    return c.filter(w => w.length <= min + 1);
+  };
+  if ((b.base || b.letters.length) && !(b.newMode && !b.letters.length)) {
+    const pre = (b.base ? b.base.str : "") + b.letters.join(""), c = ext(pre);
+    if (!c.length) return null;
+    const w = pick(c);
+    return { word: w, letters: [w[pre.length]], node: null, t0: G.t };
+  }
+  const nodes = allNodes().filter(selectable).sort(() => Math.random() - .5);
+  for (const n of nodes) {
+    const c = ext(n.str);
+    if (c.length) { const w = pick(c); return { word: w, letters: [w[n.str.length]], node: n, t0: G.t }; }
+  }
+  const c = []; for (const w of WORDS) if (w.length <= 3 && !G.used.has(w)) c.push(w);
+  if (!c.length) return null;
+  const w = pick(c);
+  return { word: w, letters: [...w], node: null, t0: G.t };
+}
+document.addEventListener("pointerdown", () => { G.idleT = 0; G.sugg = null; }, true);
+function clearBuilder() {
+  $("hintpanel").classList.remove("open"); const b = G.builder; b.base = null; b.letters = []; b.src = []; b.rootX = null; b.newMode = false; }
+
+// A branch is always selected while there is something to grow: the player never types "into the void".
+// Default = the newest open tip (an end of a branch), otherwise any growable word. "＋ новое слово" is the only way to start a separate tree.
+function ensureBase() {
+  const b = G.builder;
+  if (b.newMode || (b.base && selectable(b.base))) return;
+  const nodes = allNodes().filter(selectable);
+  const tips = nodes.filter(n => aliveKids(n) === 0);
+  const pool = tips.length ? tips : nodes;
+  const nb = pool.length ? pool.reduce((a, n) => n.id > a.id ? n : a) : null;
+  if (nb !== b.base) { b.base = nb; updateTray(); }
+}
+
+/* ---------- commit (the "grow" button) ---------- */
+function commit() {
+  if (G.over) return;
+  const b = G.builder, base = b.base, L = b.letters, need = base ? 1 : 2;
+  let made = null;
+  if (L.length < need) { toast(base ? "Добавь буквы" : "Нужно хотя бы 2 буквы", "bad"); return; }
+  const s = (base ? base.str : "") + L.join("");
+  if (WORDS.has(s) && !G.used.has(s)) {
+    const from = b.src.map(l => ({ ch: l.ch, x: l.x, y: l.y, field: l.field }));
+    const ab = base ? null : autoBase(s);
+    if (ab) made = success(s, ab, [...s.slice(ab.str.length)], null, from);
+    else made = success(s, base, L, b.rootX, from);
+  } else fail(s, base, L, WORDS.has(s) ? "уже есть в живой ветке" : null);
+  clearBuilder();
+  if (made && selectable(made)) G.builder.base = made;   // keep growing the word that was just made
+  ensureBase();
+  updateTray(); updateHud();
+}
+
+function success(s, base, L, rootX, from) {
+  G.tW = Math.min(560, G.tW + 8 * L.length);
+  G.tH = Math.min(TH_MAX, G.tH + 50);
+  let tree = base ? base.tree : null;
+  if (!tree) { tree = { nodes: [], pts: 0, harvest: false, t: 0, ripe: false, ripeT: 0 }; G.trees.push(tree); }
+  const w = nodeW(s), got = [];
+  const node = makeNode(s, L, base, tree, base ? place(base, w, 0) : placeRoot(w, L.length, rootX));
+  // words met on the way inside the final word score as "matryoshka"
+  for (let k = (base ? base.str.length : 1) + 1; k < s.length; k++) {
+    const p = s.slice(0, k);
+    if (WORDS.has(p) && !G.used.has(p)) award(p, true, tree, got);
+  }
+  award(s, false, tree, got);
+  G.tH = Math.min(TH_MAX, Math.max(G.tH, node.y + node.hh + 14));   // make room if the branch had to grow taller
+  fitTree(tree);
+  node.words = got;   // freed again if this node dies: only words standing in living branches are taken
+  G.fx.push({ from: from.slice(-L.length), to: node.lets.length ? node.lets : L.map(() => ({ x: node.x, y: node.y })), t: 0 });
+  if (isTerminal(node)) node.done = true;
+  checkHarvest(tree);
+  return node;
+}
+
+function fail(s, base, L, why) {
+  G.streak = 0;
+  const alt = FOLD.get(fold(s));
+  toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? " — может, " + alt[0] + "?" : ""), "bad");
+  if (!base) {
+    for (const ch of L) spawnDead(ch, (Math.random() - .5) * G.tW * .5, G.tH - R);
+    return;
+  }
+  L.forEach((ch, i) => spawnDead(ch, base.x + (i - (L.length - 1) / 2) * R * 1.2, base.y + R * 2));
+  if (aliveKids(base) === 0) killChain(base);
+}
+
+function killChain(node) {
+  const tree = node.tree, dying = [];
+  let n = node;
+  n.alive = false; dying.push(n);
+  let p = n.parent;
+  while (p && p.children.every(c => !c.alive)) { p.alive = false; dying.push(p); p = p.parent; }
+  if (p) p.children = p.children.filter(c => c.alive);
+  for (const d of dying) {
+    for (const w of d.words || []) G.used.delete(w);   // a dead branch gives its words back: they can be built again
+    if (d.lets.length) d.lets.forEach(l => spawnDead(l.ch, l.x, l.y));
+    else d.added.forEach((ch, i) => spawnDead(ch, d.x + (i - (d.added.length - 1) / 2) * R * 1.2, d.y));
+  }
+  G.usedVer++;
+  tree.nodes = tree.nodes.filter(x => x.alive);
+  if (!tree.nodes.length) G.trees = G.trees.filter(t => t !== tree);
+  else checkHarvest(tree);
+}
+
+function checkHarvest(tree) {
+  // A tree is finished when no tip is open. If no word anywhere in it can still take a new shoot it ripens at once;
+  // if only inner words can still branch, a few seconds are left to add a shoot.
+  if (tree.harvest) return;
+  const open = tree.nodes.some(n => n.alive && aliveKids(n) === 0 && !n.done && canExtend(n));
+  const wasRipe = tree.ripe;
+  tree.ripe = !open;
+  if (!tree.ripe) return;
+  if (!wasRipe) tree.ripeT = 0;
+  if (!tree.nodes.some(n => n.alive && !n.done && aliveKids(n) < MAXKIDS && canExtend(n))) { harvest(tree); return; }
+  if (!wasRipe) toast("Ветви закончились: урожай через " + ripeT() + " с", "gold");
+}
+function harvest(tree) {
+  tree.harvest = true; tree.t = 0; G.harvested++;
+  const bb = { x0: 1e9, x1: -1e9, y0: 1e9, y1: -1e9 };
+  for (const n of tree.nodes) { bb.x0 = Math.min(bb.x0, n.box.x0, n.x - n.w / 2); bb.x1 = Math.max(bb.x1, n.box.x1, n.x + n.w / 2); bb.y0 = Math.min(bb.y0, n.box.y0); bb.y1 = Math.max(bb.y1, n.box.y1); }
+  tree.bb = bb;
+  const bonus = Math.round(tree.pts * .25);
+  G.score += bonus;
+  toast("Урожай собран! +" + bonus, "gold");
+}
+
+function fixWord() {
+  const base = G.builder.base;
+  if (!base || G.builder.letters.length) return;
+  if (aliveKids(base) === 0) { base.done = true; checkHarvest(base.tree); G.builder.base = null; ensureBase(); updateTray(); }
+}
+
+/* ---------- input ---------- */
+// Two scales: the letter band at the bottom keeps ONE screen size (keyScale), the branch field above it zooms out as it grows (camScale).
+// World y runs up; below G.Hs it is band units, above it field units; the two meet at the wave.
+// The branch field never zooms out: it keeps one big scale (FZ times the band's, "under a microscope"). A camera follows the word being built;
+// a swipe moves the camera anywhere in the field and it stays there until the player types or grows something, then it follows again.
+const FZ = 1.4;
+const keyScale = () => Math.min(cv.clientWidth / KW, cv.clientHeight / 720);
+const camScale = () => keyScale() * FZ * cam.zoom;
+const bandPx = () => Math.max(22, G.Hs * keyScale() * cam.bandF, (G.pileTop || 0) * keyScale() + 12);   // the pile of fallen letters always keeps its place at the bottom and squeezes the field   // the letter band sinks away while an existing word is grown (the letters then float round the word)
+const cam = { x: 0, b: 360, zoom: 1, bandF: 1, drag: null, pts: new Map(), pinch: null, manual: false, key: "", lastDrag: 0 };   // x, b: world x at the screen centre and world y at the bottom edge of the field
+function fieldView() {   // which part of the world the branch field shows right now (pull included)
+  const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
+  const x = cam.x, b = cam.b;
+  return { sc, vw, vh, x, b, x0: x - vw / 2, x1: x + vw / 2, top: b + vh };
+}
+const ARCH_EDGE = 154;   // the archive of finished branches starts this far from the centre, just past the visible edge: a sliver of the newest one peeks in
+function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
+  const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
+  const hx = G.W / 2 + 40;   // the camera may centre a word even at the very wall
+  let x0 = -hx, x1 = hx, top = G.H;
+  for (const t of G.trees) if (t.dock && t.dock.ax != null) {
+    const w = (t.bb.x1 - t.bb.x0) * DOCK_K;
+    x0 = Math.min(x0, t.dock.axT - 40 + vw / 2 - 20); x1 = Math.max(x1, t.dock.axT + w + 40 - vw / 2 + 20); top = Math.max(top, t.dock.ay + 20);
+  }
+  return { vw, vh, hx, x0, x1, b0: G.Hs - vh * .55, b1: Math.max(G.Hs, top - vh) + 40 };   // b0 below the wave line lets a word near the bottom be lifted to the middle of the field
+}
+function camUpdate(dt) {
+  if (!cv.clientWidth) return;
+  const B = camBounds(), f = G.focus, bs = G.builder;
+  const key = (bs.base ? bs.base.id : -1) + ":" + bs.letters.length + ":" + G.trees.reduce((a, t) => a + t.nodes.length, 0) + ":" + G.wordsN;
+  if (key !== cam.key) { cam.key = key; cam.manual = false; }   // growing or typing something brings the camera back to the work
+  if (cam.manual && !cam.drag && !cam.pinch && performance.now() - cam.lastDrag > 6000) cam.manual = false;   // left alone for 6 s: back to the work, which sits in the middle of the field
+  const tx = f ? Math.max(-B.hx + 40, Math.min(B.hx - 40, f.x)) : 0;
+  const tb = f ? Math.max(B.b0, Math.min(B.b1 - 40, f.y - B.vh * .5)) : G.Hs;
+  if (!cam.manual) { const k = Math.min(1, dt * 4); cam.x += (tx - cam.x) * k; cam.b += (tb - cam.b) * k; }
+  const tx2 = tx, tb2 = tb;
+  cam.tx = tx2; cam.tb = tb2;   // the camera's home: where it rests while following the work
+  const dx = cam.x - tx2, dy = cam.b - tb2, home = Math.abs(dx) < 1.5 && Math.abs(dy) < 1.5, fmt = v => (Math.round(v) < 0 ? "\u2212" : "+") + String(Math.abs(Math.round(v))).padStart(3, "0");
+  const ce = $("coords"); setText(ce, (home ? "\u25cf " : "") + "X " + (home ? "+000" : fmt(dx)) + "  Y " + (home ? "+000" : fmt(dy)) + "  \u00d7" + cam.zoom.toFixed(2)); if (ce._h !== home) { ce._h = home; ce.classList.toggle("home", home); }
+}
+// zoom the branch field around a screen point (the wheel, or two fingers)
+function zoomAt(px, py, factor) {
+  const r = cv.getBoundingClientRect(), ks = keyScale(), band = bandPx(), yb = r.bottom - py, dx = px - r.left - r.width / 2;
+  if (yb <= band) return;   // the letters do not zoom
+  const sc0 = camScale(), wx = cam.x + dx / sc0, wy = cam.b + (yb - band) / sc0;
+  cam.zoom = Math.max(.3, Math.min(3.2, cam.zoom * factor));
+  const sc1 = camScale(), B = camBounds();
+  cam.x = Math.max(B.x0, Math.min(B.x1, wx - dx / sc1)); cam.b = Math.max(B.b0, Math.min(B.b1, wy - (yb - band) / sc1));
+  cam.manual = true; cam.lastDrag = performance.now();
+}
+function toWorld(ev) {
+  const r = cv.getBoundingClientRect(), ks = keyScale(), v = fieldView(), band = bandPx(), yb = r.bottom - ev.clientY, dx = ev.clientX - r.left - r.width / 2;
+  return yb <= band ? { x: dx / ks, y: yb / ks } : { x: v.x + dx / v.sc, y: v.b + (yb - band) / v.sc };
+}
+
+// mouse wheel over a branch zooms it in a little (up to +20%); after 5 s without the wheel it eases back
+const ZOOM_MAX = 1.2, ZOOM_HOLD = 5, HOVER_Z = 1.7, HOVER_HOLD = 1;   // wheel zoom of a whole branch; mouse hover enlarges one word to read it
+function zoomPt(t, x, y) { const z = t.z || 1; if (z === 1 || !t.zc) return [x, y]; return [t.zc[0] + (x - t.zc[0]) * z, t.zc[1] + (y - t.zc[1]) * z]; }
+function treeBox(t) {
+  const b = { x0: 1e9, x1: -1e9, y0: 1e9, y1: -1e9 };
+  for (const n of t.nodes) { b.x0 = Math.min(b.x0, n.box.x0); b.x1 = Math.max(b.x1, n.box.x1); b.y0 = Math.min(b.y0, n.box.y0); b.y1 = Math.max(b.y1, n.box.y1); }
+  return b;
+}
+cv.addEventListener("pointermove", ev => { if (ev.pointerType !== "touch") G.hover = toWorld(ev); });
+cv.addEventListener("pointerleave", () => { G.hover = null; });
+for (const g of ["gesturestart", "gesturechange"]) document.addEventListener(g, ev => ev.preventDefault());   // iOS Safari: two fingers must zoom the field, not the whole page
+cv.addEventListener("wheel", ev => { if (G.over) return; ev.preventDefault(); zoomAt(ev.clientX, ev.clientY, Math.exp(-ev.deltaY * .0022)); }, { passive: false });
+
+// size a tapped trophy is shown at (fits the field), and the rectangle it currently occupies (world units)
+function popKOf(t) { const V = fieldView(); return Math.max(.12, Math.min(1, (V.vw - 40) / Math.max(1, t.bb.x1 - t.bb.x0), (V.vh - 90) / Math.max(1, t.bb.y1 - t.bb.y0))); }
+function dockRect(t) {
+  const d = t.dock, bb = t.bb, bw = bb.x1 - bb.x0, bh = bb.y1 - bb.y0, V = fieldView();
+  if (d.pop > .5) { const k = popKOf(t), cy = V.b + V.vh / 2; return { x0: V.x - bw * k / 2, x1: V.x + bw * k / 2, y0: cy - bh * k / 2, y1: cy + bh * k / 2 }; }
+  const Lw = d.ax, Tw = d.ay;
+  return { x0: Lw, x1: Lw + bw * DOCK_K, y0: Tw - bh * DOCK_K, y1: Tw };
+}
+function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, which is the foreground: no word or trophy behind it may react
+  if (G.over) return;
+  const p = toWorld(ev), b = G.builder;
+  // tap a trophy: it pops out so its words can be read; only ONE trophy is shown at a time (the previous one sinks back).
+  // Resting trophies are the background: live words win a tap over them.
+  const tapTrophy = poppedOnly => {
+    if (inBand) return false;
+    for (const t of [...G.trees].sort((a, b) => (b.dock ? b.dock.pop : 0) - (a.dock ? a.dock.pop : 0))) if (t.dock && t.dock.e > .9 && (!poppedOnly || t.dock.pop > .5)) {
+      const r = dockRect(t);
+      if (p.x > r.x0 - 8 && p.x < r.x1 + 8 && p.y > r.y0 - 8 && p.y < r.y1 + 8) {
+        for (const o of G.trees) if (o !== t && o.dock) o.dock.popT = 99;
+        t.dock.popT = 0; return true;
+      }
+    }
+    return false;
+  };
+  if (tapTrophy(true)) return;
+  let bestN = null, bd = 1e9;
+  if (!inBand) for (const n of allNodes()) {
+    const zp = zoomPt(n.tree, n.x, n.y), zz = n.tree.z || 1;
+    const dx = Math.abs(zp[0] - p.x) - n.w * zz / 2, dy = Math.abs(zp[1] - p.y) - CAPH * zz;
+    if (dx < 6 && dy < 6 && selectable(n)) { const d = Math.max(dx, dy); if (d < bd) { bd = d; bestN = n; } }
+  }
+  if (bestN) { b.base = bestN; b.newMode = false; updateTray(); return; }
+  if (tapTrophy(false)) return;
+  let bestL = null; bd = R * 1.9;   // generous: the nearest letter wins, so there are no dead gaps between letters
+  for (const l of G.swarm) { if (l.show < .5) continue; const d = Math.hypot(l.x - p.x, l.y - p.y); if (d < bd) { bd = d; bestL = l; } }
+  if (bestL && !b.base && !b.newMode && allNodes().some(selectable)) { toast("Сначала выбери слово ветки", "bad"); return; }
+  if (bestL && b.letters.length < 14) {
+    if (!b.letters.length && !b.base) b.rootX = placeRoot(nodeW("aa"), 2, null).x;
+    b.letters.push(bestL.ch); b.src.push(bestL); bestL.pulse = 1; updateTray();
+    if (navigator.vibrate) navigator.vibrate(8);
+  }
+}
+// letters (the band) react at once; in the branch field a tap is told from a swipe, which pulls the field around
+cv.addEventListener("pointerdown", ev => {
+  const r = cv.getBoundingClientRect();
+  if (pickOrbit(ev.clientX - r.left, ev.clientY - r.top)) return;   // a floating letter
+  if (r.bottom - ev.clientY <= bandPx()) { cam.drag = null; if (cam.bandF > .5) onTap(ev, true); return; }
+  cam.pts.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+  try { cv.setPointerCapture(ev.pointerId); } catch (e) {}
+  if (cam.pts.size === 2) { const [a, b] = [...cam.pts.values()]; cam.drag = null; cam.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1 }; return; }   // two fingers: zoom
+  cam.drag = { id: ev.pointerId, x: ev.clientX, y: ev.clientY, moved: false };
+});
+cv.addEventListener("pointermove", ev => {
+  if (cam.pts.has(ev.pointerId)) cam.pts.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+  if (cam.pinch && cam.pts.size === 2) {
+    const [a, b] = [...cam.pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, d / cam.pinch.d); cam.pinch.d = d; return;
+  }
+  const d = cam.drag; if (!d || ev.pointerId !== d.id) return;
+  if (!d.moved) { if (Math.hypot(ev.clientX - d.x, ev.clientY - d.y) < 8) return; d.moved = true; }
+  const sc = camScale(), B = camBounds();
+  cam.x = Math.max(B.x0, Math.min(B.x1, cam.x - (ev.clientX - d.x) / sc)); cam.b = Math.max(B.b0, Math.min(B.b1, cam.b + (ev.clientY - d.y) / sc));   // the field follows the finger and stays where it is left
+  cam.manual = true; cam.lastDrag = performance.now(); d.x = ev.clientX; d.y = ev.clientY;
+});
+const endPull = ev => {
+  cam.pts.delete(ev.pointerId);
+  if (cam.pinch) { if (cam.pts.size < 2) cam.pinch = null; cam.drag = null; return; }
+  const d = cam.drag; if (!d || ev.pointerId !== d.id) return; cam.drag = null; if (!d.moved && ev.type === "pointerup") onTap(ev, false);
+};
+cv.addEventListener("pointerup", endPull); cv.addEventListener("pointercancel", endPull);
+$("go").onclick = commit;
+// a button that also reacts to a long press: `tap` on a short press, `done` once the press has lasted `ms`
+function holdButton(el, ms, done, tap) {
+  let t = 0;
+  const stop = () => { clearTimeout(t); t = 0; el.classList.remove("hold"); };
+  el.addEventListener("pointerdown", () => { stop(); el.classList.add("hold"); t = setTimeout(() => { stop(); done(); }, ms); });
+  el.addEventListener("pointerup", () => { if (t) { stop(); tap(); } });
+  el.addEventListener("pointerleave", stop); el.addEventListener("pointercancel", stop);
+}
+// tap: erase a letter. Hold: finish the branch (when nothing is typed) or erase the whole typed word
+holdButton($("back"), 650, () => { const b = G.builder; if (b.letters.length) { b.letters = []; b.src = []; updateTray(); } else finishTree(); }, () => {
+  const b = G.builder;
+  if (b.letters.length) { b.letters.pop(); b.src.pop(); } else if (b.newMode) { b.newMode = false; ensureBase(); } else if (b.base) toast("Удерживай ⌫, чтобы завершить ветку", "gold");
+  updateTray();
+});
+// "finish the branch": when the player has no idea what to add, the whole tree is counted now and goes to the wall
+function finishTree() {
+  const b = G.builder;
+  if (!b.base || b.letters.length) return;
+  const tree = b.base.tree;
+  if (tree.harvest) return;
+  for (const n of tree.nodes) if (n.alive) n.done = true;
+  b.base = null; harvest(tree); ensureBase(); updateTray(); updateHud();
+}
+// word feedback: "no such word" (only for words WITHOUT a verified translation) and "such a word exists"
+const typedWord = () => (G.builder.base ? G.builder.base.str : "") + G.builder.letters.join("");
+$("nowrd").onclick = () => {
+  const b = G.builder, s = typedWord();
+  if (!b.letters.length) { toast("Набери слово, которое хочешь отметить", "bad"); return; }
+  if (!WORDS.has(s)) { toast("Этого слова и так нет в игре", "bad"); return; }
+  if (ruOf(s)) { toast("У слова есть проверенный перевод, отметить его нельзя", "bad"); return; }
+  BANNED.add(s); ADDED.delete(s); WORDS.delete(s); saveLists();
+  toast("«" + s + "» отмечено как несуществующее и больше не принимается", "gold");
+  b.letters = []; b.src = []; updateTray();
+};
+$("yesw").onclick = () => {
+  const b = G.builder, s = typedWord();
+  if (!b.letters.length) { toast("Набери слово, которое хочешь добавить", "bad"); return; }
+  if (WORDS.has(s)) { toast("Это слово уже есть в игре", "bad"); return; }
+  BANNED.delete(s); ADDED.add(s); addWordToLex(s); saveLists();
+  toast("«" + s + "» добавлено в игру (без перевода)", "gold");
+  updateTray();
+};
+$("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast("Свои отметки сброшены", "gold"); };
+$("newb").onclick = () => {
+  const b = G.builder;
+  b.newMode = !b.newMode;
+  if (b.newMode) { b.base = null; b.letters = []; b.src = []; b.rootX = null; } else ensureBase();
+  updateTray();
+};
+// hint: shows which words can still grow (how many unused longer words start with them) and which are finished
+$("hintb").onclick = () => {
+  const nodes = allNodes().filter(n => n.alive && !n.tree.harvest);
+  if (!nodes.length) { toast("Веток пока нет", "bad"); return; }
+  G.hint = new Map();
+  for (const n of nodes) {
+    let c = 0; const cand = [];
+    if (!n.done && aliveKids(n) < MAXKIDS) for (const w of WORDS) if (w.length > n.str.length && w.startsWith(n.str) && !G.used.has(w)) { c++; cand.push(w); }
+    // greedy "most different": from a random sample take the word sharing the shortest start with those already chosen
+    const common = (p, q) => { let i = 0; while (i < p.length && i < q.length && p[i] === q[i]) i++; return i; };
+    const picked = [];
+    while (picked.length < 8 && cand.length) {
+      let bestW = null, bestScore = 1e9;
+      for (let k = 0; k < 80; k++) {
+        const w = cand[Math.floor(Math.random() * cand.length)];
+        if (picked.includes(w)) continue;
+        const sc = picked.reduce((m, q) => Math.max(m, common(w, q)), 0) * 10 + w.length * .1;
+        if (sc < bestScore) { bestScore = sc; bestW = w; }
+      }
+      if (!bestW) break;
+      picked.push(bestW);
+    }
+    const ex = picked.sort((p, q) => p.length - q.length || (p < q ? -1 : 1));
+    G.hint.set(n.id, { c, ex: ex.map(w => w.slice(n.str.length)) });
+  }
+  G.hintT = 10;
+  const rows = [];
+  for (const n of nodes) {
+    const hi = G.hint.get(n.id);
+    rows.push(hi.c > 0
+      ? `<div><b>${n.str.toUpperCase()}</b> · ещё ${hi.c}: <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
+      : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ✓ закончена</div>`);
+  }
+  $("hintpanel").innerHTML = '<button id="hintx" aria-label="Закрыть">\u00d7</button>' + rows.join("");
+  $("hintpanel").classList.add("open");
+  clearTimeout(window.__hintTO);
+  window.__hintTO = setTimeout(() => $("hintpanel").classList.remove("open"), 10000);
+};
+$("hintpanel").addEventListener("click", ev => { if (ev.target.closest("#hintx")) { clearTimeout(window.__hintTO); $("hintpanel").classList.remove("open"); G.hintT = 0; } });   // × closes the hint and its marks on the words
+$("gear").onclick = () => $("panel").classList.toggle("open");
+const applyHand = () => document.body.classList.toggle("lefty", HAND === "left");
+const applyQuality = () => {
+  const v = $("quality").value; Q = QUAL[v] || QUAL.high;
+  document.documentElement.classList.toggle("q-ultra", v === "ultra");
+  resize();
+};
+$("quality").addEventListener("change", applyQuality);
+$("layout").value = LAYOUT; $("hand").value = HAND; $("theme").value = THEME; applyHand();
+$("theme").onchange = () => { THEME = $("theme").value; T = THEMES[THEME]; document.documentElement.classList.toggle("lab", T.lab); try { localStorage.setItem("db_theme", THEME); } catch (e) {} };
+const snapKeys = () => { for (const l of G.swarm) { const h = homeOf(l.ch); l.x = h.x; l.y = h.y; l.vx = l.vy = 0; } };   // letters jump to the new layout at once
+$("layout").onchange = () => { LAYOUT = $("layout").value; try { localStorage.setItem("db_layout", LAYOUT); } catch (e) {} G.Hs = bandH(); snapKeys(); };
+$("hand").onchange = () => { HAND = $("hand").value; try { localStorage.setItem("db_hand", HAND); } catch (e) {} applyHand(); snapKeys(); };
+$("tier").onchange = () => { buildLex(+$("tier").value); reset(); updateDiff(); };
+$("onlytr").onchange = () => { buildLex(+$("tier").value); reset(); };
+$("hints").onchange = updateTray;
+$("restart").onclick = $("again").onclick = () => { $("panel").classList.remove("open"); reset(); };
+
+/* ---------- HUD ---------- */
+function toast(t, kind) {
+  const d = document.createElement("div");
+  d.className = "toast " + (kind || "ok"); d.textContent = t;
+  $("toasts").appendChild(d);
+  setTimeout(() => d.remove(), 2000);
+  while ($("toasts").children.length > 4) $("toasts").firstChild.remove();
+}
+function updateTray() {
+  const b = G.builder, bs = b.base ? b.base.str : "", ls = b.letters.join("");
+  $("bs").textContent = bs; $("ls").textContent = ls;
+  const s = bs + ls, w = $("word"); w.className = "";
+  const ru = s && WORDS.has(s) ? ruOf(s) : "", lem = ru ? lemmaOf(s) : "", g = ru ? gramOf(s) : null;
+  const alt = !ru && ls && !WORDS.has(s) ? FOLD.get(fold(s)) : null;   // typed with plain letters where the word needs diacritics
+  if (alt) { $("ru").textContent = "Нужна диакритика: " + alt.slice(0, 3).join(", "); } else
+  $("ru").textContent = ru ? "= " + ru + (g ? " — " + g[1] : "") + (lem && lem !== s ? "  · форма слова " + lem : "") : "";
+  const hint = $("hint");
+  if (b.newMode && !ls) hint.textContent = "Новая ветка: 2+ буквы";
+  else if (!ls && !bs) hint.textContent = "Собери слово";
+  else if (!ls) hint.textContent = " + буквы";
+  else hint.textContent = "";
+  $("newb").style.background = b.newMode ? "#fbbf24" : ""; $("newb").style.color = b.newMode ? "#1a1204" : "";
+  if ($("hints").checked && ls) {
+    if (WORDS.has(s) && !G.used.has(s)) w.className = "word";
+    else if (!PRE.has(s) && !(WORDS.has(s))) w.className = "dead";
+  }
+  $("go").disabled = G.over || !ls || (!b.base && ls.length < 2);
+  // small actions appear only when they make sense: the word cannot be continued / is unverified / a branch is selected and nothing typed
+  $("nowrd").hidden = !(ls && WORDS.has(s) && !ruOf(s));
+  $("yesw").hidden = !(ls && s.length >= 2 && !WORDS.has(s) && !PRE.has(s) && !alt);
+}
+function updateDiff() {
+  const lvl = 4 - +$("tier").value;   // hard dictionary = 3 stars, easy = 1
+  $("diff").textContent = "★".repeat(lvl) + "☆".repeat(3 - lvl);
+  $("diff").style.color = lvl === 3 ? "#f87171" : lvl === 2 ? "#fbbf24" : "#4ade80";
+}
+function updateHud() {
+  setText($("score"), G.score);
+  setText($("streak"), "×" + Math.min(2, 1 + .1 * G.streak).toFixed(1));
+  setText($("wn"), G.wordsN);
+  setText($("tn"), G.harvested);
+  setText($("best"), Math.max(best, G.score));
+}
+
+/* ---------- physics ---------- */
+function physics(dt) {
+  G.W += (G.tW - G.W) * Math.min(1, dt * 3);
+  G.H += (G.tH - G.H) * Math.min(1, dt * 3);
+  const hw = KW / 2 - SR - 2, D = G.dead, S = G.swarm;
+
+  for (const d of D) { d.vy -= 1100 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.vx *= .998; d.ang += d.av * dt; d.av *= .985; }
+  for (const l of S) {
+    const calm = l.blocked > 0 ? (l.blocked--, .08) : 1;   // pressed against a neighbour or the pile: no pull, no shaking (they fought each other and trembled)
+    l.vx += (Math.random() - .5) * SWARM_ACC * l.m * dt * calm; l.vy += (Math.random() - .5) * SWARM_ACC * l.m * dt * calm;   // rare letters drift less
+    const h = homeOf(l.ch);
+    l.vx += (h.x - l.x) * SWARM_K * dt * calm; l.vy += (h.y - l.y) * SWARM_K * dt * calm;
+    if (calm < 1) { l.vx *= .7; l.vy *= .7; }
+    const away = Math.hypot(h.x - l.x, h.y - l.y);   // a letter far from its key hurries back
+    const sp = Math.hypot(l.vx, l.vy), mx = SWARM_SPEED * l.m + Math.min(60, Math.max(0, away - 25) * .8);
+    if (sp > mx) { l.vx *= mx / sp; l.vy *= mx / sp; }
+    l.vx *= .985; l.vy *= .985;
+    l.x += l.vx * dt; l.y += l.vy * dt;
+    l.pulse = Math.max(0, l.pulse - dt * 3);
+  }
+
+  for (let it = 0; it < 8; it++) {
+    for (let i = 0; i < D.length; i++) {
+      const a = D[i];
+      for (let j = i + 1; j < D.length; j++) {
+        const b = D[j], dx = b.x - a.x, dy = b.y - a.y, dd = dx * dx + dy * dy, m = a.r + b.r + .5;
+        if (dd < m * m && dd > 1e-6) {
+          const d = Math.sqrt(dd), n = (m - d) / 2, nx = dx / d, ny = dy / d;
+          a.x -= nx * n; a.y -= ny * n; b.x += nx * n; b.y += ny * n;
+          const rv = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+          if (rv < 0) { const k = -rv * .55; a.vx -= nx * k; a.vy -= ny * k; b.vx += nx * k; b.vy += ny * k; }
+        }
+      }
+      const lim = KW / 2 - a.r;
+      if (a.y < FLOOR + a.r) { a.y = FLOOR + a.r; if (a.vy < 0) a.vy = -a.vy * .1; a.vx *= .9; a.av *= .8; }
+      if (a.x < -lim) { a.x = -lim; a.vx = Math.abs(a.vx) * .1; }
+      if (a.x > lim) { a.x = lim; a.vx = -Math.abs(a.vx) * .1; }
+    }
+    for (let i = 0; i < S.length; i++) {
+      const a = S[i];
+      for (let j = i + 1; j < S.length; j++) {
+        const b = S[j], dx = b.x - a.x, dy = b.y - a.y, dd = dx * dx + dy * dy, m = a.r + b.r + 1.5;
+        if (dd < m * m && dd > 1e-6) {
+          const d = Math.sqrt(dd), n = (m - d) / 2, nx = dx / d, ny = dy / d;
+          a.x -= nx * n; a.y -= ny * n; b.x += nx * n; b.y += ny * n; a.blocked = b.blocked = 6;
+        }
+      }
+      for (const d of D) {
+        const dx = a.x - d.x, dy = a.y - d.y, dd = dx * dx + dy * dy, m = a.r + d.r;
+        if (dd < m * m) {
+          // a falling dead letter never pushes a swarm letter down into the floor: the swarm letter is lifted onto the pile
+          const top = d.y + Math.sqrt(Math.max(0, m * m - dx * dx));
+          a.blocked = 12;
+          if (dy < 0 || dd < 1e-6) a.y += Math.min(top - a.y, 14);
+          else { const q = Math.sqrt(dd), n = m - q; a.x += dx / q * n; a.y += dy / q * n; }
+        }
+      }
+      a.x = Math.max(-hw, Math.min(hw, a.x));
+      a.y = Math.max(FLOOR + a.r, Math.min(G.Hs - a.r, a.y));
+    }
+  }
+  for (const d of D) if (Math.hypot(d.vx, d.vy) < 25) d.vx *= .9;
+  let top = FLOOR; for (const d of D) if (Math.hypot(d.vx, d.vy) < 60) top = Math.max(top, d.y + d.r);
+  G.pileTop = Math.min(top, G.Hs);   // height of the settled pile
+}
+
+function measureDensity() {
+  // free band area = band minus the (inflated) area of settled dead letters inside it
+  let used = 0;
+  for (const d of G.dead) {
+    if (Math.hypot(d.vx, d.vy) > 60) continue;
+    const frac = Math.max(0, Math.min(1, (G.Hs - (d.y - d.r)) / (2 * d.r)));
+    used += Math.PI * d.r * d.r * frac * PILE_PACK;
+  }
+  const free = KW * (G.Hs - FLOOR) - used;
+  let sa = 0; for (const l of G.swarm) sa += Math.PI * l.r * l.r;
+  return free > 1 ? sa / free : 9;
+}
+
+// A finished branch is carried off to the archive: one long chain to the left of the field, like a single huge molecule. The newest trophy peeks a
+// little into the screen, older ones lie further left, all roughly on one line (shifted up and down at random), each tied to the next by a thin bond.
+const hash01 = n => ((n * 2654435761) % 4294967296) / 4294967296;
+function archivePlace(t) {
+  const d = t.dock, bb = t.bb, w = (bb.x1 - bb.x0) * DOCK_K, h = (bb.y1 - bb.y0) * DOCK_K;
+  d.side = 0;
+  for (const o of G.trees) if (o.dock && o !== t && o.dock.ax != null) o.dock.axT -= w + 36 + Math.random() * 44;   // older ones make room
+  const peek = Math.min(26, w * .35);
+  d.axT = -ARCH_EDGE + peek - w; d.ax = d.axT;
+  const mid = Math.max(G.Hs + 110 + (Math.random() - .5) * 80, G.Hs + 12 + h / 2);   // the chain lies just above the wave
+  d.ay = mid + h / 2;
+  archiveEnds(t);
+}
+function archiveEnds(t) {   // fixed once per trophy: which word ends the branch (its last letter takes the bond) and which of the root's first letters receives the previous branch
+  const d = t.dock, leaves = t.nodes.filter(n => aliveKids(n) === 0), pool = leaves.length ? leaves : t.nodes;
+  d.eId = pool[Math.floor(Math.random() * pool.length)].id; d.sId = t.nodes[0].id; d.sK = Math.floor(Math.random() * 1000); d.fo = Math.floor(Math.random() * 1000);
+}
+function drawPeek(t, SX, SY, cw, wy, sc, alpha) {   // the newest finished branch sticks out of the left edge, so you know the archive is there
+  const bb = t.bb, d = t.dock, k = sc * DOCK_K, w = (bb.x1 - bb.x0) * DOCK_K, h = (bb.y1 - bb.y0) * DOCK_K;
+  const rx0 = SX(d.ax), rx1 = SX(d.ax + w), ry0 = SY(d.ay), ry1 = SY(d.ay - h);
+  if (rx1 > 0 && rx0 < cw && ry1 > 0 && ry0 < wy) return;   // the real one is already on screen
+  const edgeX = 38, cy = wy * .4, midY = (bb.y0 + bb.y1) / 2, P = (x, y) => [edgeX - (bb.x1 - x) * k, cy - (y - midY) * k];
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, edgeX + 2, wy); ctx.clip(); ctx.globalAlpha = alpha;
+  ctx.strokeStyle = T.mol.bondGold; ctx.lineWidth = 1;
+  for (const n of t.nodes) if (n.parent) { const [qx, qy] = P(n.parent.x, n.parent.y), [px, py] = P(n.x, n.y); linkBond(qx, qy, n.parent.str, k, px, py, n.str, k, Math.min(3, n.added.length)); }
+  for (const n of t.nodes) { const [x, y] = P(n.x, n.y); molecule(x, y, k, n.str, { bond: T.mol.bondGold, atom: T.mol.atomGold, shift: 0, gens: wordGens(n) }); }
+  ctx.restore();
+}
+function archiveBonds(sc, SX, SY, alpha) {   // thin bonds joining the finished branches into one long molecule: the last letter of one to a first letter of the next
+  const ds = G.trees.filter(t => t.dock && t.dock.ax != null && t.dock.e > .9 && t.dock.pe && t.dock.ps).sort((a, b) => a.dock.ax - b.dock.ax);
+  if (!ds.length) return;
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = T.mol.bond; ctx.lineWidth = 1; ctx.lineCap = "round";
+  const link = (p, q, order) => {   // p, q = [x, y, gap]: stop short of the letters
+    const e = Math.hypot(q[0] - p[0], q[1] - p[1]) || 1, vx = (q[0] - p[0]) / e, vy = (q[1] - p[1]) / e;
+    if (e > p[2] + q[2] + 2) bond(p[0] + vx * p[2], p[1] + vy * p[2], q[0] - vx * q[2], q[1] - vy * q[2], order, 4 * sc);
+  };
+  for (let i = 0; i < ds.length - 1; i++) link(ds[i].dock.pe, ds[i + 1].dock.ps, 1 + (ds[i].dock.fo % 2));
+  // the branch still being worked on is NOT tied to the chain: it joins the molecule only once it is finished and carried off
+  ctx.restore();
+}
+
+/* ---------- letter assist ---------- */
+// While a word is being built, only the letters that can continue it are lit (plus a few decoys, a setting); the rest dim and cannot be tapped.
+// The full keyboard stays for the first word and for a new branch.
+const strHash = str => { let h = 7; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; };
+function updateAllowed(dt) {
+  const b = G.builder, mode = $("assist").value, p = (b.base ? b.base.str : "") + b.letters.join("");
+  if (p !== G.oprefix) { G.oprefix = p; G.orbitAll = false; }   // the "every letter" bubble works for the current prefix only
+  const key = mode + "|" + p + "|" + (b.newMode ? 1 : 0) + "|" + G.usedVer + "|" + (G.over ? 1 : 0) + "|" + (G.orbitAll ? 1 : 0) + "|" + (b.base ? 1 : 0);
+  if (key !== G.akey) {
+    G.akey = key; G.allowed = null;
+    if (mode !== "off" && !G.over && !b.newMode && b.base) {
+      const ok = new Set(); for (const l of G.swarm) { const w = p + l.ch; if (PRE.has(w) || WORDS.has(w)) ok.add(l.ch); }
+      if (ok.size || WORDS.has(p)) {   // a mistyped (dead) prefix gets the full keyboard back so it can be erased and fixed
+        G.allowed = ok;
+        if (G.orbitAll) for (const l of G.swarm) ok.add(l.ch);
+        else if (mode === "decoy" && ok.size) for (const c of G.swarm.map(l => l.ch).filter(c => !ok.has(c)).sort((x, y) => strHash(p + x) - strHash(p + y)).slice(0, 3)) ok.add(c);   // the same decoys while the prefix stays
+      }
+    }
+  }
+  for (const l of G.swarm) { const t = !G.allowed || G.allowed.has(l.ch) ? 1 : 0; l.show += (t - l.show) * Math.min(1, dt * 10); }
+}
+
+const orbitActive = () => $("assist").value !== "off" && !!G.builder.base && !G.builder.newMode && !G.over;
+function syncOrbit(dt) {   // the letters that fit float along the two sides of the screen, so the word keeps the middle; the last bubble ("...") shows every letter
+  const act = orbitActive(), b = G.builder, p = (b.base ? b.base.str : "") + b.letters.join("");
+  cam.bandF += ((act ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);
+  const letters = act && G.allowed ? [...G.allowed].sort((x, y) => ALPHA.indexOf(x) - ALPHA.indexOf(y)) : [];
+  const want = letters.slice(); if (act && !G.orbitAll) want.push("\u2026");
+  const key = want.join("") + "|" + p;
+  if (key !== G.okey) {
+    G.okey = key;
+    const n = letters.length, nR = Math.min(Math.ceil(n * .55), 8), nL = n - nR;   // the right side (under the thumb) gets the larger share
+    want.forEach((ch, i) => {
+      let o = G.orbit.get(ch), fresh = false;
+      if (!o) { o = { ch, show: 0, ph: Math.random() * 6.28, sx: -99, sy: -99, pulse: 0 }; G.orbit.set(ch, o); fresh = true; }
+      if (ch === "\u2026") { o.side = 1; o.slot = nR; o.cnt = nR + 1; }   // the "all letters" bubble sits lowest on the right
+      else if (i < nR) { o.side = 1; o.slot = i; o.cnt = nR + 1; }
+      else { o.side = -1; o.slot = i - nR; o.cnt = nL; }
+      o.gi = i; o.want = true;
+      const sk = o.side + ":" + o.slot + ":" + o.cnt;   // a new place: the letter fades out of and back into view there, it does not travel
+      if (o.sk !== sk) { o.sk = sk; o.snap = true; o.jx = (Math.random() - .5) * 30; o.jy = (Math.random() - .5) * 30; if (!fresh) o.show = 0; }
+    });
+    for (const o of G.orbit.values()) if (!want.includes(o.ch)) o.want = false;
+  }
+  for (const [ch, o] of G.orbit) {
+    o.show += ((o.want ? 1 : 0) - o.show) * Math.min(1, dt * 8);
+    if (!o.want && o.show < .02) G.orbit.delete(ch);
+  }
+}
+function pickOrbit(px, py) {   // px, py: pixels inside the canvas; true when a floating letter took the tap
+  let best = null, bd = 1e9;
+  for (const o of G.orbit.values()) { if (o.show < .5) continue; const d = Math.hypot(o.sx - px, o.sy - py); if (d < bd) { bd = d; best = o; } }
+  if (!best || bd > SR * keyScale() * (G.orbitAll ? 1.5 : ORB * 1.15) || G.over) return false;
+  if (best.ch === "\u2026") { G.orbitAll = true; best.pulse = 1; return true; }
+  const b = G.builder; if (b.letters.length >= 14) return true;
+  const V = fieldView(), wyPix = cv.clientHeight - bandPx();
+  b.letters.push(best.ch); b.src.push({ ch: best.ch, field: true, x: V.x + (best.sx - cv.clientWidth / 2) / V.sc, y: V.b + (wyPix - best.sy) / V.sc });
+  best.pulse = 1; updateTray(); if (navigator.vibrate) navigator.vibrate(8);
+  return true;
+}
+const ORB = 1.8;   // the floating letters are big: there is room, and they are the thing to tap
+function drawOrbit(cw, wy, SX, SY, ks) {
+  if (!G.orbit.size) return;
+  const tb = SR * ks * .95, tok = G.orbitAll ? tb : tb * ORB, top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
+  const colW = Math.min(cw, KW * ks * 1.12), cs = Math.min(tb * 2 + 8, (colW - 24) / 8), rs = tb * 2 + 8;   // colW: the play column (all of the screen on a phone)
+  for (const o of G.orbit.values()) {
+    const e = o.show * o.show * (3 - 2 * o.show);
+    let tx, ty;
+    if (G.orbitAll) { const col = o.gi % 8, row = Math.floor(o.gi / 8); tx = cw / 2 + (col - 3.5) * cs; ty = wy - 16 - tb - (3 - row) * rs; }   // every letter: a small keyboard over the lower part of the field
+    else {
+      const a = colW / 2 - tok - 8, b = H / 2, cyo = top + H / 2, tm = 1.4;   // two arcs of one big oval round the word, the word keeps the middle
+      const th = -tm + (o.slot + .5) * 2 * tm / Math.max(1, o.cnt);
+      tx = cw / 2 + o.side * (a * Math.cos(th) - (o.slot % 2) * tok * .45) + Math.sin(G.t * .6 + o.ph) * 5;   // neighbours alternate inwards so the big letters do not touch
+      ty = cyo + b * Math.sin(th) + Math.sin(G.t * .8 + o.ph * 2) * 6;
+      const c = G.orbitC;   // keep clear of the word and the source letters hanging on it
+      if (c) {
+        const ccx = SX(c.x), ccy = SY(c.y), ox = tx - ccx, oy = ty - ccy, d0 = Math.hypot(ox, oy) || 1, need = (G.orbitR || 0) + tok * .9;
+        if (d0 < need) { tx = ccx + ox / d0 * need; ty = ccy + oy / d0 * need; }
+        tx = Math.max((cw - colW) / 2 + tok + 4, Math.min((cw + colW) / 2 - tok - 4, tx)); ty = Math.max(top, Math.min(bottom, ty));
+      }
+    }
+    tx += o.jx || 0; ty += o.jy || 0;
+    if (o.dx == null || o.snap) { o.dx = tx; o.dy = ty; o.snap = false; } else { o.dx += (tx - o.dx) * .2; o.dy += (ty - o.dy) * .2; }   // letters appear in place (no flying in from the side)
+    o.sx = o.dx; o.sy = o.dy;
+    ctx.globalAlpha = Math.min(1, e); o.pulse = Math.max(0, o.pulse - .05);
+    glyph(o.sx, o.sy, tok * (1 + o.pulse * .25), o.ch, T.key[0], T.key[2], T.key[4], 2);
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- update / draw ---------- */
+function update(dt) {
+  dustStep(dt);
+  camUpdate(dt);
+  updateAllowed(dt);
+  syncOrbit(dt);
+  // the border wave slowly changes its height: every ~10 s it eases toward a new height between 3 and 7
+  G.waveT += dt; if (G.waveT > 10) { G.waveT = 0; G.waveTarget = 3 + Math.round(Math.random() * 4); }
+  G.waveAmp += (G.waveTarget - G.waveAmp) * Math.min(1, dt * .6);
+  if (!G.over) ensureBase();
+  if (!G.over) { G.idleT += dt; if (G.idleT > IDLE_T && (!G.sugg || G.t - G.sugg.t0 > (G.sugg.letters.length + (G.sugg.node ? 1 : 0)) * .8 + .9 + SUGG_PAUSE)) G.sugg = suggest(); }   // a new random suggestion after each pass
+  if (G.over) { physics(dt); return; }
+  G.t += dt;
+  physics(dt);
+  G.hintT = Math.max(0, G.hintT - dt);
+  for (const f of G.fx) f.t += dt;
+  G.fx = G.fx.filter(f => f.t < .9);
+  for (const t of G.trees) {
+    if (t.dock || !t.nodes.length) continue;
+    const b = treeBox(t); t.zc = [(b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2];
+    t.zTimer = (t.zTimer || 0) + dt;
+    if (t.zTimer > ZOOM_HOLD) t.zt = 1;
+    t.z = (t.z || 1) + ((t.zt || 1) - (t.z || 1)) * Math.min(1, dt * 6);
+    if (Math.abs(t.z - 1) < .001 && (t.zt || 1) === 1) t.z = 1;
+  }
+  // hover: the word under the mouse grows (for readability), stays a moment after the mouse leaves, one word at a time
+  if (G.hover) {
+    let best = null, bd = 1e9;
+    for (const t of G.trees) if (!t.dock) for (const n of t.nodes) {
+      const zp = zoomPt(t, n.x, n.y), z = t.z || 1, hz = n.hz || 1;
+      const ox = Math.abs(zp[0] - G.hover.x) - n.w * z * hz / 2, oy = Math.abs(zp[1] - G.hover.y) - CAPH * z * hz;
+      if (ox < 0 && oy < 0 && Math.hypot(zp[0] - G.hover.x, zp[1] - G.hover.y) < bd) { bd = Math.hypot(zp[0] - G.hover.x, zp[1] - G.hover.y); best = n; }
+    }
+    if (best) { G.hoverNode = best; G.hoverT = G.t; }
+  }
+  for (const t of G.trees) if (!t.dock) for (const n of t.nodes) {
+    const target = n === G.hoverNode && G.t - G.hoverT < HOVER_HOLD ? HOVER_Z : 1, hz = n.hz || 1;
+    n.hz = hz + (target - hz) * Math.min(1, dt * 8);
+    if (target === 1 && Math.abs(n.hz - 1) < .005) n.hz = 1;
+  }
+  for (const t of G.trees) if (!t.harvest && t.cv !== G.usedVer) { t.cv = G.usedVer; checkHarvest(t); }
+  for (const t of G.trees) {
+    if (t.harvest) t.t += dt;
+    else if (t.ripe && (t.ripeT += dt) > ripeT()) harvest(t);
+  }
+  // a ripe branch glows, then slides away to the archive
+  for (const t of G.trees) if (t.harvest && t.t > .8) {
+    if (!t.dock) {
+      t.dock = { side: 0, e: 0, pop: 0, popT: 99, rot: (1 + (G.harvested * 7) % 15) * Math.PI / 180 * (G.harvested % 2 ? 1 : -1),   // silhouette tilt 1..15 degrees
+        amp: (8 + Math.random() * 14) * Math.PI / 180, w: (Math.random() * .3 + .12) * (Math.random() < .5 ? -1 : 1), ph: Math.random() * 6.28,   // slow turning to and fro, random speed and direction
+        sx: 2 + Math.random() * 3, sy: 2 + Math.random() * 3, w2: .2 + Math.random() * .3 };   // slow sway
+      archivePlace(t);
+    }
+    if (t.dock.ax == null) archivePlace(t);   // trophies saved by an older version
+    t.dock.ax += (t.dock.axT - t.dock.ax) * Math.min(1, dt * 2.5);
+    const p = Math.min(1, (t.t - .8) / 1.2);
+    t.dock.e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    t.dock.popT += dt;   // a tapped trophy stays enlarged for POP_T seconds, then sinks back
+    t.dock.pop += ((t.dock.popT < POP_T ? 1 : 0) - t.dock.pop) * Math.min(1, dt * 8);
+  }
+  if ($("pressure").checked) {
+    G.pressureT += dt;
+    if (G.pressureT > 18) { G.pressureT = 0; spawnDead(ALPHA[Math.floor(Math.random() * ALPHA.length)], (Math.random() - .5) * G.W * .6, G.H); toast("Упала буква", "bad"); }
+  }
+  const dn = measureDensity();
+  G.density += (dn - G.density) * Math.min(1, dt * 4);
+  if (G.density > dmax()) G.agony += dt; else G.agony = Math.max(0, G.agony - dt * .5);
+  const f = Math.min(1, G.density / dmax());
+  const bar = $("dens").firstElementChild;
+  const bw = (Math.round(f * 200) / 2) + "%", bc = f > .85 ? "#f87171" : f > .65 ? "#fbbf24" : "#38bdf8";
+  if (bar._w !== bw) { bar._w = bw; bar.style.width = bw; }
+  if (bar._c !== bc) { bar._c = bc; bar.style.background = bc; }
+  setText($("denst"), Math.round(f * 100) + "%");
+  const lim = +$("agony").value;
+  const cdOpen = G.agony > .05; if ($("cd")._o !== cdOpen) { $("cd")._o = cdOpen; $("cd").classList.toggle("open", cdOpen); }
+  if (cdOpen) setText($("cd"), "⚠ буквы сжаты · конец через " + Math.max(0, lim - G.agony).toFixed(1) + " с");
+  if (G.agony > lim) gameOver();
+  updateHud();
+}
+function gameOver() {
+  G.over = true; $("cd").classList.remove("open"); clearSave();
+  if (G.score > best) { best = G.score; try { localStorage.setItem("db_best", best); } catch (e) {} }
+  $("fs").textContent = G.score;
+  $("fsub").textContent = "слов: " + G.wordsN + " · рекорд: " + best;
+  $("over").classList.add("open");
+  updateTray();
+}
+
+function resize() {
+  const dpr = cvDpr();
+  cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr);
+}
+function layoutMode() {   // a wide window gets the wide layout
+  document.documentElement.classList.toggle("wide", innerWidth / innerHeight > 1.25 && innerWidth >= 900);
+  resize();
+}
+window.addEventListener("resize", layoutMode);
+
+function circle(x, y, r, fill, stroke, ch, tc, lw) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832);
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.lineWidth = lw || 2; ctx.strokeStyle = stroke; ctx.stroke();
+  if (ch) {
+    ctx.fillStyle = tc; ctx.font = fontWeightOf(ch) + " " + Math.round(r * 1.05) + "px system-ui,sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(ch.toUpperCase(), x, y + r * .06);
+  }
+}
+
+// letter token, like atoms / rings in a chemical formula: circle, ellipse, rounded pentagon or hexagon, slightly rotated.
+// Diacritic letters are always rings (hexagon for ogonek letters, pentagon for the rest).
+// popular letters are bold, middling ones regular, rare ones thin
+const fontWeightOf = ch => ({ 1: 900, 1.25: 500, 1.5: 200 })[WEIGHT[ch] || 1];
+function shapeOf(ch) {
+  const c = ch.charCodeAt(0), rot = ((c * 37) % 60) * Math.PI / 180;
+  if (DIAC.has(ch)) return { n: 6, rot };                                        // letters with diacritics (vowels and consonants)
+  if (VOWEL.has(ch)) return { rot };                                              // plain vowels: circle
+  return { n: 4, rot: Math.PI / 4 + (rot - Math.PI / 6) * .2 };                   // plain consonants: slightly turned square
+}
+function glyph(x, y, r, ch, fill, stroke, tc, lw, glass) {
+  r *= sizeK(ch) / .95;
+  const sh = shapeOf(ch);
+  if (sh.n) {
+    const n = sh.n, rad = r * (n === 6 ? 1.08 : 1.22), pts = [];
+    for (let i = 0; i < n; i++) { const a = sh.rot + i * 6.2832 / n; pts.push([x + Math.cos(a) * rad, y + Math.sin(a) * rad]); }
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const p0 = pts[(i + n - 1) % n], p1 = pts[i], p2 = pts[(i + 1) % n];
+      const m0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2], m1 = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+      if (i === 0) ctx.moveTo(m0[0], m0[1]);
+      ctx.arcTo(p1[0], p1[1], m1[0], m1[1], r * (n === 6 ? .6 : .5));
+    }
+    ctx.closePath();
+  } else if (sh.ell) {
+    ctx.beginPath(); ctx.ellipse(x, y, r * 1.12, r * .9, sh.rot, 0, 6.2832);
+  } else {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832);
+  }
+  ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke();
+  if (T.lab && Q.glass === 1 && glass !== false) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill(); }   // flat glint only
+  if (T.lab && Q.glass === 2 && glass !== false) {   // glass: soft light from the top left, a glint
+    ctx.save(); ctx.clip();
+    const gl = ctx.createLinearGradient(x - r, y - r, x + r * .6, y + r * 1.1);
+    gl.addColorStop(0, "rgba(255,255,255,.7)"); gl.addColorStop(.5, "rgba(255,255,255,.1)"); gl.addColorStop(1, "rgba(90,170,215,.18)");
+    ctx.fillStyle = gl; ctx.fillRect(x - r * 1.5, y - r * 1.5, r * 3, r * 3);
+    ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(x - r * .28, y - r * .58, r * .42, r * .13, -.5, 0, 6.2832); ctx.fill();
+    ctx.restore();
+  }
+  ctx.fillStyle = tc; ctx.font = fontWeightOf(ch) + " " + Math.round(r * 1.05) + "px system-ui,sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(ch.toUpperCase(), x, y + r * .06);
+}
+
+// a source letter leans toward the vector that leaves it: a gentle tilt of 0..15 degrees along that direction
+function leanAngle(lx, ly, nx, ny) {
+  let a = Math.atan2(-(ny - ly), nx - lx);
+  if (Math.abs(a) > Math.PI / 2) a -= Math.sign(a) * Math.PI;
+  const lim = 15 * Math.PI / 180;
+  return Math.max(-lim, Math.min(lim, a * .25));
+}
+function glyphLean(x, y, r, ch, fill, stroke, tc, lw, ang, glass) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang); glyph(0, 0, r, ch, fill, stroke, tc, lw, glass); ctx.restore();
+}
+
+// one flat colour for resting trophies: the water behind them at that height, a bit darker (no see-through overlaps)
+function silColor(frac, haze) {
+  if (T.lab) { const b = [64, 100, 126], m = [190, 210, 224], hz = (haze || 0) * .5; return "rgb(" + b.map((v, k) => Math.round(v + (m[k] - v) * hz)).join(",") + ")"; }   // haze 0..1: the further away, the paler (blended toward a misty blue)
+  const stops = [[0, [15, 90, 115]], [.45, [10, 58, 88]], [1, [4, 24, 43]]];
+  let c = stops[2][1];
+  for (let i = 0; i < 2; i++) if (frac <= stops[i + 1][0]) { const [a, ca] = stops[i], [b, cb] = stops[i + 1], t = Math.max(0, (frac - a) / (b - a)); c = ca.map((v, k) => v + (cb[k] - v) * t); break; }
+  const o = [3, 14, 26];
+  const mist = [88, 142, 172], hz = (haze || 0) * .6;
+  return "rgb(" + c.map((v, k) => { const d = Math.round((v * .62 + o[k] * .38) * .72); return Math.round(d + (mist[k] - d) * hz); }).join(",") + ")";
+}
+
+function capsule(x, y, w, h, fill, stroke, text, tc, lw, dash, ang, sub) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang || 0); x = 0; y = 0;
+  ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, h / 2);
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.lineWidth = lw; ctx.strokeStyle = stroke;
+  if (dash) ctx.setLineDash([6, 4]);
+  ctx.stroke(); ctx.setLineDash([]);
+  if (text) {
+    ctx.fillStyle = tc; ctx.font = "700 " + Math.round(h * (sub ? .37 : .5)) + "px system-ui,sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(text.toUpperCase(), x, y + (sub ? -h * .12 : h * .03));
+    if (sub) {   // tiny thin russian translation under the lithuanian word; if it is too long it slowly scrolls inside the capsule
+      const fs = Math.max(8, Math.round(h * .19)), maxW = w - h * .7, yy = y + h * .27;
+      ctx.globalAlpha *= .8; ctx.fillStyle = tc; ctx.font = "300 " + fs + "px system-ui,sans-serif";
+      const tw = ctx.measureText(sub).width;
+      if (tw <= maxW) ctx.fillText(sub, x, yy);
+      else {
+        ctx.save(); ctx.beginPath(); ctx.rect(x - maxW / 2, yy - fs, maxW, fs * 2); ctx.clip();
+        ctx.textAlign = "left";
+        const period = tw + fs * 2.5, off = (G.t * 14) % period;
+        ctx.fillText(sub, x - maxW / 2 - off, yy); ctx.fillText(sub, x - maxW / 2 - off + period, yy);
+        ctx.restore();
+      }
+    }
+  }
+  ctx.restore();
+}
+
+// the translation line under a molecule; a long one slowly scrolls inside its width
+function subText(x, y, maxW, fs, color, sub) {
+  ctx.save(); ctx.globalAlpha *= T.lab ? .95 : .85; ctx.fillStyle = color; ctx.font = (T.lab ? "400 " : "300 ") + fs + "px system-ui,sans-serif"; ctx.textBaseline = "middle";
+  const tw = ctx.measureText(sub).width;
+  if (tw <= maxW) { ctx.textAlign = "center"; ctx.fillText(sub, x, y); }
+  else {
+    ctx.beginPath(); ctx.rect(x - maxW / 2, y - fs, maxW, fs * 2); ctx.clip(); ctx.textAlign = "left";
+    const period = tw + fs * 2.5, off = (G.t * 14) % period;
+    ctx.fillText(sub, x - maxW / 2 - off, y); ctx.fillText(sub, x - maxW / 2 - off + period, y);
+  }
+  ctx.restore();
+}
+// draw a word as a molecule: (x, y) = screen centre of its cell, k = screen pixels per world unit
+function molecule(x, y, k, str, st) {
+  const g = molGeom(str), sh = st.shift || 0, gap = AF * .5 * k;
+  const P = a => [x + a.x * k, y - (a.y + sh) * k];
+  ctx.save(); ctx.lineCap = "round"; ctx.strokeStyle = st.bond; ctx.lineWidth = 1;   // bonds are always one pixel thin
+  if (st.dash) ctx.setLineDash([6 * k, 4 * k]);
+  for (const [i, j, o] of g.bonds) {
+    const [x0, y0] = P(g.atoms[i]), [x1, y1] = P(g.atoms[j]), d = Math.hypot(x1 - x0, y1 - y0) || 1, ux = (x1 - x0) / d, uy = (y1 - y0) / d;
+    if (!(i === 0 && j === 1 && !st.sil)) bond(x0 + ux * gap, y0 + uy * gap, x1 - ux * gap, y1 - uy * gap, o, 4 * k);   // the first bond is drawn below as a single arrow
+  }
+  ctx.setLineDash([]); ctx.fillStyle = st.atom;
+  if (st.sil) for (const a of g.atoms) { const [ax, ay] = P(a); ctx.beginPath(); ctx.arc(ax, ay, AF * .42 * k, 0, 6.2832); ctx.fill(); }
+  else {
+    const fpx = Math.round(AF * k) + "px system-ui,sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    g.atoms.forEach((a, i) => { const [ax, ay] = P(a); ctx.font = (st.gens ? GEN_WEIGHT[Math.min(2, st.gens[i] || 0)] : 800) + " " + fpx; ctx.fillStyle = i === 0 ? T.first : st.atom; ctx.fillText(a.ch.toUpperCase(), ax, ay + AF * .04 * k); });
+    // the first letter is where reading starts: black, a small index 1 (like the number of an element) and a thin arrow pointing at it
+    const [x0, y0] = P(g.atoms[0]);
+    const a1 = g.atoms[1] ? P(g.atoms[1]) : [x0 + 1, y0], onLeft = a1[0] > x0;   // the index goes to the side away from the arrow
+    ctx.fillStyle = T.first; ctx.font = "700 " + Math.round(AF * .5 * k) + "px system-ui,sans-serif"; ctx.textAlign = onLeft ? "right" : "left"; ctx.fillText("1", x0 + (onLeft ? -1 : 1) * AF * .36 * k, y0 + AF * .42 * k);
+    if (g.atoms.length > 1) {   // the bond from the first letter to the second is one plain arrow with a solid head: this is the way to read the word
+      const [x1, y1] = P(g.atoms[1]), ddx = x1 - x0, ddy = y1 - y0, dl = Math.hypot(ddx, ddy) || 1, ux = ddx / dl, uy = ddy / dl;
+      const sx = x0 + ux * gap * .8, sy = y0 + uy * gap * .8, tx = x1 - ux * gap * .8, ty = y1 - uy * gap * .8, hl = 8 * k, hw = 3.2 * k;
+      ctx.strokeStyle = T.first; ctx.fillStyle = T.first; ctx.lineWidth = 1; ctx.lineCap = "round";
+      const ang = Math.atan2(uy, ux);   // a thin line with an open tick at its end, light like a pen stroke
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(tx, ty);
+      ctx.moveTo(tx - Math.cos(ang - .62) * hl, ty - Math.sin(ang - .62) * hl); ctx.lineTo(tx, ty); ctx.lineTo(tx - Math.cos(ang + .62) * hl, ty - Math.sin(ang + .62) * hl); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+// a bond between two molecules: from the atom of each that faces the other, `order` lines
+function linkBond(pcx, pcy, pStr, kp, ccx, ccy, cStr, kc, order, cache) {
+  // `cache` (the child node) remembers which atoms the bond joined, so it never jumps between two nearly equal candidates
+  const dx = ccx - pcx, dy = ccy - pcy, d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d;
+  const pick = (str, k, sgn) => {
+    let best = 0, bs = -1e9; const at = molGeom(str).atoms, sh = molShift(str);
+    for (let i = 0; i < at.length; i++) { const v = (at[i].x * k * ux + -(at[i].y + sh) * k * uy) * sgn; if (v > bs + 1e-6) { bs = v; best = i; } }
+    return best;
+  };
+  let ip, ic;
+  if (cache && cache._lp != null && cache._ls === pStr + "|" + cStr) { ip = cache._lp; ic = cache._lc; }
+  else { ip = pick(pStr, kp, 1); ic = pick(cStr, kc, -1); if (cache) { cache._lp = ip; cache._lc = ic; cache._ls = pStr + "|" + cStr; } }
+  const pa = molGeom(pStr).atoms[ip], ca = molGeom(cStr).atoms[ic];
+  const x0 = pcx + pa.x * kp, y0 = pcy - (pa.y + molShift(pStr)) * kp, x1 = ccx + ca.x * kc, y1 = ccy - (ca.y + molShift(cStr)) * kc;
+  const e = Math.hypot(x1 - x0, y1 - y0) || 1, vx = (x1 - x0) / e, vy = (y1 - y0) / e, g0 = AF * .5 * kp, g1 = AF * .5 * kc;
+  if (e > g0 + g1 + 2) bond(x0 + vx * g0, y0 + vy * g0, x1 - vx * g1, y1 - vy * g1, order, 4 * Math.min(kp, kc));
+}
+
+// a bond between two atoms: `order` parallel lines (1 = single, 2 = double, 3 = triple)
+function bond(x0, y0, x1, y1, order, gap) {
+  const dx = x1 - x0, dy = y1 - y0, d = Math.hypot(dx, dy) || 1, nx = -dy / d * gap, ny = dx / d * gap;
+  ctx.beginPath();
+  for (let i = 0; i < order; i++) { const o = i - (order - 1) / 2; ctx.moveTo(x0 + nx * o, y0 + ny * o); ctx.lineTo(x1 + nx * o, y1 + ny * o); }
+  ctx.stroke();
+}
+
+// the laboratory behind everything, kept abstract: faint tile seams, a soft band of light, a few thin cables
+const CABLES = [[.06, .55, 0], [.13, .34, 1.3], [.91, .5, 2.1], [.96, .72, 3.4]];
+function labBackdrop(g, cw, ch, wy, px, py, withCables) {   // g: the context to draw on (the screen, or an offscreen layer)
+  g.save(); g.beginPath(); g.rect(0, 0, cw, ch); g.clip();
+  const pw = Math.max(150, cw * .5), ph = Math.max(150, wy * .36), ox = ((-px * .2) % pw + pw) % pw, oy = ((py * .2) % ph + ph) % ph;
+  g.strokeStyle = "rgba(70,105,128,.08)"; g.lineWidth = 1; g.beginPath();
+  for (let x = ox - pw; x < cw + pw; x += pw) { g.moveTo(x, 0); g.lineTo(x, ch); }
+  for (let y = oy - ph; y < ch + ph; y += ph) { g.moveTo(0, y); g.lineTo(cw, y); }
+  g.stroke();
+  const sy = wy * .4 + Math.sin(py * .004) * 6;   // a soft band of light
+  const lg = g.createLinearGradient(0, sy - 40, 0, sy + 40);
+  lg.addColorStop(0, "rgba(255,255,255,0)"); lg.addColorStop(.5, "rgba(255,255,255,.55)"); lg.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = lg; g.fillRect(0, sy - 40, cw, 80);
+  g.fillStyle = "rgba(255,255,255,.05)";   // faint beams
+  for (const [a, b] of [[.1, .26], [.74, .84]]) { g.beginPath(); g.moveTo(cw * a, 0); g.lineTo(cw * (a + .1), 0); g.lineTo(cw * b + cw * .25, ch); g.lineTo(cw * b - cw * .08, ch); g.fill(); }
+  if (withCables) labCables(g, cw, wy);
+  g.restore();
+}
+
+function labCables(g, cw, wy) {   // thin cables that sway a little
+  g.lineCap = "round"; g.strokeStyle = "rgba(40,75,98,.2)"; g.lineWidth = 1.5;
+  for (const [fx, len, ph] of CABLES) {
+    const x0 = fx * cw, sw = Math.sin(G.t * .5 + ph) * 6, x1 = x0 + (fx < .5 ? 1 : -1) * cw * .05 + sw, y1 = wy * len;
+    g.beginPath(); g.moveTo(x0, -8); g.bezierCurveTo(x0 + sw * .4, y1 * .55, x1 - sw, y1 * .8, x1, y1); g.stroke();
+  }
+}
+// the still part of the background (sky, tiles, the band of light, beams) is drawn once into its own canvas on the lighter profiles
+const bgCache = { key: "", cv: null };
+function bgLayer(cw, ch, wy) {
+  const dpr = cvDpr(), key = [cw, ch, wy | 0, dpr, THEME].join("|");
+  if (bgCache.key !== key) {
+    const c = document.createElement("canvas"); c.width = Math.round(cw * dpr); c.height = Math.round(ch * dpr);
+    const g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const water = g.createLinearGradient(0, 0, 0, ch); water.addColorStop(0, T.sky[0]); water.addColorStop(.45, T.sky[1]); water.addColorStop(1, T.sky[2]);
+    g.fillStyle = water; g.fillRect(0, 0, cw, ch);
+    if (T.lab) labBackdrop(g, cw, ch, wy, 0, 0, false);
+    bgCache.key = key; bgCache.cv = c;
+  }
+  return bgCache.cv;
+}
+
+function draw() {
+  const dpr = cvDpr();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cw = cv.clientWidth, ch = cv.clientHeight, ks = keyScale(), sc = camScale(), band = bandPx(), V = fieldView();
+  ctx.clearRect(0, 0, cw, ch);
+  const wy = ch - band;                                      // screen y of the wave
+  const SX = x => cw / 2 + (x - V.x) * sc, SY = y => y <= G.Hs ? ch - y * ks : wy - (y - V.b) * sc, rr = R * sc;   // the branch field (y above the wave is clipped away)
+  const KX = x => cw / 2 + x * ks, KY = y => ch - y * ks;   // the letter band
+  G.focus = null; G.orbitC = null;
+  const late = [];   // enlarged (hovered) words are drawn last, on top
+  let ripeSlot = 0;   // finished branches that wait for the harvest stack their notices upward from the wave
+  const away = Math.min(1, Math.max(0, (Math.abs(V.x) - 100) / 100));   // 0 at the work, 1 when the camera is out in the archive
+  const isBg = t => !!t.dock && t.dock.pop < .5;   // resting trophies form the background layer, behind everything
+
+  const left = SX(-G.W / 2), right = SX(G.W / 2), top = SY(G.H), bleft = KX(-KW / 2), bright = KX(KW / 2);
+  // underwater: light teal near the surface, deep blue below, no rays
+  if (Q.cache) { ctx.drawImage(bgLayer(cw, ch, wy), 0, 0, cw, ch); if (T.lab) labCables(ctx, cw, wy); }   // light profiles: one image blit instead of the gradients and lines
+  else {
+    const water = ctx.createLinearGradient(0, 0, 0, ch);
+    water.addColorStop(0, T.sky[0]); water.addColorStop(.45, T.sky[1]); water.addColorStop(1, T.sky[2]);
+    ctx.fillStyle = water; ctx.fillRect(0, 0, cw, ch);
+    if (T.lab) labBackdrop(ctx, cw, ch, wy, V.x * sc, V.b * sc, true);
+  }
+  if (!T.lab) {   // the dark look tints the field and the water; the laboratory has nothing to add here
+    ctx.fillStyle = T.fieldTint; ctx.fillRect(0, Math.min(0, top), cw, wy - Math.min(0, top));
+    const liquid = ctx.createLinearGradient(0, wy, 0, ch); liquid.addColorStop(0, T.band[0]); liquid.addColorStop(1, T.band[1]);
+    ctx.fillStyle = liquid; ctx.fillRect(0, wy, cw, ch - wy);
+  }
+  const f = Math.min(1, G.density / dmax());
+  {   // pressure warms the whole bottom of the screen with a soft red glow: no box, no edges
+    const pg = ctx.createLinearGradient(0, wy, 0, ch); pg.addColorStop(0, "rgba(248,113,113,0)"); pg.addColorStop(1, "rgba(248,113,113," + (f * f * .3) + ")");
+    ctx.fillStyle = pg; ctx.fillRect(0, wy, cw, band);
+  }
+  for (const p of DUST) {
+    ctx.globalAlpha = p.a * (.6 + .4 * Math.sin(G.t * .5 + p.ph));
+    ctx.fillStyle = T.dust; ctx.fillRect(Math.round(p.x * cw), Math.round(p.y * ch), p.s, p.s);
+  }
+  ctx.globalAlpha = 1;
+  
+  // the border between the branch space and the letter space is a wide, slowly drifting sine wave
+  {
+    const amp = G.waveAmp * ks, wl = 230 * ks, ph = G.t * .5, y0 = wy, x0 = 0, x1 = cw;
+    ctx.beginPath();
+    for (let px = x0; px <= x1 + 1; px += 3) { const yy = y0 + Math.sin((px - x0) / wl * 6.2832 + ph) * amp; if (px === x0) ctx.moveTo(px, yy); else ctx.lineTo(px, yy); }
+    ctx.strokeStyle = T.wave; ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.stroke();
+    ctx.lineJoin = "miter";
+  }
+  // the floor: a thin, almost black strip at the very bottom
+  ctx.fillStyle = T.floor; ctx.fillRect(bleft, ch - FLOOR * ks, bright - bleft, FLOOR * ks);
+  ctx.fillStyle = T.floorLine; ctx.fillRect(bleft, ch - FLOOR * ks, bright - bleft, 1.5);
+
+  if (LAYOUT === "fan" && KEYPOS.pivot) {   // faint arcs show the thumb fan the letters sit on
+    const pv = KEYPOS.pivot, lh = HAND === "left";
+    ctx.save(); ctx.beginPath(); ctx.rect(bleft, wy, bright - bleft, band); ctx.clip();
+    ctx.strokeStyle = T.arcs; ctx.lineWidth = 1.5;
+    for (let k = 0; k < FAN_RINGS.length; k++) { ctx.beginPath(); ctx.arc(KX(pv.x), KY(pv.y), (FAN_R0 + k * FAN_DR) * ks, lh ? 1.5 * Math.PI : Math.PI, lh ? 2 * Math.PI : 1.5 * Math.PI); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  for (const d of G.dead) {   // a falling letter eases from the field scale to the band scale on its way down
+    const e = d.y <= G.Hs ? 0 : Math.min(1, (d.y - G.Hs) / 90), s = ks + (sc - ks) * e;
+    let sy = SY(d.y);
+    if (d.y > G.Hs && sy > wy) continue;   // below the water surface line but not yet in the band: out of sight
+    if (d.y <= G.Hs) {   // falling through the sunk band: glide from where the field puts the surface down to the top of the pile, no jumps
+      const P = G.pileTop || FLOOR;
+      if (d.y > P) { const Ybot = KY(P), Ytop = Math.min(wy - (G.Hs - V.b) * sc, Ybot - 4); sy = Ybot + (Ytop - Ybot) * Math.min(1, (d.y - P) / Math.max(1, G.Hs - P)); }
+    }
+    glyphLean(KX(d.x) + (SX(d.x) - KX(d.x)) * e, sy, R * s * .95, d.ch, T.dead[0], T.dead[1], T.dead[2], 1.5, d.ang, false);   // fallen letters: dark blue-grey, almost the colour of the water
+  }
+
+  ctx.save(); ctx.beginPath(); ctx.rect(0, wy, cw, ch - wy); ctx.clip();   // the letters sink with the band
+  for (const l of G.swarm) {
+    const k = (1 + l.pulse * .25) * (.82 + .18 * l.show);   // letters that do not fit now are dimmer and a little smaller
+    const sel = G.builder.src.includes(l);
+    if (cam.bandF < .03) continue;   // the keyboard has sunk: nothing of it may peek out above the pile
+    ctx.globalAlpha = (.15 + .85 * l.show) * Math.min(1, cam.bandF * 2.2);
+    glyph(KX(l.x), KY(l.y), l.r * ks * k / sizeK(l.ch) * .95, l.ch, sel ? T.key[1] : T.key[0], l.pulse || sel ? T.key[3] : T.key[2], T.key[4], 2);
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  // a new word's source letters appear in the field; links and the capsule only after "grow"
+  const bl = G.builder;
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();   // everything of the branch field stays above the wave
+  if (Q.blur && "filter" in ctx) ctx.filter = "blur(" + (1.4 * ks * (1 - away)).toFixed(1) + "px)";   // the trophies far behind are out of focus, so they never compete with the live branch
+  drawTrees(isBg);
+  archiveBonds(sc, SX, SY, .3 + .5 * away);
+  if (Q.blur && "filter" in ctx) ctx.filter = "none";
+  { const nw = G.trees.filter(t => t.dock && t.dock.ax != null && t.dock.e > .9).sort((a, b) => b.dock.axT - a.dock.axT)[0];
+    if (nw && away < .6) drawPeek(nw, SX, SY, cw, wy, sc, .8 * (1 - away)); }
+  if (bl.base && !bl.letters.length) { const bb = bl.base.box; G.focus = { x: bl.base.x, y: bl.base.y }; G.orbitC = { x: bl.base.x, y: bl.base.y }; G.orbitR = Math.max(bl.base.x - bb.x0, bb.x1 - bl.base.x, bl.base.y - bb.y0, bb.y1 - bl.base.y) * sc; }
+  if (bl.letters.length) {
+    const str = (bl.base ? bl.base.str : "") + bl.letters.join(""), w = nodeW(str);
+    const pb = bl.base || autoBase(str);
+    ctx.globalAlpha = .8;
+    if (pb) {
+      const pos = place(pb, w, 0); G.focus = { x: (pos.x + pb.x) / 2, y: (pos.y + pb.y) / 2 }; G.orbitC = { x: pos.x, y: pos.y }; G.orbitR = Math.max(w / 2, CAPH) * sc;
+      const cx0 = SX(pos.x), cy0 = SY(pos.y), ru = subOf(str);
+      linkBond(SX(pb.x), SY(pb.y), pb.str, sc, cx0, cy0, str, sc, Math.min(3, str.length - pb.str.length));
+      molecule(cx0, cy0, sc, str, { bond: T.pv.bond, atom: T.pv.atom, dash: true, shift: molShift(str), gens: pb ? wordGens(pb).concat(new Array(Math.max(0, str.length - pb.str.length)).fill(Math.max(...wordGens(pb)) + 1)) : undefined });
+      if (ru) subText(cx0, cy0 + (CAPH - 6) * sc, w * sc - 8, Math.max(9, 12.5 * sc), T.pv.text, ru);
+    } else {
+      const pos = placeRoot(w, bl.letters.length, bl.rootX); G.focus = { x: pos.x, y: pos.y };
+      for (const l of slotsFor(pos, w, bl.letters)) glyphLean(SX(l.x), SY(l.y), rr * LRK * (l.s || 1), l.ch, T.pv.fill, T.pv.rim, T.pv.text, 2, leanAngle(l.x, l.y, pos.x, pos.y), false);
+    }
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  if (G.sugg && G.idleT > IDLE_T) {
+    // gold glow, then fade: first the word to grow from (if any), then the letters one after another
+    const ph = G.t - G.sugg.t0, sn = G.sugg.node, delay = sn ? .8 : 0;
+    if (sn && sn.alive && !sn.tree.harvest && ph >= 0 && ph <= .9) {
+      const k = Math.sin(Math.PI * ph / .9);
+      ctx.globalAlpha = k;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();
+      capsule(SX(sn.x), SY(sn.y), sn.w * sc * 1.22 + 10, 2 * rr * 1.3 * CAPK + 10, "rgba(253,224,71,.16)", "#fde68a", "", "", 3.5, false, sn.tilt);
+      ctx.globalAlpha = 1; ctx.restore();
+    }
+    G.sugg.letters.forEach((ch, i) => {
+      const l = G.swarm.find(q => q.ch === ch), u = (ph - delay - i * .8) / .9;
+      if (!l || u < 0 || u > 1) return;
+      const ob = cam.bandF < .5 ? G.orbit.get(ch) : null;   // with the keyboard sunk, the hint glows on the floating letter
+      if (cam.bandF < .5 && !ob) return;
+      const k = Math.sin(Math.PI * u), x = ob ? ob.sx : KX(l.x), y = ob ? ob.sy : KY(l.y), r = ob ? SR * ks : l.r * ks;
+      const g = ctx.createRadialGradient(x, y, r * .3, x, y, r * 1.9);
+      g.addColorStop(0, "rgba(253,224,71," + (.75 * k) + ")"); g.addColorStop(1, "rgba(251,146,60,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 1.9, 0, 6.2832); ctx.fill();
+      ctx.globalAlpha = .9 * k; ctx.strokeStyle = "#fde68a"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(x, y, r * 1.12, 0, 6.2832); ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();
+  function drawTrees(pred) {
+  for (const t of [...G.trees].filter(pred).sort((a, b) => (a.dock ? a.dock.pop : 0) - (b.dock ? b.dock.pop : 0))) {
+    const d = t.dock, pp = d ? d.pop : 0, popK = d ? popKOf(t) : 1;
+    const KS = d ? (1 + (DOCK_K - 1) * d.e) * (1 - pp) + popK * pp : (t.z || 1);
+    const rotNow = d ? d.rot + d.amp * Math.sin(G.t * d.w + d.ph) : 0;
+    const swx = d ? d.sx * Math.sin(G.t * d.w2 + d.ph * 2) : 0, swy = d ? d.sy * Math.cos(G.t * d.w2 * .8 + d.ph) : 0;
+    const sil = !!d && d.e > .02 && pp < .5 && away < .5;   // resting trophies are quiet dark silhouettes; a tapped one shows its words
+    const dp = sil ? (Math.sin(d.ph * 3) + 1) / 2 : 0, ga = sil ? (T.lab ? .32 + .38 * (1 - dp) : .14 + .26 * (1 - dp)) * Math.min(1, .25 + d.e) : (d && pp < .5 ? .3 + .7 * away : 1);   // each trophy sits at its own depth: farther = paler and more transparent
+    const M = (x, y) => {
+      if (!d) return zoomPt(t, x, y);
+      const bb = t.bb, bw = bb.x1 - bb.x0, bh = bb.y1 - bb.y0;
+      const Lw = d.ax, Tw = d.ay;
+      let tx = Lw + (x - bb.x0) * DOCK_K, ty = Tw - (bb.y1 - y) * DOCK_K;
+      const c0x = Lw + bw * DOCK_K / 2, c0y = Tw - bh * DOCK_K / 2, a = rotNow, ex = tx - c0x, ey = ty - c0y;   // the whole silhouette leans
+      tx = c0x + ex * Math.cos(a) - ey * Math.sin(a); ty = c0y + ex * Math.sin(a) + ey * Math.cos(a);
+      let ox = x + (tx - x) * d.e + swx * d.e * (1 - pp), oy = y + (ty - y) * d.e + swy * d.e * (1 - pp);
+      if (pp > 0) {
+        const qx = V.x + (x - (bb.x0 + bb.x1) / 2) * popK, qy = V.b + V.vh / 2 + (y - (bb.y0 + bb.y1) / 2) * popK;
+        ox += (qx - ox) * pp; oy += (qy - oy) * pp;
+      }
+      return [ox, oy];
+    };
+    const rotS = d ? -rotNow * d.e * (1 - pp) : 0;   // capsules lean with the tree (canvas angles are clockwise)
+    const rk = rr * KS;
+    if (d && d.ax != null) {   // where the end letter and a start letter of this trophy are on screen right now (the chain bonds attach there)
+      if (d.eId == null) archiveEnds(t);
+      const kk = sc * KS, en = t.nodes.find(n => n.id === d.eId), sn = t.nodes.find(n => n.id === d.sId);
+      if (en) { const [mx, my] = M(en.x, en.y), g = molGeom(en.str), a = g.atoms[g.atoms.length - 1]; d.pe = [SX(mx) + a.x * kk, SY(my) - (a.y + molShift(en.str)) * kk, AF * .5 * kk]; }
+      if (sn) {
+        const [mx, my] = M(sn.x, sn.y);
+        if (sn.lets.length) { const l = sn.lets[d.sK % sn.lets.length], [lx, ly] = M(l.x, l.y); d.ps = [SX(lx), SY(ly), rk * LRK * (l.s || 1)]; }
+        else { const a = molGeom(sn.str).atoms[0]; d.ps = [SX(mx) + a.x * kk, SY(my) - (a.y + molShift(sn.str)) * kk, AF * .5 * kk]; }
+      }
+    }
+    const silCol = sil ? silColor(Math.min(1, Math.max(0, SY(M((t.bb.x0 + t.bb.x1) / 2, (t.bb.y0 + t.bb.y1) / 2)[1]) / ch)), dp) : null;
+    ctx.lineWidth = 1; ctx.strokeStyle = sil ? silCol : t.harvest ? T.mol.bondGold : T.mol.bond; ctx.lineCap = "round";
+    for (const n of t.nodes) {
+      ctx.globalAlpha = Math.min(1, (G.t - n.born) / .5) * ga;
+      const [px, py] = M(n.x, n.y);
+      if (n.parent) { const [qx, qy] = M(n.parent.x, n.parent.y); linkBond(SX(qx), SY(qy), n.parent.str, sc * KS, SX(px), SY(py), n.str, sc * KS, Math.min(3, n.added.length), n); }   // one line per added letter, up to three
+      for (const l of n.lets) {   // a root word's source letters hang on the nearest atom
+        const [lx, ly] = M(l.x, l.y), sx = SX(lx), sy = SY(ly), cx0 = SX(px), cy0 = SY(py), kk = sc * KS;
+        const ats = molGeom(n.str).atoms;
+        if (l._ai == null || l._as !== n.str) {   // the atom a source letter hangs on is chosen once, so the bond never flickers between two neighbours
+          let bi = 0, bdd = 1e9;
+          for (let i = 0; i < ats.length; i++) { const dd = Math.hypot(cx0 + ats[i].x * kk - sx, cy0 - (ats[i].y + molShift(n.str)) * kk - sy); if (dd < bdd - 1e-6) { bdd = dd; bi = i; } }
+          l._ai = bi; l._as = n.str;
+        }
+        const best = [cx0 + ats[l._ai].x * kk, cy0 - (ats[l._ai].y + molShift(n.str)) * kk], bd = Math.hypot(best[0] - sx, best[1] - sy);
+        const vx = (best[0] - sx) / (bd || 1), vy = (best[1] - sy) / (bd || 1), g0 = rk * LRK * (l.s || 1), g1 = AF * .5 * kk;
+        if (bd > g0 + g1 + 2) { ctx.beginPath(); ctx.moveTo(sx + vx * g0, sy + vy * g0); ctx.lineTo(best[0] - vx * g1, best[1] - vy * g1); ctx.stroke(); }
+      }
+      for (const l of n.lets) { const [lx, ly] = M(l.x, l.y); glyphLean(SX(lx), SY(ly), rk * LRK * (l.s || 1), l.ch, sil ? silCol : T.lets.fill, sil ? "rgba(2,10,20,0)" : t.harvest ? T.lets.gold : T.lets.rim, sil ? "rgba(0,0,0,0)" : T.lets.text, sil ? .01 : 2, leanAngle(l.x, l.y, n.x, n.y) + rotS, false); }   // source letters: pale mint ring, nothing grows from them
+    }
+    for (const n of t.nodes) {
+      ctx.globalAlpha = Math.min(1, (G.t - n.born) / .4) * ga;
+      const [mx, my] = M(n.x, n.y);
+      const wob = d ? 0 : 1.5, x = SX(mx + Math.sin(G.t * 1.6 + n.id) * wob), y = SY(my + Math.cos(G.t * 1.3 + n.id) * wob);
+      const leaf = aliveKids(n) === 0;
+      let tc = T.lab ? "#0b1620" : "#c9f7dc";
+      if (n.done || t.harvest || (t.ripe && leaf)) tc = T.lab ? "#0b1620" : "#fff3c4";
+      if (sil) molecule(x, y, sc * KS, n.str, { bond: silCol, atom: silCol, sil: true });
+      else {
+        let bc = T.mol.bond, ac = T.mol.atom;
+        if (leaf) { bc = T.mol.bondLeaf; ac = T.mol.atomLeaf; }
+        if (n.done || t.harvest || (t.ripe && leaf)) { bc = T.mol.bondGold; ac = T.mol.atomGold; }
+        const hz = n.hz || 1, kk = sc * KS * hz, ru = subOf(n.str);
+        const drawIt = () => {
+          molecule(x, y, kk, n.str, { bond: bc, atom: ac, shift: molShift(n.str), gens: wordGens(n) });
+          if (ru) subText(x, y + (CAPH - 6) * kk, n.w * kk - 8, Math.max(9, 12.5 * kk), tc, ru);
+        };
+        if (hz > 1.03) late.push(drawIt); else drawIt();
+      }
+      if (!t.harvest && t.ripe && leaf && n.done) {
+        ctx.globalAlpha = .9; ctx.fillStyle = T.warn; ctx.font = "600 " + Math.max(10, Math.round(rr * .6)) + "px system-ui,sans-serif";
+        ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+        ctx.fillText(!canExtend(n) ? "Больше слов нет" : "Зафиксировано", x, y - (CAPH + 3) * sc * KS);
+        ctx.globalAlpha = 1;
+      }
+      if (!t.harvest && G.hintT > 0 && G.hint.has(n.id)) {
+        const hi = G.hint.get(n.id), c = hi.c, al = Math.min(1, G.hintT), col = c > 0 ? T.good : T.warn;
+        ctx.globalAlpha = al * (.65 + .35 * Math.sin(G.t * 7));
+        if (c > 0) capsule(x, y, n.w * sc * 1.15 + 8, 2 * rr * 1.2 * CAPK + 8, "rgba(74,222,128,.10)", col, "", "", 2.5, false, n.tilt);
+        ctx.globalAlpha = al;
+        ctx.fillStyle = col; ctx.font = "700 " + Math.max(11, Math.round(rr * .72)) + "px system-ui,sans-serif";
+        ctx.textAlign = "right"; ctx.textBaseline = "bottom";   // in the upper right corner of the word's cell, clear of its translation
+        ctx.fillText(c > 0 ? "+" + c : "✓", x + n.w * sc * KS / 2, y - CAPH * sc * KS + 2);
+        ctx.globalAlpha = 1;
+      }
+      if (!t.harvest && G.builder.base === n) {
+        const k = 1.12 + .03 * Math.sin(G.t * 6);
+        capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2, false, n.tilt);
+      }
+    }
+    if (t.ripe && !t.harvest) {
+      // countdown: why and when this branch ripens
+      let minX = 1e9, maxX = -1e9, maxY = -1e9;
+      for (const n of t.nodes) { minX = Math.min(minX, n.box.x0); maxX = Math.max(maxX, n.box.x1); maxY = Math.max(maxY, n.box.y1 - R); }
+      const fs = Math.max(12, Math.round(R * ks * .8)), bw = Math.max(90, 150 * ks);
+      const left = Math.max(0, ripeT() - t.ripeT), cx = cw / 2;
+      const cy = wy - 8 - fs * 1.75 - ripeSlot++ * fs * 3.5;   // the notice rests just above the wave, where it hides no words
+      ctx.globalAlpha = 1; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+      ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
+      const pw = Math.max(bw + 20, ctx.measureText("Ветви дошли до конца · Можно добавить побег").width + 28);   // a pill behind the text keeps it readable over words
+      ctx.fillStyle = T.lab ? "rgba(255,255,255,.86)" : "rgba(5,12,20,.7)"; ctx.beginPath(); ctx.roundRect(cx - pw / 2, cy - fs * 1.45, pw, fs * 3.2, fs * .7); ctx.fill();
+      ctx.fillStyle = T.ripeTitle; ctx.font = "700 " + fs + "px system-ui,sans-serif";
+      ctx.fillText("🌿 Урожай через " + left.toFixed(1) + " с", cx, cy);
+      ctx.fillStyle = T.ripeSub; ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
+      ctx.fillText("Ветви дошли до конца · Можно добавить побег", cx, cy + fs * 1.25);
+      ctx.fillStyle = T.barBg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw, 4);
+      ctx.fillStyle = T.barFg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw * (left / ripeT()), 4);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  }
+  drawTrees(t => !isBg(t));
+  ctx.globalAlpha = 1; for (const f of late) f();
+  ctx.restore();
+
+  drawOrbit(cw, wy, SX, SY, ks);
+
+  // picked letters fly from the swarm to their places in the new word
+  for (const f of G.fx) {
+    const p = f.t / .9, e = 1 - Math.pow(1 - Math.min(1, p * 1.6), 2);
+    f.from.forEach((l, i) => {
+      const to = f.to[i]; if (!to) return;
+      ctx.globalAlpha = Math.max(0, 1 - p) * .85;
+      ctx.strokeStyle = T.fly[3]; ctx.lineWidth = 2;
+      const x0 = l.field ? SX(l.x) : KX(l.x), y0 = l.field ? SY(l.y) : KY(l.y), x1 = SX(to.x), y1 = SY(to.y);   // from the band (or from a floating letter) to the field
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      glyph(x0 + (x1 - x0) * e, y0 + (y1 - y0) * e, R * ks + (rr * LRK - R * ks) * e, l.ch, T.fly[0], T.fly[1], T.fly[2], 2);
+    });
+    ctx.globalAlpha = 1;
+  }
+}
+
+let last = performance.now();
+let lastDraw = 0;
+const fpsStat = { n: 0, ms: 0, t0: 0 };
+function frame(now) {
+  requestAnimationFrame(frame);
+  if (now - lastDraw < 1000 / Q.fps - 3) return;   // the quality profile caps the frame rate (fewer frames, less heat)
+  lastDraw = now;
+  const dt = Math.min(.04, (now - last) / 1000); last = now;
+  const w0 = performance.now(); update(dt); draw(); const spent = performance.now() - w0;
+  fpsStat.n++; fpsStat.ms += spent;
+  if (now - fpsStat.t0 >= 500) {   // a small counter: frames per second, the time one frame costs the processor, the canvas size
+    if ($("showfps").checked) setText($("fps"), "FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " мс \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value);
+    else setText($("fps"), "");
+    fpsStat.n = 0; fpsStat.ms = 0; fpsStat.t0 = now;
+  }
+}
+
+/* ---------- autosave ---------- */
+// The running game is written to localStorage every few seconds and when the page is hidden or closed, and restored on the next visit.
+// Not saved: swarm letters (they drift back to their keys by themselves), effects, hints. A finished game leaves no save.
+const SAVE_KEY = "db_save", SAVE_VER = 1;
+function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
+function readSave() { try { const d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return d && d.v === SAVE_VER ? d : null; } catch (e) { return null; } }
+function saveGame() {
+  if (G.over || !G.trees) return;
+  try {
+    const rec = n => ({ id: n.id, str: n.str, added: n.added, parent: n.parent ? n.parent.id : null, alive: n.alive, done: n.done, x: n.x, y: n.y, w: n.w, hh: n.hh, born: n.born, box: n.box, lets: n.lets, tilt: n.tilt, words: n.words || null });
+    const b = G.builder;
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      v: SAVE_VER, tier: +$("tier").value, onlytr: $("onlytr").checked,
+      W: G.W, H: G.H, tW: G.tW, tH: G.tH, score: G.score, streak: G.streak, wordsN: G.wordsN, agony: G.agony, t: G.t, pressureT: G.pressureT,
+      usedVer: G.usedVer, dockOff: G.dockOff, harvested: G.harvested, used: [...G.used], dead: G.dead,
+      trees: G.trees.map(t => ({ pts: t.pts, harvest: t.harvest, t: t.t, ripe: t.ripe, ripeT: t.ripeT, bb: t.bb || null, dock: t.dock || null, nodes: t.nodes.map(rec) })),
+      builder: { base: b.base ? b.base.id : null, letters: b.letters, rootX: b.rootX, newMode: b.newMode }
+    }));
+  } catch (e) {}
+}
+function restoreGame(d) {
+  const byId = new Map();
+  G.trees = d.trees.map(td => {
+    const t = { nodes: [], pts: td.pts, harvest: td.harvest, t: td.t, ripe: td.ripe, ripeT: td.ripeT };
+    if (td.bb) t.bb = td.bb;
+    if (td.dock) t.dock = td.dock;
+    for (const r of td.nodes) {
+      const n = { ...r, parent: r.parent == null ? null : byId.get(r.parent) || null, children: [], tree: t };   // parents always come before their children
+      if (n.parent) n.parent.children.push(n);
+      byId.set(n.id, n); t.nodes.push(n); nodeId = Math.max(nodeId, n.id + 1);
+    }
+    return t;
+  });
+  Object.assign(G, { W: d.W, H: d.H, tW: d.tW, tH: d.tH, score: d.score, streak: d.streak, wordsN: d.wordsN, agony: d.agony, t: d.t, pressureT: d.pressureT,
+    usedVer: d.usedVer, dockOff: d.dockOff, harvested: d.harvested, used: new Set(d.used), dead: d.dead });
+  const b = G.builder, sb = d.builder;
+  b.base = sb.base == null ? null : byId.get(sb.base) || null;
+  b.letters = sb.letters.filter(ch => G.swarm.some(l => l.ch === ch)); b.src = b.letters.map(ch => G.swarm.find(l => l.ch === ch));
+  b.rootX = sb.rootX; b.newMode = sb.newMode;
+  ensureBase(); updateTray(); updateHud();
+}
+const SET_IDS = ["tier", "agony", "ripe", "assist", "quality"], SET_CHECKS = ["onlytr", "hints", "pressure", "fsauto", "showfps"];
+function loadSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem("db_settings") || "{}");
+    for (const id of SET_IDS) if (s[id] != null && [...$(id).options].some(o => o.value === s[id])) $(id).value = s[id];
+    for (const id of SET_CHECKS) if (typeof s[id] === "boolean") $(id).checked = s[id];
+  } catch (e) {}
+}
+function saveSettings() {
+  const s = {}; for (const id of SET_IDS) s[id] = $(id).value; for (const id of SET_CHECKS) s[id] = $(id).checked;
+  try { localStorage.setItem("db_settings", JSON.stringify(s)); } catch (e) {}
+}
+for (const id of [...SET_IDS, ...SET_CHECKS]) $(id).addEventListener("change", saveSettings);
+// full screen (Android Chrome and desktop browsers; iPhone has no such API: use "Add to Home Screen" there)
+const canFS = !!document.documentElement.requestFullscreen;
+function goFullscreen() {
+  if (!canFS || document.fullscreenElement) return;
+  document.documentElement.requestFullscreen({ navigationUI: "hide" }).then(() => { try { screen.orientation.lock("portrait").catch(() => {}); } catch (e) {} }).catch(() => {});
+}
+function toggleFullscreen() { if (document.fullscreenElement) document.exitFullscreen(); else goFullscreen(); }
+if (!canFS) { $("fs").style.display = "none"; $("fsauto").parentElement.style.display = "none"; }
+$("fs").onclick = () => { toggleFullscreen(); $("panel").classList.remove("open"); };
+document.addEventListener("pointerdown", () => { if ($("fsauto").checked) goFullscreen(); }, true);   // browsers allow it only from a tap
+setInterval(saveGame, 3000);
+document.addEventListener("visibilitychange", () => { if (document.hidden) saveGame(); });
+window.addEventListener("pagehide", saveGame);
+
+/* ---------- boot ---------- */
+loadSettings();
+{ let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
+  if (!stored) $("quality").value = (navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) < 900) ? "low" : "high"; }   // a phone starts on the light profile
+applyQuality();
+const SAVED = readSave();   // read before reset(), which clears the stored game
+buildLex(+$("tier").value);
+reset(); layoutMode(); updateDiff();
+if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast("Партия восстановлена", "gold"); }
+$("ver").textContent = "Dead Branch v" + VERSION;
+requestAnimationFrame(frame);
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js").catch(() => {});   // an offline copy once it has been opened with a network
+window.__dbg = { G, cam, step: dt => { update(dt); draw(); }, commit, WORDS: () => WORDS, PRE: () => PRE, reset };
+</script>
+</body>
+</html>
