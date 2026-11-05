@@ -247,11 +247,11 @@ const I18N = {
 };
 let LANG = "en"; try { LANG = localStorage.getItem("db_lang") || LANG; } catch (e) {}
 if (!I18N[LANG]) LANG = "en";
-function t(key, ...a) { let s = (I18N[LANG][key] != null ? I18N[LANG][key] : I18N.en[key]) || key; a.forEach((v, i) => { s = s.split("%" + i).join(v); }); return s; }
+function tr(key, ...a) { let s = (I18N[LANG][key] != null ? I18N[LANG][key] : I18N.en[key]) || key; a.forEach((v, i) => { s = s.split("%" + i).join(v); }); return s; }
 function applyLang() {
-  document.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = t(e.dataset.i18n); });
-  document.querySelectorAll("[data-i18n-title]").forEach(e => { e.title = t(e.dataset.i18nTitle); });
-  document.querySelectorAll("[data-i18n-aria]").forEach(e => { e.setAttribute("aria-label", t(e.dataset.i18nAria)); });
+  document.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = tr(e.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-title]").forEach(e => { e.title = tr(e.dataset.i18nTitle); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(e => { e.setAttribute("aria-label", tr(e.dataset.i18nAria)); });
   document.documentElement.lang = LANG;
 }
 function rrPath(x, y, w, h, r) {   // rounded rectangle from plain arcs: ctx.roundRect flickered between round and sharp corners on iPad Safari
@@ -278,7 +278,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.5";   // keep in sync with the VERSION file
+const VERSION = "0.0.6";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -670,14 +670,14 @@ function commit() {
   if (G.over) return;
   const b = G.builder, base = b.base, L = b.letters, need = base ? 1 : 2;
   let made = null;
-  if (L.length < need) { toast(base ? t("addLetters") : t("need2"), "bad"); return; }
+  if (L.length < need) { toast(base ? tr("addLetters") : tr("need2"), "bad"); return; }
   const s = (base ? base.str : "") + L.join("");
   if (WORDS.has(s) && !G.used.has(s)) {
     const from = b.src.map(l => ({ ch: l.ch, x: l.x, y: l.y, field: l.field }));
     const ab = base ? null : autoBase(s);
     if (ab) made = success(s, ab, [...s.slice(ab.str.length)], null, from);
     else made = success(s, base, L, b.rootX, from);
-  } else fail(s, base, L, WORDS.has(s) ? t("alreadyLive") : null);
+  } else fail(s, base, L, WORDS.has(s) ? tr("alreadyLive") : null);
   clearBuilder();
   if (made && selectable(made)) G.builder.base = made;   // keep growing the word that was just made
   ensureBase();
@@ -709,7 +709,7 @@ function success(s, base, L, rootX, from) {
 function fail(s, base, L, why) {
   G.streak = 0;
   const alt = FOLD.get(fold(s));
-  toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? t("maybe", alt[0]) : ""), "bad");
+  toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? tr("maybe", alt[0]) : ""), "bad");
   if (!base) {
     for (const ch of L) spawnDead(ch, (Math.random() - .5) * G.tW * .5, G.tH - R);
     return;
@@ -746,7 +746,7 @@ function checkHarvest(tree) {
   if (!tree.ripe) return;
   if (!wasRipe) tree.ripeT = 0;
   if (!tree.nodes.some(n => n.alive && !n.done && aliveKids(n) < MAXKIDS && canExtend(n))) { harvest(tree); return; }
-  if (!wasRipe) toast(t("branchesEnded", ripeT()), "gold");
+  if (!wasRipe) toast(tr("branchesEnded", ripeT()), "gold");
 }
 function harvest(tree) {
   tree.harvest = true; tree.t = 0; G.harvested++;
@@ -755,7 +755,7 @@ function harvest(tree) {
   tree.bb = bb;
   const bonus = Math.round(tree.pts * .25);
   G.score += bonus;
-  toast(t("harvested", bonus), "gold");
+  toast(tr("harvested", bonus), "gold");
 }
 
 function fixWord() {
@@ -785,13 +785,16 @@ const ARCH_EDGE = 320, ARCH_EDGE_OLD = 154;   // the archive of finished branche
 function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
   const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
   const hx = G.W / 2 + 40;   // the camera may centre a word even at the very wall
-  const xr = Math.max(0, hx - vw / 2);   // the camera may not leave the field so far that the view shows only empty water (on a wide screen the field fits and there is nothing to pan)
-  let x0 = -xr, x1 = xr, top = G.H;
+  const f = G.focus, fx = f ? f.x : 0, reach = vw * .4;   // the word being worked on may be dragged almost to either edge of the screen, no further: the view never shows only empty water
+  let x0 = Math.max(-hx, fx - reach), x1 = Math.min(hx, fx + reach), top = G.H;
+  if (x0 > x1) x0 = x1 = Math.max(-hx, Math.min(hx, fx));
   if (!archiveLocked()) for (const t of G.trees) if (t.dock && t.dock.ax != null) {
     const w = (t.bb.x1 - t.bb.x0) * DOCK_K;
     x0 = Math.min(x0, t.dock.axT - 40 + vw / 2 - 20); x1 = Math.max(x1, t.dock.axT + w + 40 - vw / 2 + 20); top = Math.max(top, t.dock.ay + 20);
   }
-  return { vw, vh, hx, x0, x1, b0: G.Hs - vh * .55, b1: Math.max(G.Hs, top - vh) + 40 };   // b0 below the wave line lets a word near the bottom be lifted to the middle of the field
+  let b1 = Math.max(G.Hs, top - vh) + 40;
+  if (f) b1 = Math.min(b1, Math.max(G.Hs, f.y - 70 / sc));   // the word can not be pushed down under the wave: at least a strip of it stays above the water
+  return { vw, vh, hx, x0, x1, b0: G.Hs - vh * .55, b1 };   // b0 below the wave line lets a word near the bottom be lifted to the middle of the field
 }
 function camUpdate(dt) {
   if (!cv.clientWidth) return;
@@ -871,7 +874,7 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
   if (tapTrophy(false)) return;
   let bestL = null; bd = R * 1.9;   // generous: the nearest letter wins, so there are no dead gaps between letters
   for (const l of G.swarm) { if (l.show < .5) continue; const d = Math.hypot(l.x - p.x, l.y - p.y); if (d < bd) { bd = d; bestL = l; } }
-  if (bestL && !b.base && !b.newMode && allNodes().some(selectable)) { toast(t("pickFirst"), "bad"); return; }
+  if (bestL && !b.base && !b.newMode && allNodes().some(selectable)) { toast(tr("pickFirst"), "bad"); return; }
   if (bestL && b.letters.length < 14) {
     if (!b.letters.length && !b.base) b.rootX = placeRoot(nodeW("aa"), 2, null).x;
     b.letters.push(bestL.ch); b.src.push(bestL); bestL.pulse = 1; updateTray();
@@ -918,7 +921,7 @@ function holdButton(el, ms, done, tap) {
 // tap: erase a letter. Hold: finish the branch (when nothing is typed) or erase the whole typed word
 holdButton($("back"), 650, () => { const b = G.builder; if (b.letters.length) { b.letters = []; b.src = []; updateTray(); } else finishTree(); }, () => {
   const b = G.builder;
-  if (b.letters.length) { b.letters.pop(); b.src.pop(); } else if (b.newMode) { b.newMode = false; ensureBase(); } else if (b.base) toast(t("holdBack"), "gold");
+  if (b.letters.length) { b.letters.pop(); b.src.pop(); } else if (b.newMode) { b.newMode = false; ensureBase(); } else if (b.base) toast(tr("holdBack"), "gold");
   updateTray();
 });
 // "finish the branch": when the player has no idea what to add, the whole tree is counted now and goes to the wall
@@ -934,22 +937,22 @@ function finishTree() {
 const typedWord = () => (G.builder.base ? G.builder.base.str : "") + G.builder.letters.join("");
 $("nowrd").onclick = () => {
   const b = G.builder, s = typedWord();
-  if (!b.letters.length) { toast(t("typeMark"), "bad"); return; }
-  if (!WORDS.has(s)) { toast(t("notInGame"), "bad"); return; }
-  if (ruOf(s)) { toast(t("verified"), "bad"); return; }
+  if (!b.letters.length) { toast(tr("typeMark"), "bad"); return; }
+  if (!WORDS.has(s)) { toast(tr("notInGame"), "bad"); return; }
+  if (ruOf(s)) { toast(tr("verified"), "bad"); return; }
   BANNED.add(s); ADDED.delete(s); WORDS.delete(s); saveLists();
-  toast(t("marked", s), "gold");
+  toast(tr("marked", s), "gold");
   b.letters = []; b.src = []; updateTray();
 };
 $("yesw").onclick = () => {
   const b = G.builder, s = typedWord();
-  if (!b.letters.length) { toast(t("typeAdd"), "bad"); return; }
-  if (WORDS.has(s)) { toast(t("alreadyIn"), "bad"); return; }
+  if (!b.letters.length) { toast(tr("typeAdd"), "bad"); return; }
+  if (WORDS.has(s)) { toast(tr("alreadyIn"), "bad"); return; }
   BANNED.delete(s); ADDED.add(s); addWordToLex(s); saveLists();
-  toast(t("added", s), "gold");
+  toast(tr("added", s), "gold");
   updateTray();
 };
-$("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast(t("listsReset"), "gold"); };
+$("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast(tr("listsReset"), "gold"); };
 $("newb").onclick = () => {
   const b = G.builder;
   b.newMode = !b.newMode;
@@ -959,7 +962,7 @@ $("newb").onclick = () => {
 // hint: shows which words can still grow (how many unused longer words start with them) and which are finished
 $("hintb").onclick = () => {
   const nodes = allNodes().filter(n => n.alive && !n.tree.harvest);
-  if (!nodes.length) { toast(t("noBranches"), "bad"); return; }
+  if (!nodes.length) { toast(tr("noBranches"), "bad"); return; }
   G.hint = new Map();
   for (const n of nodes) {
     let c = 0; const cand = [];
@@ -986,10 +989,10 @@ $("hintb").onclick = () => {
   for (const n of nodes) {
     const hi = G.hint.get(n.id);
     rows.push(hi.c > 0
-      ? `<div><b>${n.str.toUpperCase()}</b> · ${t("more", hi.c)} <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
-      : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ${t("finished")}</div>`);
+      ? `<div><b>${n.str.toUpperCase()}</b> · ${tr("more", hi.c)} <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
+      : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ${tr("finished")}</div>`);
   }
-  $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + t("close") + '">\u00d7</button>' + rows.join("");
+  $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + tr("close") + '">\u00d7</button>' + rows.join("");
   $("hintpanel").classList.add("open");
   clearTimeout(window.__hintTO);
   window.__hintTO = setTimeout(() => $("hintpanel").classList.remove("open"), 10000);
@@ -1027,12 +1030,12 @@ function updateTray() {
   const s = bs + ls, w = $("word"); w.className = "";
   const ru = s && WORDS.has(s) ? ruOf(s) : "", lem = ru ? lemmaOf(s) : "", g = ru ? gramOf(s) : null;
   const alt = !ru && ls && !WORDS.has(s) ? FOLD.get(fold(s)) : null;   // typed with plain letters where the word needs diacritics
-  if (alt) { $("ru").textContent = t("diacritics") + " " + alt.slice(0, 3).join(", "); } else
-  $("ru").textContent = ru ? "= " + ru + (g ? " — " + g[1] : "") + (lem && lem !== s ? "  · " + t("formOf") + " " + lem : "") : "";
+  if (alt) { $("ru").textContent = tr("diacritics") + " " + alt.slice(0, 3).join(", "); } else
+  $("ru").textContent = ru ? "= " + ru + (g ? " — " + g[1] : "") + (lem && lem !== s ? "  · " + tr("formOf") + " " + lem : "") : "";
   const hint = $("hint");
-  if (b.newMode && !ls) hint.textContent = t("newHint");
-  else if (!ls && !bs) hint.textContent = t("wordHint");
-  else if (!ls) hint.textContent = t("plusLetters");
+  if (b.newMode && !ls) hint.textContent = tr("newHint");
+  else if (!ls && !bs) hint.textContent = tr("wordHint");
+  else if (!ls) hint.textContent = tr("plusLetters");
   else hint.textContent = "";
   $("newb").style.background = b.newMode ? "#fbbf24" : ""; $("newb").style.color = b.newMode ? "#1a1204" : "";
   if ($("hints").checked && ls) {
@@ -1356,7 +1359,7 @@ function update(dt) {
   }
   if ($("pressure").checked) {
     G.pressureT += dt;
-    if (G.pressureT > 18) { G.pressureT = 0; spawnDead(ALPHA[Math.floor(Math.random() * ALPHA.length)], (Math.random() - .5) * G.W * .6, G.H); toast(t("fell"), "bad"); }
+    if (G.pressureT > 18) { G.pressureT = 0; spawnDead(ALPHA[Math.floor(Math.random() * ALPHA.length)], (Math.random() - .5) * G.W * .6, G.H); toast(tr("fell"), "bad"); }
   }
   const dn = measureDensity();
   G.density += (dn - G.density) * Math.min(1, dt * 4);
@@ -1369,7 +1372,7 @@ function update(dt) {
   setText($("denst"), Math.round(f * 100) + "%");
   const lim = +$("agony").value;
   const cdOpen = G.agony > .05; if ($("cd")._o !== cdOpen) { $("cd")._o = cdOpen; $("cd").classList.toggle("open", cdOpen); }
-  if (cdOpen) setText($("cd"), t("cdWarn", Math.max(0, lim - G.agony).toFixed(1)));
+  if (cdOpen) setText($("cd"), tr("cdWarn", Math.max(0, lim - G.agony).toFixed(1)));
   if (G.agony > lim) gameOver();
   updateHud();
 }
@@ -1377,7 +1380,7 @@ function gameOver() {
   G.over = true; $("cd").classList.remove("open"); clearSave();
   if (G.score > best) { best = G.score; try { localStorage.setItem("db_best", best); } catch (e) {} }
   $("fscore").textContent = G.score;
-  $("fsub").textContent = t("overSub", G.wordsN, best);
+  $("fsub").textContent = tr("overSub", G.wordsN, best);
   $("over").classList.add("open");
   updateTray();
 }
@@ -1816,7 +1819,7 @@ function draw() {
       if (!t.harvest && t.ripe && leaf && n.done) {
         ctx.globalAlpha = .9; ctx.fillStyle = T.warn; ctx.font = "600 " + Math.max(10, Math.round(rr * .6)) + "px system-ui,sans-serif";
         ctx.textAlign = "center"; ctx.textBaseline = "bottom";
-        ctx.fillText(!canExtend(n) ? t("noMore") : t("locked"), x, y - (CAPH + 3) * sc * KS);
+        ctx.fillText(!canExtend(n) ? tr("noMore") : tr("locked"), x, y - (CAPH + 3) * sc * KS);
         ctx.globalAlpha = 1;
       }
       if (!t.harvest && G.hintT > 0 && G.hint.has(n.id)) {
@@ -1843,12 +1846,12 @@ function draw() {
       const cy = wy - 8 - fs * 1.75 - ripeSlot++ * fs * 3.5;   // the notice rests just above the wave, where it hides no words
       ctx.globalAlpha = 1; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
       ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
-      const pw = Math.max(bw + 20, ctx.measureText(t("ripeSub")).width + 28);   // a pill behind the text keeps it readable over words
+      const pw = Math.max(bw + 20, ctx.measureText(tr("ripeSub")).width + 28);   // a pill behind the text keeps it readable over words
       ctx.fillStyle = T.lab ? "rgba(255,255,255,.86)" : "rgba(5,12,20,.7)"; ctx.beginPath(); rrPath(cx - pw / 2, cy - fs * 1.45, pw, fs * 3.2, fs * .7); ctx.fill();
       ctx.fillStyle = T.ripeTitle; ctx.font = "700 " + fs + "px system-ui,sans-serif";
-      ctx.fillText("🌿 " + t("ripeTitle", left.toFixed(1)), cx, cy);
+      ctx.fillText("🌿 " + tr("ripeTitle", left.toFixed(1)), cx, cy);
       ctx.fillStyle = T.ripeSub; ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
-      ctx.fillText(t("ripeSub"), cx, cy + fs * 1.25);
+      ctx.fillText(tr("ripeSub"), cx, cy + fs * 1.25);
       ctx.fillStyle = T.barBg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw, 4);
       ctx.fillStyle = T.barFg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw * (left / ripeT()), 4);
     }
@@ -1975,7 +1978,7 @@ applyQuality();
 const SAVED = readSave();   // read before reset(), which clears the stored game
 buildLex(+$("tier").value);
 reset(); layoutMode(); updateDiff();
-if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast(t("restored"), "gold"); }
+if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast(tr("restored"), "gold"); }
 $("ver").textContent = "Dead Branch v" + VERSION;
 requestAnimationFrame(frame);
 if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js").catch(() => {});   // an offline copy once it has been opened with a network
