@@ -776,12 +776,14 @@ function fieldView() {   // which part of the world the branch field shows right
   const x = cam.x, b = cam.b;
   return { sc, vw, vh, x, b, x0: x - vw / 2, x1: x + vw / 2, top: b + vh };
 }
+// while a branch is being worked on (a word is picked or letters are typed) the archive of finished branches is shut: no popping them out, no panning over to them
+const archiveLocked = () => !!G.builder.base || G.builder.letters.length > 0;
 const ARCH_EDGE = 154;   // the archive of finished branches starts this far from the centre, just past the visible edge: a sliver of the newest one peeks in
 function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
   const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
   const hx = G.W / 2 + 40;   // the camera may centre a word even at the very wall
   let x0 = -hx, x1 = hx, top = G.H;
-  for (const t of G.trees) if (t.dock && t.dock.ax != null) {
+  if (!archiveLocked()) for (const t of G.trees) if (t.dock && t.dock.ax != null) {
     const w = (t.bb.x1 - t.bb.x0) * DOCK_K;
     x0 = Math.min(x0, t.dock.axT - 40 + vw / 2 - 20); x1 = Math.max(x1, t.dock.axT + w + 40 - vw / 2 + 20); top = Math.max(top, t.dock.ay + 20);
   }
@@ -790,6 +792,7 @@ function camBounds() {   // how far the camera may go: over the whole field and 
 function camUpdate(dt) {
   if (!cv.clientWidth) return;
   const B = camBounds(), f = G.focus, bs = G.builder;
+  if (archiveLocked()) { cam.x = Math.max(B.x0, Math.min(B.x1, cam.x)); for (const t of G.trees) if (t.dock) t.dock.popT = 99; }   // a trophy that is open sinks back
   const key = (bs.base ? bs.base.id : -1) + ":" + bs.letters.length + ":" + G.trees.reduce((a, t) => a + t.nodes.length, 0) + ":" + G.wordsN;
   if (key !== cam.key) { cam.key = key; cam.manual = false; }   // growing or typing something brings the camera back to the work
   if (cam.manual && !cam.drag && !cam.pinch && performance.now() - cam.lastDrag > 6000) cam.manual = false;   // left alone for 6 s: back to the work, which sits in the middle of the field
@@ -843,7 +846,7 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
   // tap a trophy: it pops out so its words can be read; only ONE trophy is shown at a time (the previous one sinks back).
   // Resting trophies are the background: live words win a tap over them.
   const tapTrophy = poppedOnly => {
-    if (inBand) return false;
+    if (inBand || archiveLocked()) return false;
     for (const t of [...G.trees].sort((a, b) => (b.dock ? b.dock.pop : 0) - (a.dock ? a.dock.pop : 0))) if (t.dock && t.dock.e > .9 && (!poppedOnly || t.dock.pop > .5)) {
       const r = dockRect(t);
       if (p.x > r.x0 - 8 && p.x < r.x1 + 8 && p.y > r.y0 - 8 && p.y < r.y1 + 8) {
