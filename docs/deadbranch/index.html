@@ -105,50 +105,53 @@
 </style>
 </head>
 <body>
+<body>
 <div id="hud">
-  <div><div class="big" id="score">0</div><div class="sub"><span id="diff" title="сложность словаря"></span><span>·</span><span id="streak" title="множитель за серию">×1.0</span><span>·</span><span>слов <span id="wn">0</span></span><span>·</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l7-7"/></svg><span id="tn" title="собранные ветки">0</span></div></div>
-  <div class="grow"><div class="sub" style="justify-content:flex-end">давление <b id="denst">0%</b></div><div id="dens"><i></i></div></div>
+  <div><div class="big" id="score">0</div><div class="sub"><span id="diff" data-i18n-title="t_diff"></span><span>·</span><span id="streak" data-i18n-title="t_streak">×1.0</span><span>·</span><span><span data-i18n="words"></span> <span id="wn">0</span></span><span>·</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l7-7"/></svg><span id="tn" data-i18n-title="t_branches">0</span></div></div>
+  <div class="grow"><div class="sub" style="justify-content:flex-end"><span data-i18n="pressure"></span> <b id="denst">0%</b></div><div id="dens"><i></i></div></div>
   <button id="gear" aria-label="settings">⚙</button>
 </div>
 <div id="coords"></div>
 <div id="fps"></div>
 <div id="panel">
-  <label>Раскладка букв
-    <select id="layout"><option value="qwerty">как QWERTY</option><option value="fan">веер под палец</option></select>
+  <label><span data-i18n="language"></span>
+    <select id="lang"><option value="en">English</option><option value="ru">Русский</option></select>
   </label>
-  <label>Оформление
-    <select id="theme"><option value="lab">лаборатория</option><option value="deep">глубина</option></select>
+  <label><span data-i18n="layout"></span>
+    <select id="layout"><option value="qwerty" data-i18n="o_qwerty"></option><option value="fan" data-i18n="o_fan"></option></select>
   </label>
-  <label>Качество
-    <select id="quality"><option value="ultra">максимальное (с размытием)</option><option value="high">высокое</option><option value="med">среднее</option><option value="low">низкое</option></select>
+  <label><span data-i18n="theme"></span>
+    <select id="theme"><option value="lab" data-i18n="o_lab"></option><option value="deep" data-i18n="o_deep"></option></select>
   </label>
-  <label>Счётчик FPS <input type="checkbox" id="showfps" checked></label>
-  <label>Подсказка букв
-    <select id="assist"><option value="off">нет</option><option value="valid">только подходящие</option><option value="decoy" selected>подходящие + 3 лишних</option></select>
+  <label><span data-i18n="quality"></span>
+    <select id="quality"><option value="ultra" data-i18n="o_ultra"></option><option value="high" data-i18n="o_high"></option><option value="med" data-i18n="o_med"></option><option value="low" data-i18n="o_low"></option></select>
   </label>
-  <label>Рука
-    <select id="hand"><option value="right">правая</option><option value="left">левая</option></select>
+  <label><span data-i18n="showfps"></span> <input type="checkbox" id="showfps" checked></label>
+  <label><span data-i18n="assist"></span>
+    <select id="assist"><option value="off" data-i18n="o_aoff"></option><option value="valid" data-i18n="o_avalid"></option><option value="decoy" selected data-i18n="o_adecoy"></option></select>
   </label>
-  <label>Словарь
-    <select id="tier"><option value="1">жёсткий</option><option value="2">средний</option><option value="3" selected>лёгкий</option></select>
+  <label><span data-i18n="hand"></span>
+    <select id="hand"><option value="right" data-i18n="o_right"></option><option value="left" data-i18n="o_left"></option></select>
   </label>
-  <label>Таймер конца
-    <select id="agony"><option value="2">сложный · 2 с</option><option value="10">средний · 10 с</option><option value="30" selected>лёгкий · 30 с</option></select>
+  <label><span data-i18n="tier"></span>
+    <select id="tier"><option value="1" data-i18n="o_t1"></option><option value="2" data-i18n="o_t2"></option><option value="3" selected data-i18n="o_t3"></option></select>
   </label>
-  <label>Время до урожая
-    <select id="ripe"><option value="8">сложное · 8 с</option><option value="15">среднее · 15 с</option><option value="30" selected>лёгкое · 30 с</option></select>
+  <label><span data-i18n="agony"></span>
+    <select id="agony"><option value="2" data-i18n="o_g2"></option><option value="10" data-i18n="o_g10"></option><option value="30" selected data-i18n="o_g30"></option></select>
   </label>
-  <label>Только слова с переводом <input type="checkbox" id="onlytr" checked></label>
-  <label>Подсказки <input type="checkbox" id="hints" checked></label>
-  <label>Давление по таймеру <input type="checkbox" id="pressure"></label>
-  <label>Рекорд <b id="best">0</b></label>
-  <button id="fs" style="width:100%;margin-top:6px">Во весь экран</button>
-  <label>Весь экран по первому касанию <input type="checkbox" id="fsauto"></label>
-  <button id="restart" style="width:100%;margin-top:6px">Новая игра</button>
-  <button id="resetlists" style="width:100%;margin-top:6px">Сбросить мои отметки слов</button>
+  <label><span data-i18n="ripe"></span>
+    <select id="ripe"><option value="8" data-i18n="o_r8"></option><option value="15" data-i18n="o_r15"></option><option value="30" selected data-i18n="o_r30"></option></select>
+  </label>
+  <label><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr" checked></label>
+  <label><span data-i18n="hints"></span> <input type="checkbox" id="hints" checked></label>
+  <label><span data-i18n="pressureT"></span> <input type="checkbox" id="pressure"></label>
+  <label><span data-i18n="best"></span> <b id="best">0</b></label>
+  <button id="fs" style="width:100%;margin-top:6px" data-i18n="fullscreen"></button>
+  <label><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
+  <button id="restart" style="width:100%;margin-top:6px" data-i18n="restart"></button>
+  <button id="resetlists" style="width:100%;margin-top:6px" data-i18n="resetlists"></button>
   <div id="ver" style="margin-top:8px;font-size:11px;color:#6b8294;text-align:center"></div>
-  <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer">Источники данных</summary>
-    Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md</details>
+  <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer" data-i18n="sources"></summary><span data-i18n="sourcesText"></span></details>
 </div>
 <div id="cd"></div>
 <div id="toasts"></div>
@@ -156,21 +159,21 @@
 <canvas id="c"></canvas>
 <div id="tray">
   <div id="wzone">
-    <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint">Собери слово</span></div>
+    <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint"></span></div>
     <div id="sub">
       <div id="ru"></div>
-      <button class="chip" id="nowrd" hidden title="Отметить: такого слова нет">✗ Нет такого слова</button>
-      <button class="chip" id="yesw" hidden title="Такое слово есть: добавить в игру">✓ Такое слово есть</button>
+      <button class="chip" id="nowrd" hidden data-i18n="nowrd" data-i18n-title="t_nowrd"></button>
+      <button class="chip" id="yesw" hidden data-i18n="yesw" data-i18n-title="t_yesw"></button>
     </div>
   </div>
   <div id="btns">
-    <button class="btn sec ic" id="newb" title="Начать новое слово (новую ветку)" aria-label="Новая ветка"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button class="btn sec ic" id="hintb" title="Подсказка: какие ветки ещё могут расти" aria-label="Подсказка"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
-    <button class="btn sec ic" id="back" title="Стереть букву. Удерживай: завершить ветку (или стереть всё слово)" aria-label="Стереть"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
-    <button class="btn go" id="go">Расти ✓</button>
+    <button class="btn sec ic" id="newb" data-i18n-title="t_newb" data-i18n-aria="a_newb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
+    <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
+    <button class="btn go" id="go" data-i18n="go"></button>
   </div>
 </div>
-<div id="over"><h1>Буквы сжаты</h1><div class="score" id="fs">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px">Ещё раз</button></div>
+<div id="over"><h1 data-i18n="overTitle"></h1><div class="score" id="fscore">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px" data-i18n="again"></button></div>
 
 <script src="words.js?v=20"></script>
 <script src="ru.js?v=20"></script>
@@ -178,9 +181,84 @@
 "use strict";
 if (typeof WORDS_TXT === "undefined" || typeof RU_DATA === "undefined") {   // the data files did not load (typical when index.html is opened from a file manager)
   document.body.innerHTML = '<div style="padding:28px;font:16px/1.5 system-ui,sans-serif;color:#0f2f44;background:#eef5f8;height:100%;overflow:auto">' +
-    '<h2 style="margin:0 0 12px">Не загрузились данные игры</h2>Файлы <b>words.js</b> и <b>ru.js</b> лежат рядом с index.html, но телефон их не подгрузил.<br><br>' +
-    'Откройте вместо этого файл <b>DeadBranch.html</b> из той же папки (в нём всё внутри), либо запустите игру через сервер или хостинг.</div>';
+    '<h2 style="margin:0 0 12px">Game data failed to load / Не загрузились данные игры</h2>Files <b>words.js</b> and <b>ru.js</b> must sit next to index.html. / Файлы <b>words.js</b> и <b>ru.js</b> должны лежать рядом с index.html.<br><br>' +
+    'Open <b>DeadBranch.html</b> instead (everything inside) or serve the folder. / Откройте <b>DeadBranch.html</b> (в нём всё внутри) или запустите через сервер.</div>';
   throw new Error("data scripts missing");
+}
+/* ---------- language (English by default, Russian optional) ---------- */
+const I18N = {
+  en: {
+    t_diff:"dictionary difficulty", t_streak:"streak multiplier", words:"words", t_branches:"collected branches", pressure:"pressure",
+    language:"Language", layout:"Letter layout", o_qwerty:"like QWERTY", o_fan:"fan under the finger",
+    theme:"Theme", o_lab:"laboratory", o_deep:"deep",
+    quality:"Quality", o_ultra:"maximum (with blur)", o_high:"high", o_med:"medium", o_low:"low",
+    showfps:"FPS counter", assist:"Letter assist", o_aoff:"off", o_avalid:"valid only", o_adecoy:"valid + 3 decoys",
+    hand:"Hand", o_right:"right", o_left:"left", tier:"Dictionary", o_t1:"hard", o_t2:"medium", o_t3:"easy",
+    agony:"End timer", o_g2:"hard · 2 s", o_g10:"medium · 10 s", o_g30:"easy · 30 s",
+    ripe:"Time to harvest", o_r8:"hard · 8 s", o_r15:"medium · 15 s", o_r30:"easy · 30 s",
+    onlytr:"Only words with translation", hints:"Hints", pressureT:"Timer pressure", best:"Best",
+    fullscreen:"Fullscreen", fsauto:"Fullscreen on first touch", restart:"New game", resetlists:"Reset my word marks",
+    sources:"Data sources",
+    sourcesText:"Hunspell lt_LT dictionary (A. Agejevas et al., BSD); word frequencies from FrequencyWords / OpenSubtitles (CC BY-SA); English and Russian Wiktionary dumps from kaikki.org (CC BY-SA), including verb forms; a noun list and the database of the author's study app; some translations were made by AI (Claude) and checked against Wiktionary. Details: CREDITS.md",
+    nowrd:"✗ Not a word", t_nowrd:"Mark: there is no such word", yesw:"✓ It is a word", t_yesw:"It is a word: add it to the game",
+    t_newb:"Start a new word (new branch)", a_newb:"New branch", t_hintb:"Hint: which branches can still grow", a_hintb:"Hint",
+    t_back:"Erase a letter. Hold: finish the branch (or erase the whole word)", a_back:"Erase", go:"Grow ✓",
+    overTitle:"Letters crushed", again:"Again",
+    addLetters:"Add letters", need2:"At least 2 letters needed", alreadyLive:"already in a live branch", maybe:"maybe %0?",
+    branchesEnded:"Branches ended: harvest in %0 s", harvested:"Harvest collected! +%0", pickFirst:"Pick a branch word first",
+    holdBack:"Hold ⌫ to finish the branch", typeMark:"Type the word you want to mark", notInGame:"This word isn't in the game anyway",
+    verified:"This word has a verified translation and can't be marked", marked:"«%0» marked as non-existent and no longer accepted",
+    typeAdd:"Type the word you want to add", alreadyIn:"This word is already in the game", added:"«%0» added to the game (no translation)",
+    listsReset:"Your marks were reset", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
+    diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
+    fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"words: %0 · best: %1",
+    noMore:"No more words", locked:"Locked in", ripeTitle:"Harvest in %0 s", ripeSub:"Branches reached the end · You can add a sprout",
+    restored:"Game restored"
+  },
+  ru: {
+    t_diff:"сложность словаря", t_streak:"множитель за серию", words:"слов", t_branches:"собранные ветки", pressure:"давление",
+    language:"Язык", layout:"Раскладка букв", o_qwerty:"как QWERTY", o_fan:"веер под палец",
+    theme:"Оформление", o_lab:"лаборатория", o_deep:"глубина",
+    quality:"Качество", o_ultra:"максимальное (с размытием)", o_high:"высокое", o_med:"среднее", o_low:"низкое",
+    showfps:"Счётчик FPS", assist:"Подсказка букв", o_aoff:"нет", o_avalid:"только подходящие", o_adecoy:"подходящие + 3 лишних",
+    hand:"Рука", o_right:"правая", o_left:"левая", tier:"Словарь", o_t1:"жёсткий", o_t2:"средний", o_t3:"лёгкий",
+    agony:"Таймер конца", o_g2:"сложный · 2 с", o_g10:"средний · 10 с", o_g30:"лёгкий · 30 с",
+    ripe:"Время до урожая", o_r8:"сложное · 8 с", o_r15:"среднее · 15 с", o_r30:"лёгкое · 30 с",
+    onlytr:"Только слова с переводом", hints:"Подсказки", pressureT:"Давление по таймеру", best:"Рекорд",
+    fullscreen:"Во весь экран", fsauto:"Весь экран по первому касанию", restart:"Новая игра", resetlists:"Сбросить мои отметки слов",
+    sources:"Источники данных",
+    sourcesText:"Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md",
+    nowrd:"✗ Нет такого слова", t_nowrd:"Отметить: такого слова нет", yesw:"✓ Такое слово есть", t_yesw:"Такое слово есть: добавить в игру",
+    t_newb:"Начать новое слово (новую ветку)", a_newb:"Новая ветка", t_hintb:"Подсказка: какие ветки ещё могут расти", a_hintb:"Подсказка",
+    t_back:"Стереть букву. Удерживай: завершить ветку (или стереть всё слово)", a_back:"Стереть", go:"Расти ✓",
+    overTitle:"Буквы сжаты", again:"Ещё раз",
+    addLetters:"Добавь буквы", need2:"Нужно хотя бы 2 буквы", alreadyLive:"уже есть в живой ветке", maybe:"может, %0?",
+    branchesEnded:"Ветви закончились: урожай через %0 с", harvested:"Урожай собран! +%0", pickFirst:"Сначала выбери слово ветки",
+    holdBack:"Удерживай ⌫, чтобы завершить ветку", typeMark:"Набери слово, которое хочешь отметить", notInGame:"Этого слова и так нет в игре",
+    verified:"У слова есть проверенный перевод, отметить его нельзя", marked:"«%0» отмечено как несуществующее и больше не принимается",
+    typeAdd:"Набери слово, которое хочешь добавить", alreadyIn:"Это слово уже есть в игре", added:"«%0» добавлено в игру (без перевода)",
+    listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
+    diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
+    fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"слов: %0 · рекорд: %1",
+    noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Урожай через %0 с", ripeSub:"Ветви дошли до конца · Можно добавить побег",
+    restored:"Партия восстановлена"
+  }
+};
+let LANG = "en"; try { LANG = localStorage.getItem("db_lang") || LANG; } catch (e) {}
+if (!I18N[LANG]) LANG = "en";
+function t(key, ...a) { let s = (I18N[LANG][key] != null ? I18N[LANG][key] : I18N.en[key]) || key; a.forEach((v, i) => { s = s.split("%" + i).join(v); }); return s; }
+function applyLang() {
+  document.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = t(e.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-title]").forEach(e => { e.title = t(e.dataset.i18nTitle); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(e => { e.setAttribute("aria-label", t(e.dataset.i18nAria)); });
+  document.documentElement.lang = LANG;
+}
+function rrPath(x, y, w, h, r) {   // rounded rectangle from plain arcs: ctx.roundRect flickered between round and sharp corners on iPad Safari
+  r = Math.max(0, Math.min(r, w / 2, h / 2)); const P = Math.PI;
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arc(x + w - r, y + r, r, -P / 2, 0);
+  ctx.lineTo(x + w, y + h - r); ctx.arc(x + w - r, y + h - r, r, 0, P / 2);
+  ctx.lineTo(x + r, y + h); ctx.arc(x + r, y + h - r, r, P / 2, P);
+  ctx.lineTo(x, y + r); ctx.arc(x + r, y + r, r, P, P * 1.5); ctx.closePath();
 }
 /* ---------- constants ---------- */
 const DOCK_K = .55, POP_T = 3, ANGLE_STEP = 15, IDLE_T = 6, SUGG_PAUSE = 6;   // seconds without a tap before the 'where to start' glow appears
@@ -588,14 +666,14 @@ function commit() {
   if (G.over) return;
   const b = G.builder, base = b.base, L = b.letters, need = base ? 1 : 2;
   let made = null;
-  if (L.length < need) { toast(base ? "Добавь буквы" : "Нужно хотя бы 2 буквы", "bad"); return; }
+  if (L.length < need) { toast(base ? t("addLetters") : t("need2"), "bad"); return; }
   const s = (base ? base.str : "") + L.join("");
   if (WORDS.has(s) && !G.used.has(s)) {
     const from = b.src.map(l => ({ ch: l.ch, x: l.x, y: l.y, field: l.field }));
     const ab = base ? null : autoBase(s);
     if (ab) made = success(s, ab, [...s.slice(ab.str.length)], null, from);
     else made = success(s, base, L, b.rootX, from);
-  } else fail(s, base, L, WORDS.has(s) ? "уже есть в живой ветке" : null);
+  } else fail(s, base, L, WORDS.has(s) ? t("alreadyLive") : null);
   clearBuilder();
   if (made && selectable(made)) G.builder.base = made;   // keep growing the word that was just made
   ensureBase();
@@ -627,7 +705,7 @@ function success(s, base, L, rootX, from) {
 function fail(s, base, L, why) {
   G.streak = 0;
   const alt = FOLD.get(fold(s));
-  toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? " — может, " + alt[0] + "?" : ""), "bad");
+  toast("✗ " + s + (why ? " (" + why + ")" : alt && !WORDS.has(s) ? t("maybe", alt[0]) : ""), "bad");
   if (!base) {
     for (const ch of L) spawnDead(ch, (Math.random() - .5) * G.tW * .5, G.tH - R);
     return;
@@ -664,7 +742,7 @@ function checkHarvest(tree) {
   if (!tree.ripe) return;
   if (!wasRipe) tree.ripeT = 0;
   if (!tree.nodes.some(n => n.alive && !n.done && aliveKids(n) < MAXKIDS && canExtend(n))) { harvest(tree); return; }
-  if (!wasRipe) toast("Ветви закончились: урожай через " + ripeT() + " с", "gold");
+  if (!wasRipe) toast(t("branchesEnded", ripeT()), "gold");
 }
 function harvest(tree) {
   tree.harvest = true; tree.t = 0; G.harvested++;
@@ -673,7 +751,7 @@ function harvest(tree) {
   tree.bb = bb;
   const bonus = Math.round(tree.pts * .25);
   G.score += bonus;
-  toast("Урожай собран! +" + bonus, "gold");
+  toast(t("harvested", bonus), "gold");
 }
 
 function fixWord() {
@@ -785,7 +863,7 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
   if (tapTrophy(false)) return;
   let bestL = null; bd = R * 1.9;   // generous: the nearest letter wins, so there are no dead gaps between letters
   for (const l of G.swarm) { if (l.show < .5) continue; const d = Math.hypot(l.x - p.x, l.y - p.y); if (d < bd) { bd = d; bestL = l; } }
-  if (bestL && !b.base && !b.newMode && allNodes().some(selectable)) { toast("Сначала выбери слово ветки", "bad"); return; }
+  if (bestL && !b.base && !b.newMode && allNodes().some(selectable)) { toast(t("pickFirst"), "bad"); return; }
   if (bestL && b.letters.length < 14) {
     if (!b.letters.length && !b.base) b.rootX = placeRoot(nodeW("aa"), 2, null).x;
     b.letters.push(bestL.ch); b.src.push(bestL); bestL.pulse = 1; updateTray();
@@ -832,7 +910,7 @@ function holdButton(el, ms, done, tap) {
 // tap: erase a letter. Hold: finish the branch (when nothing is typed) or erase the whole typed word
 holdButton($("back"), 650, () => { const b = G.builder; if (b.letters.length) { b.letters = []; b.src = []; updateTray(); } else finishTree(); }, () => {
   const b = G.builder;
-  if (b.letters.length) { b.letters.pop(); b.src.pop(); } else if (b.newMode) { b.newMode = false; ensureBase(); } else if (b.base) toast("Удерживай ⌫, чтобы завершить ветку", "gold");
+  if (b.letters.length) { b.letters.pop(); b.src.pop(); } else if (b.newMode) { b.newMode = false; ensureBase(); } else if (b.base) toast(t("holdBack"), "gold");
   updateTray();
 });
 // "finish the branch": when the player has no idea what to add, the whole tree is counted now and goes to the wall
@@ -848,22 +926,22 @@ function finishTree() {
 const typedWord = () => (G.builder.base ? G.builder.base.str : "") + G.builder.letters.join("");
 $("nowrd").onclick = () => {
   const b = G.builder, s = typedWord();
-  if (!b.letters.length) { toast("Набери слово, которое хочешь отметить", "bad"); return; }
-  if (!WORDS.has(s)) { toast("Этого слова и так нет в игре", "bad"); return; }
-  if (ruOf(s)) { toast("У слова есть проверенный перевод, отметить его нельзя", "bad"); return; }
+  if (!b.letters.length) { toast(t("typeMark"), "bad"); return; }
+  if (!WORDS.has(s)) { toast(t("notInGame"), "bad"); return; }
+  if (ruOf(s)) { toast(t("verified"), "bad"); return; }
   BANNED.add(s); ADDED.delete(s); WORDS.delete(s); saveLists();
-  toast("«" + s + "» отмечено как несуществующее и больше не принимается", "gold");
+  toast(t("marked", s), "gold");
   b.letters = []; b.src = []; updateTray();
 };
 $("yesw").onclick = () => {
   const b = G.builder, s = typedWord();
-  if (!b.letters.length) { toast("Набери слово, которое хочешь добавить", "bad"); return; }
-  if (WORDS.has(s)) { toast("Это слово уже есть в игре", "bad"); return; }
+  if (!b.letters.length) { toast(t("typeAdd"), "bad"); return; }
+  if (WORDS.has(s)) { toast(t("alreadyIn"), "bad"); return; }
   BANNED.delete(s); ADDED.add(s); addWordToLex(s); saveLists();
-  toast("«" + s + "» добавлено в игру (без перевода)", "gold");
+  toast(t("added", s), "gold");
   updateTray();
 };
-$("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast("Свои отметки сброшены", "gold"); };
+$("resetlists").onclick = () => { BANNED.clear(); ADDED.clear(); saveLists(); buildLex(+$("tier").value); reset(); toast(t("listsReset"), "gold"); };
 $("newb").onclick = () => {
   const b = G.builder;
   b.newMode = !b.newMode;
@@ -873,7 +951,7 @@ $("newb").onclick = () => {
 // hint: shows which words can still grow (how many unused longer words start with them) and which are finished
 $("hintb").onclick = () => {
   const nodes = allNodes().filter(n => n.alive && !n.tree.harvest);
-  if (!nodes.length) { toast("Веток пока нет", "bad"); return; }
+  if (!nodes.length) { toast(t("noBranches"), "bad"); return; }
   G.hint = new Map();
   for (const n of nodes) {
     let c = 0; const cand = [];
@@ -900,10 +978,10 @@ $("hintb").onclick = () => {
   for (const n of nodes) {
     const hi = G.hint.get(n.id);
     rows.push(hi.c > 0
-      ? `<div><b>${n.str.toUpperCase()}</b> · ещё ${hi.c}: <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
-      : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ✓ закончена</div>`);
+      ? `<div><b>${n.str.toUpperCase()}</b> · ${t("more", hi.c)} <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
+      : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ${t("finished")}</div>`);
   }
-  $("hintpanel").innerHTML = '<button id="hintx" aria-label="Закрыть">\u00d7</button>' + rows.join("");
+  $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + t("close") + '">\u00d7</button>' + rows.join("");
   $("hintpanel").classList.add("open");
   clearTimeout(window.__hintTO);
   window.__hintTO = setTimeout(() => $("hintpanel").classList.remove("open"), 10000);
@@ -941,12 +1019,12 @@ function updateTray() {
   const s = bs + ls, w = $("word"); w.className = "";
   const ru = s && WORDS.has(s) ? ruOf(s) : "", lem = ru ? lemmaOf(s) : "", g = ru ? gramOf(s) : null;
   const alt = !ru && ls && !WORDS.has(s) ? FOLD.get(fold(s)) : null;   // typed with plain letters where the word needs diacritics
-  if (alt) { $("ru").textContent = "Нужна диакритика: " + alt.slice(0, 3).join(", "); } else
-  $("ru").textContent = ru ? "= " + ru + (g ? " — " + g[1] : "") + (lem && lem !== s ? "  · форма слова " + lem : "") : "";
+  if (alt) { $("ru").textContent = t("diacritics") + " " + alt.slice(0, 3).join(", "); } else
+  $("ru").textContent = ru ? "= " + ru + (g ? " — " + g[1] : "") + (lem && lem !== s ? "  · " + t("formOf") + " " + lem : "") : "";
   const hint = $("hint");
-  if (b.newMode && !ls) hint.textContent = "Новая ветка: 2+ буквы";
-  else if (!ls && !bs) hint.textContent = "Собери слово";
-  else if (!ls) hint.textContent = " + буквы";
+  if (b.newMode && !ls) hint.textContent = t("newHint");
+  else if (!ls && !bs) hint.textContent = t("wordHint");
+  else if (!ls) hint.textContent = t("plusLetters");
   else hint.textContent = "";
   $("newb").style.background = b.newMode ? "#fbbf24" : ""; $("newb").style.color = b.newMode ? "#1a1204" : "";
   if ($("hints").checked && ls) {
@@ -1243,7 +1321,7 @@ function update(dt) {
   }
   if ($("pressure").checked) {
     G.pressureT += dt;
-    if (G.pressureT > 18) { G.pressureT = 0; spawnDead(ALPHA[Math.floor(Math.random() * ALPHA.length)], (Math.random() - .5) * G.W * .6, G.H); toast("Упала буква", "bad"); }
+    if (G.pressureT > 18) { G.pressureT = 0; spawnDead(ALPHA[Math.floor(Math.random() * ALPHA.length)], (Math.random() - .5) * G.W * .6, G.H); toast(t("fell"), "bad"); }
   }
   const dn = measureDensity();
   G.density += (dn - G.density) * Math.min(1, dt * 4);
@@ -1256,15 +1334,15 @@ function update(dt) {
   setText($("denst"), Math.round(f * 100) + "%");
   const lim = +$("agony").value;
   const cdOpen = G.agony > .05; if ($("cd")._o !== cdOpen) { $("cd")._o = cdOpen; $("cd").classList.toggle("open", cdOpen); }
-  if (cdOpen) setText($("cd"), "⚠ буквы сжаты · конец через " + Math.max(0, lim - G.agony).toFixed(1) + " с");
+  if (cdOpen) setText($("cd"), t("cdWarn", Math.max(0, lim - G.agony).toFixed(1)));
   if (G.agony > lim) gameOver();
   updateHud();
 }
 function gameOver() {
   G.over = true; $("cd").classList.remove("open"); clearSave();
   if (G.score > best) { best = G.score; try { localStorage.setItem("db_best", best); } catch (e) {} }
-  $("fs").textContent = G.score;
-  $("fsub").textContent = "слов: " + G.wordsN + " · рекорд: " + best;
+  $("fscore").textContent = G.score;
+  $("fsub").textContent = t("overSub", G.wordsN, best);
   $("over").classList.add("open");
   updateTray();
 }
@@ -1274,7 +1352,7 @@ function resize() {
   cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr);
 }
 function layoutMode() {   // a wide window gets the wide layout
-  document.documentElement.classList.toggle("wide", innerWidth / innerHeight > 1.25 && innerWidth >= 900);
+  document.documentElement.classList.toggle("wide", innerWidth > 520);
   resize();
 }
 window.addEventListener("resize", layoutMode);
@@ -1357,7 +1435,7 @@ function silColor(frac, haze) {
 
 function capsule(x, y, w, h, fill, stroke, text, tc, lw, dash, ang, sub) {
   ctx.save(); ctx.translate(x, y); ctx.rotate(ang || 0); x = 0; y = 0;
-  ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, h / 2);
+  ctx.beginPath(); rrPath(x - w / 2, y - h / 2, w, h, h / 2);
   ctx.fillStyle = fill; ctx.fill();
   ctx.lineWidth = lw; ctx.strokeStyle = stroke;
   if (dash) ctx.setLineDash([6, 4]);
@@ -1703,7 +1781,7 @@ function draw() {
       if (!t.harvest && t.ripe && leaf && n.done) {
         ctx.globalAlpha = .9; ctx.fillStyle = T.warn; ctx.font = "600 " + Math.max(10, Math.round(rr * .6)) + "px system-ui,sans-serif";
         ctx.textAlign = "center"; ctx.textBaseline = "bottom";
-        ctx.fillText(!canExtend(n) ? "Больше слов нет" : "Зафиксировано", x, y - (CAPH + 3) * sc * KS);
+        ctx.fillText(!canExtend(n) ? t("noMore") : t("locked"), x, y - (CAPH + 3) * sc * KS);
         ctx.globalAlpha = 1;
       }
       if (!t.harvest && G.hintT > 0 && G.hint.has(n.id)) {
@@ -1730,12 +1808,12 @@ function draw() {
       const cy = wy - 8 - fs * 1.75 - ripeSlot++ * fs * 3.5;   // the notice rests just above the wave, where it hides no words
       ctx.globalAlpha = 1; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
       ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
-      const pw = Math.max(bw + 20, ctx.measureText("Ветви дошли до конца · Можно добавить побег").width + 28);   // a pill behind the text keeps it readable over words
-      ctx.fillStyle = T.lab ? "rgba(255,255,255,.86)" : "rgba(5,12,20,.7)"; ctx.beginPath(); ctx.roundRect(cx - pw / 2, cy - fs * 1.45, pw, fs * 3.2, fs * .7); ctx.fill();
+      const pw = Math.max(bw + 20, ctx.measureText(t("ripeSub")).width + 28);   // a pill behind the text keeps it readable over words
+      ctx.fillStyle = T.lab ? "rgba(255,255,255,.86)" : "rgba(5,12,20,.7)"; ctx.beginPath(); rrPath(cx - pw / 2, cy - fs * 1.45, pw, fs * 3.2, fs * .7); ctx.fill();
       ctx.fillStyle = T.ripeTitle; ctx.font = "700 " + fs + "px system-ui,sans-serif";
-      ctx.fillText("🌿 Урожай через " + left.toFixed(1) + " с", cx, cy);
+      ctx.fillText("🌿 " + t("ripeTitle", left.toFixed(1)), cx, cy);
       ctx.fillStyle = T.ripeSub; ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
-      ctx.fillText("Ветви дошли до конца · Можно добавить побег", cx, cy + fs * 1.25);
+      ctx.fillText(t("ripeSub"), cx, cy + fs * 1.25);
       ctx.fillStyle = T.barBg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw, 4);
       ctx.fillStyle = T.barFg; ctx.fillRect(cx - bw / 2, cy + fs * 1.45, bw * (left / ripeT()), 4);
     }
@@ -1775,7 +1853,7 @@ function frame(now) {
   const w0 = performance.now(); update(dt); draw(); const spent = performance.now() - w0;
   fpsStat.n++; fpsStat.ms += spent;
   if (now - fpsStat.t0 >= 500) {   // a small counter: frames per second, the time one frame costs the processor, the canvas size
-    if ($("showfps").checked) setText($("fps"), "FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " мс \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value);
+    if ($("showfps").checked) setText($("fps"), "FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " ms \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value);
     else setText($("fps"), "");
     fpsStat.n = 0; fpsStat.ms = 0; fpsStat.t0 = now;
   }
@@ -1851,13 +1929,15 @@ window.addEventListener("pagehide", saveGame);
 
 /* ---------- boot ---------- */
 loadSettings();
+$("lang").value = LANG; applyLang();
+$("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); };
 { let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
   if (!stored) $("quality").value = (navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) < 900) ? "low" : "high"; }   // a phone starts on the light profile
 applyQuality();
 const SAVED = readSave();   // read before reset(), which clears the stored game
 buildLex(+$("tier").value);
 reset(); layoutMode(); updateDiff();
-if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast("Партия восстановлена", "gold"); }
+if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast(t("restored"), "gold"); }
 $("ver").textContent = "Dead Branch v" + VERSION;
 requestAnimationFrame(frame);
 if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js").catch(() => {});   // an offline copy once it has been opened with a network
