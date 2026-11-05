@@ -32,7 +32,7 @@
   #hud .grow { flex:1; }
   #dens { height:8px; border-radius:3px; background:#12202e; overflow:hidden; margin-top:8px; }
   #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
-  #gear { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:12px; width:44px; height:44px; font-size:20px; }
+  #gear, #helpb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:12px; width:44px; height:44px; font-size:20px; }
   /* wide screens (a monitor, 16:9): the canvas and the laboratory fill the window, the play column sits in the middle */
   html.wide body { max-width:none; box-shadow:none; }
   html.wide #hud { left:50%; right:auto; width:min(560px,100%); transform:translateX(-50%); }
@@ -40,6 +40,15 @@
   html.wide #panel { right:calc(50% - 280px + 10px); }
   html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
   html.wide #tray > * { width:min(560px,100%); align-self:center; }
+  #helpb { font-size:20px; font-weight:700; }
+  #help { position:absolute; inset:0; z-index:12; display:none; background:#050a10f5; }
+  #help.open { display:block; }
+  #help .card { height:100%; overflow:auto; touch-action:pan-y; -webkit-overflow-scrolling:touch; user-select:text; padding:max(16px,env(safe-area-inset-top)) 18px 90px; max-width:600px; margin:0 auto; font-size:16px; line-height:1.5; }
+  #help h2 { margin:0 0 10px; font-size:26px; } #help h3 { margin:18px 0 6px; font-size:17px; color:var(--sky); }
+  #help p { margin:0 0 8px; } #help ul, #help ol { margin:0 0 8px; padding-left:22px; } #help li { margin:0 0 5px; }
+  #help .lg { display:grid; grid-template-columns:64px 1fr; gap:6px 12px; margin:0 0 8px; } #help .lg b { font-size:17px; color:var(--gold); white-space:nowrap; }
+  #helpok { position:absolute; left:50%; bottom:max(16px,env(safe-area-inset-bottom)); transform:translateX(-50%); min-width:220px; height:48px; }
+  html.lab #help { background:#eef5f8f7; color:#12303f; } html.lab #help h3 { color:#1b7cb8; } html.lab #help .lg b { color:#b45309; }
   #panel { position:absolute; top:52px; right:10px; z-index:6; background:#0c1722f2; border:1px solid #1d3547; border-radius:12px; padding:12px; display:none; min-width:220px; font-size:14px; }
   #panel.open { display:block; }
   #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
@@ -87,7 +96,7 @@
   html.lab body { color:#12303f; box-shadow:0 0 50px #4a6b7e55; }
   html.lab #hud .sub { color:#35566a; text-shadow:0 1px 0 #fff9; } html.lab #hud .sub svg { color:#13997c; }
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
-  html.lab #gear { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
   html.lab #tray { background:#eef5f8f2; border-top-color:#b9cfdb; }
@@ -110,6 +119,7 @@
 <div id="hud">
   <div><div class="big" id="score">0</div><div class="sub"><span id="diff" data-i18n-title="t_diff"></span><span>·</span><span id="streak" data-i18n-title="t_streak">×1.0</span><span>·</span><span><span data-i18n="words"></span> <span id="wn">0</span></span><span>·</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l7-7"/></svg><span id="tn" data-i18n-title="t_branches">0</span></div></div>
   <div class="grow"><div class="sub" style="justify-content:flex-end"><span data-i18n="pressure"></span> <b id="denst">0%</b></div><div id="dens"><i></i></div></div>
+  <button id="helpb" aria-label="help" data-i18n-aria="a_help">?</button>
   <button id="gear" aria-label="settings">⚙</button>
 </div>
 <div id="coords"></div>
@@ -174,6 +184,7 @@
     <button class="btn go" id="go" data-i18n="go"></button>
   </div>
 </div>
+<div id="help"><div class="card"><div id="helptext"></div></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
 <div id="over"><h1 data-i18n="overTitle"></h1><div class="score" id="fscore">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px" data-i18n="again"></button></div>
 
 <script src="words.js?v=20"></script>
@@ -214,7 +225,29 @@ const I18N = {
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"words: %0 · best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Harvest in %0 s", ripeSub:"Branches reached the end · You can add a sprout",
-    restored:"Game restored"
+    restored:"Game restored", a_help:"How to play", helpClose:"Got it", helpHtml:`<h2>How to play</h2>
+<p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
+<h3>What to do</h3>
+<ol>
+<li>Tap letters at the bottom to spell a word of 2+ letters and press <b>Grow ✓</b>.</li>
+<li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. One word can have up to 3 shoots.</li>
+<li><b>+</b> starts a new word, <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
+</ol>
+<h3>What gives points</h3>
+<p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. When a branch is finished you get a harvest bonus of +25% of its points.</p>
+<h3>The numbers at the top</h3>
+<div class="lg"><b>485</b><span>Your score.</span>
+<b>★☆☆</b><span>Dictionary difficulty (a setting): 3 red stars = hard dictionary with rare words, 1 green star = easy dictionary with common words.</span>
+<b>×1.3</b><span>Streak multiplier. Every correct word in a row adds +0.1 to the points (up to ×2.0). A mistake drops it back to ×1.0.</span>
+<b>words 18</b><span>How many words you have found.</span>
+<b>🌿 7</b><span>How many branches you have harvested.</span>
+<b>pressure</b><span>How full the letter area is. Fallen letters lie at the bottom and take its space. When the bar is full, a countdown "letters crushed" starts, and if it runs out the game is over. It stops when there is room again.</span></div>
+<h3>Mistakes</h3>
+<p>A word that does not exist resets the streak, and its letters fall to the bottom. If it was the only shoot of a word, that word dies too and its letters fall as well (its words can be built again).</p>
+<h3>Why does a branch "ripen"?</h3>
+<p>A branch is finished when none of its tips can grow any more: there are no longer words, or you fixed the word by holding ⌫. Then you see "Branches reached the end · Harvest in N s": you have N seconds (a setting) to add one more shoot to an inner word that can still take one. When the time is up, or at once if nothing can grow, the branch ripens: you get +25% of its points, a leaf is added to the counter and the branch moves to the archive on the left. "Locked in" under a word means you finished it yourself; "No more words" means there is no longer word for it.</p>
+<h3>Old branches</h3>
+<p>Harvested branches wait on the left, beside the field. You can look at them only while you are not building a branch: drag the field to the left or tap one.</p>`
   },
   ru: {
     t_diff:"сложность словаря", t_streak:"множитель за серию", words:"слов", t_branches:"собранные ветки", pressure:"давление",
@@ -242,7 +275,29 @@ const I18N = {
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"слов: %0 · рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Урожай через %0 с", ripeSub:"Ветви дошли до конца · Можно добавить побег",
-    restored:"Партия восстановлена"
+    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", helpHtml:`<h2>Как играть</h2>
+<p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
+<h3>Что делать</h3>
+<ol>
+<li>Нажимайте на буквы внизу, чтобы составить слово из 2+ букв, и нажмите <b>Расти ✓</b>.</li>
+<li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. У одного слова может быть до 3 побегов.</li>
+<li><b>+</b> начинает новое слово, <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
+</ol>
+<h3>За что дают очки</h3>
+<p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Когда ветка закончена, вы получаете бонус урожая: +25% от её очков.</p>
+<h3>Цифры сверху</h3>
+<div class="lg"><b>485</b><span>Ваш счёт.</span>
+<b>★☆☆</b><span>Сложность словаря (настройка): 3 красные звезды: трудный словарь с редкими словами, 1 зелёная звезда: лёгкий словарь с частыми словами.</span>
+<b>×1.3</b><span>Множитель серии. Каждое правильное слово подряд прибавляет +0.1 к очкам (до ×2.0). Ошибка сбрасывает его до ×1.0.</span>
+<b>слов 18</b><span>Сколько слов вы нашли.</span>
+<b>🌿 7</b><span>Сколько веток вы собрали (урожай).</span>
+<b>давление</b><span>Насколько заполнена область букв. Упавшие буквы лежат внизу и занимают в ней место. Когда шкала заполнена, запускается обратный отсчёт «буквы сжаты», и если он закончится, игра окончена. Он останавливается, когда место снова появляется.</span></div>
+<h3>Ошибки</h3>
+<p>Слово, которого нет, сбрасывает серию, а его буквы падают вниз. Если это был единственный побег слова, то слово тоже погибает и его буквы тоже падают (его слова можно собрать снова).</p>
+<h3>Почему ветка «созревает»?</h3>
+<p>Ветка завершена, когда ни один её конец не может расти дальше: длиннее слов нет, или вы закрепили слово удержанием ⌫. Тогда вы видите «Ветви дошли до конца · Урожай через N с»: у вас есть N секунд (настройка), чтобы добавить ещё один побег к внутреннему слову, которое ещё может его принять. Когда время вышло, или сразу, если расти нечему, ветка созревает: вы получаете +25% её очков, к счётчику добавляется листочек, а ветка уходит в архив слева. Надпись «Зафиксировано» под словом значит, что вы закончили его сами, а «Больше слов нет»: длиннее слов не существует.</p>
+<h3>Старые ветки</h3>
+<p>Собранные ветки ждут слева, рядом с полем. Смотреть их можно только когда вы не собираете ветку: потяните поле влево или нажмите на одну из них.</p>`
   }
 };
 let LANG = "en"; try { LANG = localStorage.getItem("db_lang") || LANG; } catch (e) {}
@@ -252,6 +307,7 @@ function applyLang() {
   document.querySelectorAll("[data-i18n]").forEach(e => { e.textContent = tr(e.dataset.i18n); });
   document.querySelectorAll("[data-i18n-title]").forEach(e => { e.title = tr(e.dataset.i18nTitle); });
   document.querySelectorAll("[data-i18n-aria]").forEach(e => { e.setAttribute("aria-label", tr(e.dataset.i18nAria)); });
+  $("helptext").innerHTML = tr("helpHtml");
   document.documentElement.lang = LANG;
 }
 function rrPath(x, y, w, h, r) {   // rounded rectangle from plain arcs: ctx.roundRect flickered between round and sharp corners on iPad Safari
@@ -278,7 +334,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.6";   // keep in sync with the VERSION file
+const VERSION = "0.0.7";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1971,6 +2027,10 @@ window.addEventListener("pagehide", saveGame);
 /* ---------- boot ---------- */
 loadSettings();
 $("lang").value = LANG; applyLang();
+const openHelp = () => { $("help").classList.add("open"); $("help").querySelector(".card").scrollTop = 0; };
+const closeHelp = () => { $("help").classList.remove("open"); try { localStorage.setItem("db_help", "1"); } catch (e) {} };
+$("helpb").onclick = openHelp; $("helpok").onclick = closeHelp;
+{ let seen = false; try { seen = !!localStorage.getItem("db_help"); } catch (e) {} if (!seen) openHelp(); }
 $("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); };
 { let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
   if (!stored) $("quality").value = "high"; }   // everyone starts on High (the light profile looked blurry)
