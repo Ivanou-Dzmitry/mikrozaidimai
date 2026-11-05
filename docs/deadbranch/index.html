@@ -45,10 +45,10 @@
   #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
   #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
-  #tray { flex:none; display:flex; flex-direction:column; gap:6px; padding:8px 12px max(10px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
-  #wzone { height:70px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:0; }
-  #word { width:100%; height:38px; line-height:38px; text-align:center; font-size:30px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
-  #sub { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:30px; min-width:0; }
+  #tray { flex:none; display:flex; flex-direction:column; gap:6px; padding:6px 12px max(10px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
+  #wzone { height:36px; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; }
+  #word { flex:none; max-width:55%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:1 1 0; height:30px; min-width:0; }
   #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
   #ru:empty { display:none; }
   .chip { flex:none; position:relative; overflow:hidden; height:30px; padding:0 12px; border-radius:15px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:13px; font-weight:600; }
@@ -58,10 +58,10 @@
   #back.hold i { width:100%; transition:width .65s linear; }   /* a fill shows how long to hold */
   #back svg { position:relative; }
   #btns { display:flex; gap:8px; }
-  #btns .btn { height:56px; }
-  .btn.ic { flex:none; width:58px; padding:0; display:flex; align-items:center; justify-content:center; }
-  .btn.ic svg { width:26px; height:26px; }
-  #go { flex:1; font-size:21px; }
+  #btns .btn { height:32px; border-radius:11px; }
+  .btn.ic { flex:none; width:48px; padding:0; display:flex; align-items:center; justify-content:center; }
+  .btn.ic svg { width:20px; height:20px; }
+  #go { flex:1; font-size:17px; }
   body.lefty #btns { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
@@ -291,7 +291,7 @@ const THEMES = {
   deep: {
     lab: false, first: "#ffffff", sky: ["#0f5a73", "#0a3a58", "#04182b"], fieldTint: "rgba(3,14,26,.38)", band: ["rgba(3,14,26,.38)", "rgba(3,14,26,.38)"],
     wall: "#1a3347", dust: "#9fd8ff", wave: "rgba(140,210,235,.38)", floor: "rgba(0,0,0,0)", floorLine: "rgba(0,0,0,0)", arcs: "rgba(140,210,235,.09)",
-    dead: ["#0b2134", "#183448", "#2a4a60"], key: ["#10283b", "#1b4a6b", "#38bdf8", "#e0f7ff", "#cfeeff"],   // fill, selected fill, rim, selected rim, letter
+    dead: ["#1d4560", "#2a5a7a", "#7fb0cc"], key: ["#10283b", "#1b4a6b", "#38bdf8", "#e0f7ff", "#cfeeff"],   // fill, selected fill, rim, selected rim, letter
     pv: { bond: "#7dd3fc", atom: "#e6f6ff", fill: "rgba(0,0,0,0)", rim: "#7dd3fc", text: "#e6f6ff" },
     mol: { bond: "#4fbf84", atom: "#d9f7e5", bondLeaf: "#86efac", atomLeaf: "#f0fff5", bondGold: "#fbbf24", atomGold: "#fff3c4" },
     lets: { fill: "rgba(0,0,0,0)", rim: "#d9ffe8", text: "#eafff2", gold: "#fbbf24" },
@@ -301,7 +301,7 @@ const THEMES = {
   lab: {
     lab: true, first: "#000000", sky: ["#eef5f8", "#a9c8db", "#3b7ba6"], fieldTint: "rgba(255,255,255,0)", band: ["rgba(255,255,255,0)", "rgba(255,255,255,0)"],
     wall: "rgba(255,255,255,.9)", dust: "#ffffff", wave: "rgba(255,255,255,.95)", floor: "rgba(0,0,0,0)", floorLine: "rgba(0,0,0,0)", arcs: "rgba(15,70,110,.14)",
-    dead: ["rgba(120,150,170,.16)", "rgba(110,140,160,.22)", "rgba(90,120,140,.32)"], key: ["rgba(255,255,255,.84)", "#bfe7f8", "#2a86b8", "#0a5f8c", "#0f2f44"],
+    dead: ["rgba(70,105,130,.55)", "rgba(60,95,120,.6)", "rgba(30,60,85,.85)"], key: ["rgba(255,255,255,.84)", "#bfe7f8", "#2a86b8", "#0a5f8c", "#0f2f44"],
     pv: { bond: "#0b1620", atom: "#0b1620", fill: "rgba(0,0,0,0)", rim: "#0a6a80", text: "#0b1620" },
     mol: { bond: "#0b1620", atom: "#0b1620", bondLeaf: "#0b1620", atomLeaf: "#0a6a80", bondGold: "#0b1620", atomGold: "#0b1620" },   // the branches use only black and one dark cyan
     lets: { fill: "rgba(0,0,0,0)", rim: "#0a6a80", text: "#0b1620", gold: "#0a6a80" },
@@ -1196,7 +1196,7 @@ const orbitActive = () => $("assist").value !== "off" && !!G.builder.base && !G.
 function syncOrbit(dt) {   // the letters that fit float along the two sides of the screen, so the word keeps the middle; the last bubble ("...") shows every letter
   const act = orbitActive(), b = G.builder, p = (b.base ? b.base.str : "") + b.letters.join("");
   cam.bandF += ((act ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);
-  const letters = act && G.allowed ? [...G.allowed].sort((x, y) => ALPHA.indexOf(x) - ALPHA.indexOf(y)) : [];
+  const letters = act && G.allowed ? [...G.allowed].sort((x, y) => strHash(p + "|" + x) - strHash(p + "|" + y)) : [];   // shuffled for every prefix: a new letter must not sit where the old one left (that would be a hint)
   const want = letters.slice(); if (act && !G.orbitAll) want.push("\u2026");
   const key = want.join("") + "|" + p;
   if (key !== G.okey) {
@@ -1534,7 +1534,7 @@ function bond(x0, y0, x1, y1, order, gap) {
 const CABLES = [[.06, .55, 0], [.13, .34, 1.3], [.91, .5, 2.1], [.96, .72, 3.4]];
 function labBackdrop(g, cw, ch, wy, px, py, withCables) {   // g: the context to draw on (the screen, or an offscreen layer)
   g.save(); g.beginPath(); g.rect(0, 0, cw, ch); g.clip();
-  const pw = Math.max(150, cw * .5), ph = Math.max(150, wy * .36), ox = ((-px * .2) % pw + pw) % pw, oy = ((py * .2) % ph + ph) % ph;
+  const pw = Math.max(75, cw * .25), ph = Math.max(75, wy * .18), ox = ((-px * .2) % pw + pw) % pw, oy = ((py * .2) % ph + ph) % ph;
   g.strokeStyle = "rgba(70,105,128,.08)"; g.lineWidth = 1; g.beginPath();
   for (let x = ox - pw; x < cw + pw; x += pw) { g.moveTo(x, 0); g.lineTo(x, ch); }
   for (let y = oy - ph; y < ch + ph; y += ph) { g.moveTo(0, y); g.lineTo(cw, y); }
@@ -1850,6 +1850,7 @@ function frame(now) {
   requestAnimationFrame(frame);
   if (now - lastDraw < 1000 / Q.fps - 3) return;   // the quality profile caps the frame rate (fewer frames, less heat)
   lastDraw = now;
+  { const d = cvDpr(); if (cv.width !== Math.round(cv.clientWidth * d) || cv.height !== Math.round(cv.clientHeight * d)) resize(); }
   const dt = Math.min(.04, (now - last) / 1000); last = now;
   const w0 = performance.now(); update(dt); draw(); const spent = performance.now() - w0;
   fpsStat.n++; fpsStat.ms += spent;
