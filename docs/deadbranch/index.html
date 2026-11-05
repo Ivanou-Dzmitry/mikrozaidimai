@@ -781,7 +781,7 @@ function fieldView() {   // which part of the world the branch field shows right
 }
 // while a branch is being worked on (a word is picked or letters are typed) the archive of finished branches is shut: no popping them out, no panning over to them
 const archiveLocked = () => !!G.builder.base || G.builder.letters.length > 0;
-const ARCH_EDGE = 154;   // the archive of finished branches starts this far from the centre, just past the visible edge: a sliver of the newest one peeks in
+const ARCH_EDGE = 320, ARCH_EDGE_OLD = 154;   // the archive of finished branches starts this far from the centre, just outside the widest the live field gets (560 / 2 + margin), so on a wide screen it sits beside the words, never under them
 function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
   const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
   const hx = G.W / 2 + 40;   // the camera may centre a word even at the very wall
@@ -1140,7 +1140,7 @@ function measureDensity() {
 const hash01 = n => ((n * 2654435761) % 4294967296) / 4294967296;
 function archivePlace(t) {
   const d = t.dock, bb = t.bb, w = (bb.x1 - bb.x0) * DOCK_K, h = (bb.y1 - bb.y0) * DOCK_K;
-  d.side = 0;
+  d.side = 0; d.v = 2;
   for (const o of G.trees) if (o.dock && o !== t && o.dock.ax != null) o.dock.axT -= w + 36 + Math.random() * 44;   // older ones make room
   const peek = Math.min(26, w * .35);
   d.axT = -ARCH_EDGE + peek - w; d.ax = d.axT;
@@ -1320,6 +1320,7 @@ function update(dt) {
       archivePlace(t);
     }
     if (t.dock.ax == null) archivePlace(t);   // trophies saved by an older version
+    if (t.dock.v !== 2) { t.dock.ax -= ARCH_EDGE - ARCH_EDGE_OLD; t.dock.axT -= ARCH_EDGE - ARCH_EDGE_OLD; t.dock.v = 2; }   // a saved game from before the archive moved out
     t.dock.ax += (t.dock.axT - t.dock.ax) * Math.min(1, dt * 2.5);
     const p = Math.min(1, (t.t - .8) / 1.2);
     t.dock.e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
