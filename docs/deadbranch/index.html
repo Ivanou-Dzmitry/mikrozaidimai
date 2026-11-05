@@ -64,10 +64,14 @@
   #help .lg { display:grid; grid-template-columns:64px 1fr; gap:6px 12px; margin:0 0 8px; } #help .lg b { font-size:17px; color:var(--gold); white-space:nowrap; }
   #helpok { position:absolute; left:50%; bottom:14px; transform:translateX(-50%); min-width:220px; height:48px; }
   html.lab #help { background:#eef5f8f7; color:#12303f; } html.lab #help h3 { color:#1b7cb8; } html.lab #help .lg b { color:#b45309; }
-  #panel { position:absolute; top:52px; right:10px; z-index:6; background:#0c1722f2; border:1px solid #1d3547; border-radius:12px; padding:12px; display:none; min-width:220px; font-size:14px; }
-  #panel.open { display:block; }
-  #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
-  #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
+  #panel { position:absolute; top:52px; right:10px; z-index:6; background:#0c1722f2; border:1px solid #1d3547; border-radius:12px; padding:10px; display:none; width:min(400px,calc(100% - 20px)); max-height:calc(100dvh - 64px); overflow:auto; font-size:13px; }
+  #panel.open { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; align-content:start; }
+  #panel label { display:flex; flex-direction:column; align-items:stretch; gap:3px; margin:0; min-width:0; color:#9fb6c6; }
+  #panel label.ck { flex-direction:row; justify-content:space-between; align-items:center; gap:8px; padding:6px 8px; border:1px solid #1d3547; border-radius:8px; color:var(--fg); }
+  #panel label.ck input { width:18px; height:18px; flex:none; margin:0; }
+  #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; width:100%; min-width:0; }
+  #panel button { min-height:36px; margin:0 !important; }
+  #panel #ver, #panel details { grid-column:1 / -1; margin:0 !important; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
   #tray { flex:none; display:flex; flex-direction:row; align-items:center; gap:10px; padding:6px 12px max(30px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
   #wzone { flex:1 1 0; height:44px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px; min-width:0; }
@@ -120,6 +124,7 @@
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
   html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #panel label { color:#4d6a7b; } html.lab #panel label.ck { color:#0f2f44; border-color:#c3d6e0; }
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
   html.lab #tray { background:#eef5f8f2; border-top-color:#b9cfdb; }
   html.lab #bs { color:#6f8796; } html.lab #ls { color:#0f2f44; } html.lab #word.word #ls { color:#15803d; } html.lab #word.dead #ls { color:#dc2626; }
@@ -159,7 +164,7 @@
   <label><span data-i18n="quality"></span>
     <select id="quality"><option value="ultra" data-i18n="o_ultra"></option><option value="high" data-i18n="o_high"></option><option value="med" data-i18n="o_med"></option><option value="low" data-i18n="o_low"></option></select>
   </label>
-  <label><span data-i18n="showfps"></span> <input type="checkbox" id="showfps" checked></label>
+  <label class="ck"><span data-i18n="showfps"></span> <input type="checkbox" id="showfps" checked></label>
   <label><span data-i18n="assist"></span>
     <select id="assist"><option value="off" data-i18n="o_aoff"></option><option value="valid" data-i18n="o_avalid"></option><option value="decoy" selected data-i18n="o_adecoy"></option></select>
   </label>
@@ -175,13 +180,13 @@
   <label><span data-i18n="ripe"></span>
     <select id="ripe"><option value="8" data-i18n="o_r8"></option><option value="15" data-i18n="o_r15"></option><option value="30" selected data-i18n="o_r30"></option></select>
   </label>
-  <label><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr" checked></label>
-  <label><span data-i18n="hints"></span> <input type="checkbox" id="hints" checked></label>
-  <label><span data-i18n="haptics"></span> <input type="checkbox" id="haptics" checked></label>
-  <label><span data-i18n="pressureT"></span> <input type="checkbox" id="pressure"></label>
+  <label class="ck"><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr" checked></label>
+  <label class="ck"><span data-i18n="hints"></span> <input type="checkbox" id="hints" checked></label>
+  <label class="ck"><span data-i18n="haptics"></span> <input type="checkbox" id="haptics" checked></label>
+  <label class="ck"><span data-i18n="pressureT"></span> <input type="checkbox" id="pressure"></label>
   <label><span data-i18n="best"></span> <b id="best">0</b></label>
   <button id="fs" style="width:100%;margin-top:6px" data-i18n="fullscreen"></button>
-  <label><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
+  <label class="ck"><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
   <button id="restart" style="width:100%;margin-top:6px" data-i18n="restart"></button>
   <button id="resetlists" style="width:100%;margin-top:6px" data-i18n="resetlists"></button>
   <button id="fbb" style="width:100%;margin-top:6px" data-i18n="fbOpen"></button>
@@ -231,14 +236,14 @@ if (typeof WORDS_TXT === "undefined" || typeof RU_DATA === "undefined") {   // t
 /* ---------- language (English by default, Russian optional) ---------- */
 const I18N = {
   en: {
-    t_diff:"dictionary difficulty", t_streak:"streak multiplier", words:"words", t_branches:"collected branches", pressure:"pressure",
-    language:"Language", layout:"Letter layout", o_qwerty:"like QWERTY", o_fan:"fan under the finger",
-    theme:"Theme", o_lab:"laboratory", o_deep:"deep",
-    quality:"Quality", o_ultra:"maximum (with blur)", o_high:"high", o_med:"medium", o_low:"low",
-    showfps:"FPS counter", assist:"Letter assist", o_aoff:"off", o_avalid:"valid only", o_adecoy:"valid + 3 decoys",
-    hand:"Hand", o_right:"right", o_left:"left", tier:"Dictionary", o_t1:"hard", o_t2:"medium", o_t3:"easy",
-    agony:"End timer", o_g2:"hard · 2 s", o_g10:"medium · 10 s", o_g30:"easy · 30 s",
-    ripe:"Time until the branch closes", o_r8:"hard · 8 s", o_r15:"medium · 15 s", o_r30:"easy · 30 s",
+    t_diff:"dictionary difficulty", t_streak:"streak multiplier", words:"Words", t_branches:"collected branches", pressure:"Pressure",
+    language:"Language", layout:"Letter layout", o_qwerty:"Like QWERTY", o_fan:"Fan under the finger",
+    theme:"Theme", o_lab:"Lab", o_deep:"Deep",
+    quality:"Quality", o_ultra:"Max (blur)", o_high:"High", o_med:"Medium", o_low:"Low",
+    showfps:"FPS counter", assist:"Letter assist", o_aoff:"Off", o_avalid:"Valid only", o_adecoy:"Valid + 3 decoys",
+    hand:"Hand", o_right:"Right", o_left:"Left", tier:"Dictionary", o_t1:"Hard", o_t2:"Medium", o_t3:"Easy",
+    agony:"End timer", o_g2:"Hard · 2 s", o_g10:"Medium · 10 s", o_g30:"Easy · 30 s",
+    ripe:"Time until the branch closes", o_r8:"Hard · 8 s", o_r15:"Medium · 15 s", o_r30:"Easy · 30 s",
     onlytr:"Only words with translation", hints:"Hints", haptics:"Haptic feedback", pressureT:"Timer pressure", best:"Best",
     fullscreen:"Fullscreen", fsauto:"Fullscreen on first touch", restart:"New game", resetlists:"Reset my word marks",
     sources:"Data sources",
@@ -254,7 +259,7 @@ const I18N = {
     typeAdd:"Type the word you want to add", alreadyIn:"This word is already in the game", added:"«%0» added to the game (no translation)",
     listsReset:"Your marks were reset", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
-    fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"words: %0 · best: %1",
+    fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
     restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
@@ -270,9 +275,9 @@ const I18N = {
 <div class="lg"><b>485</b><span>Your score.</span>
 <b>★☆☆</b><span>Dictionary difficulty (a setting): 3 red stars = hard dictionary with rare words, 1 green star = easy dictionary with common words.</span>
 <b>×1.3</b><span>Streak multiplier. Every correct word in a row adds +0.1 to the points (up to ×2.0). A mistake drops it back to ×1.0.</span>
-<b>words 18</b><span>How many words you have found.</span>
+<b>Words 18</b><span>How many words you have found.</span>
 <b>🌿 7</b><span>How many branches you have closed.</span>
-<b>pressure</b><span>How full the letter area is. Fallen letters lie at the bottom and take its space. When the bar is full, a countdown "letters crushed" starts, and if it runs out the game is over. It stops when there is room again.</span></div>
+<b>Pressure</b><span>How full the letter area is. Fallen letters lie at the bottom and take its space. When the bar is full, a countdown "letters crushed" starts, and if it runs out the game is over. It stops when there is room again.</span></div>
 <h3>Mistakes</h3>
 <p>A word that does not exist resets the streak, and its letters fall to the bottom. If it was the only shoot of a word, that word dies too and its letters fall as well (its words can be built again).</p>
 <h3>When does a branch close?</h3>
@@ -281,14 +286,14 @@ const I18N = {
 <p>Closed branches wait on the left, beside the field. You can look at them only while you are not building a branch: drag the field to the left or tap one.</p>`
   },
   ru: {
-    t_diff:"сложность словаря", t_streak:"множитель за серию", words:"слов", t_branches:"собранные ветки", pressure:"давление",
-    language:"Язык", layout:"Раскладка букв", o_qwerty:"как QWERTY", o_fan:"веер под палец",
-    theme:"Оформление", o_lab:"лаборатория", o_deep:"глубина",
-    quality:"Качество", o_ultra:"максимальное (с размытием)", o_high:"высокое", o_med:"среднее", o_low:"низкое",
-    showfps:"Счётчик FPS", assist:"Подсказка букв", o_aoff:"нет", o_avalid:"только подходящие", o_adecoy:"подходящие + 3 лишних",
-    hand:"Рука", o_right:"правая", o_left:"левая", tier:"Словарь", o_t1:"жёсткий", o_t2:"средний", o_t3:"лёгкий",
-    agony:"Таймер конца", o_g2:"сложный · 2 с", o_g10:"средний · 10 с", o_g30:"лёгкий · 30 с",
-    ripe:"Время до завершения ветки", o_r8:"сложное · 8 с", o_r15:"среднее · 15 с", o_r30:"лёгкое · 30 с",
+    t_diff:"сложность словаря", t_streak:"множитель за серию", words:"Слов", t_branches:"собранные ветки", pressure:"Давление",
+    language:"Язык", layout:"Раскладка букв", o_qwerty:"Как QWERTY", o_fan:"Веер под палец",
+    theme:"Оформление", o_lab:"Лаборатория", o_deep:"Глубина",
+    quality:"Качество", o_ultra:"Макс. (размытие)", o_high:"Высокое", o_med:"Среднее", o_low:"Низкое",
+    showfps:"Счётчик FPS", assist:"Подсказка букв", o_aoff:"Нет", o_avalid:"Только подходящие", o_adecoy:"Нужные + 3 лишних",
+    hand:"Рука", o_right:"Правая", o_left:"Левая", tier:"Словарь", o_t1:"Жёсткий", o_t2:"Средний", o_t3:"Лёгкий",
+    agony:"Таймер конца", o_g2:"Сложный · 2 с", o_g10:"Средний · 10 с", o_g30:"Лёгкий · 30 с",
+    ripe:"Время до завершения ветки", o_r8:"Сложное · 8 с", o_r15:"Среднее · 15 с", o_r30:"Лёгкое · 30 с",
     onlytr:"Только слова с переводом", hints:"Подсказки", haptics:"Вибро-отклик", pressureT:"Давление по таймеру", best:"Рекорд",
     fullscreen:"Во весь экран", fsauto:"Весь экран по первому касанию", restart:"Новая игра", resetlists:"Сбросить мои отметки слов",
     sources:"Источники данных",
@@ -304,7 +309,7 @@ const I18N = {
     typeAdd:"Набери слово, которое хочешь добавить", alreadyIn:"Это слово уже есть в игре", added:"«%0» добавлено в игру (без перевода)",
     listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
-    fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"слов: %0 · рекорд: %1",
+    fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
     restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
@@ -320,9 +325,9 @@ const I18N = {
 <div class="lg"><b>485</b><span>Ваш счёт.</span>
 <b>★☆☆</b><span>Сложность словаря (настройка): 3 красные звезды: трудный словарь с редкими словами, 1 зелёная звезда: лёгкий словарь с частыми словами.</span>
 <b>×1.3</b><span>Множитель серии. Каждое правильное слово подряд прибавляет +0.1 к очкам (до ×2.0). Ошибка сбрасывает его до ×1.0.</span>
-<b>слов 18</b><span>Сколько слов вы нашли.</span>
+<b>Слов 18</b><span>Сколько слов вы нашли.</span>
 <b>🌿 7</b><span>Сколько веток вы завершили.</span>
-<b>давление</b><span>Насколько заполнена область букв. Упавшие буквы лежат внизу и занимают в ней место. Когда шкала заполнена, запускается обратный отсчёт «буквы сжаты», и если он закончится, игра окончена. Он останавливается, когда место снова появляется.</span></div>
+<b>Давление</b><span>Насколько заполнена область букв. Упавшие буквы лежат внизу и занимают в ней место. Когда шкала заполнена, запускается обратный отсчёт «буквы сжаты», и если он закончится, игра окончена. Он останавливается, когда место снова появляется.</span></div>
 <h3>Ошибки</h3>
 <p>Слово, которого нет, сбрасывает серию, а его буквы падают вниз. Если это был единственный побег слова, то слово тоже погибает и его буквы тоже падают (его слова можно собрать снова).</p>
 <h3>Когда ветка завершается?</h3>
@@ -385,7 +390,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.31";   // keep in sync with the VERSION file
+const VERSION = "0.0.33";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1237,6 +1242,10 @@ function physics(dt) {
   G.pileTop = Math.min(top, G.Hs);   // height of the settled pile
 }
 
+function baseDensity() {   // the load of the letters alone, with no fallen ones
+  let sa = 0; for (const l of G.swarm) sa += Math.PI * l.r * l.r;
+  return sa / (KW * (G.Hs - FLOOR));
+}
 function measureDensity() {
   // free band area = band minus the (inflated) area of settled dead letters inside it
   let used = 0;
@@ -1525,7 +1534,7 @@ function update(dt) {
   const dn = measureDensity();
   G.density += (dn - G.density) * Math.min(1, dt * 4);
   if (G.density > dmax()) G.agony += dt; else G.agony = Math.max(0, G.agony - dt * .5);
-  const f = Math.min(1, G.density / dmax());
+  const d0 = baseDensity(), f = Math.max(0, Math.min(1, (G.density - d0) / Math.max(.02, dmax() - d0)));   // the bar shows only what the fallen letters add to the keyboard's own load: 0% at the start, 100% = the end timer starts
   const bar = $("dens").firstElementChild;
   const bw = (Math.round(f * 200) / 2) + "%", bc = f > .85 ? "#f87171" : f > .65 ? "#fbbf24" : "#38bdf8";
   if (bar._w !== bw) { bar._w = bw; bar.style.width = bw; }
