@@ -356,7 +356,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.27";   // keep in sync with the VERSION file
+const VERSION = "0.0.28";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1361,7 +1361,8 @@ function drawIdle(cw, wy, rr) {
   ctx.beginPath(); ctx.moveTo(cx - arm, cy); ctx.lineTo(cx + arm, cy); ctx.moveTo(cx, cy - arm); ctx.lineTo(cx, cy + arm); ctx.stroke();
   ctx.restore();
 }
-function drawOrbit(cw, wy, SX, SY, ks) {
+function drawOrbit(cw, wy0, SX, SY, ks) {
+  const wy = G.ripeTop != null ? Math.min(wy0, G.ripeTop - 6) : wy0;   // the notice above the wave is never covered by a floating letter
   if (!G.orbit.size) { G.orbitTop = null; return; }
   const tb = SR * ks * .95, tok = G.orbitAll ? tb : tb * ORB, top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
   const colW = Math.min(cw, KW * ks * 1.12), cs = Math.min(tb * 2 + 8, (colW - 24) / 8), rs = tb * 2 + 8;
@@ -1761,6 +1762,7 @@ function draw() {
   const KX = x => cw / 2 + x * ks, KY = y => ch - y * ks;   // the letter band
   G.focus = null; G.orbitC = null; G.focusLow = null; G.focusRoot = false;
   const late = [];   // enlarged (hovered) words are drawn last, on top
+  G.ripeTop = null;   // top edge of the lowest-to-highest stack of 'branch closes in…' notices: floating letters and buttons keep above it
   let ripeSlot = 0;   // finished branches that wait for the harvest stack their notices upward from the wave
   const away = Math.min(1, Math.max(0, (Math.abs(V.x) - 100) / 100));   // 0 at the work, 1 when the camera is out in the archive
   const isBg = t => !!t.dock && t.dock.pop < .5;   // resting trophies form the background layer, behind everything
@@ -1988,7 +1990,8 @@ function draw() {
       for (const n of t.nodes) { minX = Math.min(minX, n.box.x0); maxX = Math.max(maxX, n.box.x1); maxY = Math.max(maxY, n.box.y1 - R); }
       const fs = Math.max(12, Math.round(R * ks * .8)), bw = Math.max(90, 150 * ks);
       const left = Math.max(0, ripeT() - t.ripeT), cx = cw / 2;
-      const cy = wy - 8 - fs * 1.75 - ripeSlot++ * fs * 3.5;   // the notice rests just above the wave, where it hides no words
+      const cy = wy - 8 - fs * 1.75 - ripeSlot++ * fs * 3.5;
+      G.ripeTop = Math.min(G.ripeTop == null ? 1e9 : G.ripeTop, cy - fs * 1.45 - 4);   // the notice rests just above the wave, where it hides no words
       ctx.globalAlpha = 1; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
       ctx.font = "500 " + Math.round(fs * .78) + "px system-ui,sans-serif";
       const pw = Math.max(bw + 20, ctx.measureText(tr("ripeSub")).width + 28);   // a pill behind the text keeps it readable over words
@@ -2009,8 +2012,8 @@ function draw() {
   ctx.restore();
 
   G.actPos = !G.focus ? null : G.focusRoot   // the first word: its height changes with every letter, so the buttons hang on fixed marks (the bottom row's edge, one word cell up) and do not follow it
-    ? { x: SX(G.builder.rootX != null ? G.builder.rootX : G.focus.x), y: SY(G.Hs + 10) + 38 * sc, yTop: SY(G.Hs + 10 + 2 * CAPH), wy, cw }
-    : { x: SX(G.focus.x), y: SY(G.focusLow != null ? G.focusLow : G.focus.y) + (CAPH + 38) * sc, yTop: SY(G.focus.y) - CAPH * sc, wy, cw };
+    ? { x: SX(G.builder.rootX != null ? G.builder.rootX : G.focus.x), y: SY(G.Hs + 10) + 38 * sc, yTop: SY(G.Hs + 10 + 2 * CAPH), wy: G.ripeTop != null ? Math.min(wy, G.ripeTop - 6) : wy, cw }
+    : { x: SX(G.focus.x), y: SY(G.focusLow != null ? G.focusLow : G.focus.y) + (CAPH + 38) * sc, yTop: SY(G.focus.y) - CAPH * sc, wy: G.ripeTop != null ? Math.min(wy, G.ripeTop - 6) : wy, cw };
   drawIdle(cw, wy, rr);
   drawOrbit(cw, wy, SX, SY, ks);
 
