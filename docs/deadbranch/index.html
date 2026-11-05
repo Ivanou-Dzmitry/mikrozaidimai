@@ -27,7 +27,7 @@
   #fps { position:absolute; left:12px; top:80px; z-index:5; pointer-events:none; font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
   #coords.home { color:#13997c; opacity:.7; }
   #hud .big { font-size:26px; font-weight:700; line-height:1; }
-  #hud .sub { font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
+  #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
   #hud .sub svg { width:14px; height:14px; color:#86efac; margin-right:-2px; }
   #hud .grow { flex:1; }
   #dens { height:8px; border-radius:3px; background:#12202e; overflow:hidden; margin-top:8px; }
@@ -54,7 +54,7 @@
   #panel label { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:6px 0; }
   #panel select, #panel button { background:#10202e; color:var(--fg); border:1px solid #1d3547; border-radius:8px; padding:6px 8px; font-size:14px; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
-  #tray { flex:none; display:flex; flex-direction:column; gap:6px; padding:6px 12px max(10px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
+  #tray { flex:none; display:flex; flex-direction:column-reverse; gap:6px; padding:6px 12px max(14px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
   #wzone { height:36px; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; }
   #word { flex:none; max-width:55%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
   #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:1 1 0; height:30px; min-width:0; }
@@ -66,11 +66,11 @@
   #back i { position:absolute; inset:0 auto 0 0; width:0; background:#0a6a8040; }
   #back.hold i { width:100%; transition:width .65s linear; }   /* a fill shows how long to hold */
   #back svg { position:relative; }
-  #btns { display:flex; gap:8px; }
+  #btns { display:flex; gap:8px; justify-content:flex-end; }
   #btns .btn { height:32px; border-radius:11px; }
   .btn.ic { flex:none; width:48px; padding:0; display:flex; align-items:center; justify-content:center; }
   .btn.ic svg { width:20px; height:20px; }
-  #go { flex:1; font-size:17px; }
+  #go { flex:0 0 112px; font-size:17px; padding:0 10px; }   /* about half the old length; the group sits on the side of the thumb */
   body.lefty #btns { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
@@ -349,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.9";   // keep in sync with the VERSION file
+const VERSION = "0.0.10";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
