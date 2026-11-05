@@ -349,7 +349,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.15";   // keep in sync with the VERSION file
+const VERSION = "0.0.16";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1317,6 +1317,26 @@ function pickOrbit(px, py) {   // px, py: pixels inside the canvas; true when a 
 const ORB = 1.8;   // the floating letters are big: there is room, and they are the thing to tap
 // an empty field (no word yet, nothing typed): a reticle in the middle and letters that appear and fade round it, so it is clear that this is where the words will grow
 const idle = { items: [], next: 0 };
+// a few bubbles rise very slowly from the bottom to the top, behind everything: barely visible, never more than three at once
+const bubbles = []; let bubNext = 0;
+function drawBubbles(cw, ch) {
+  const t = G.t;
+  if (t < bubNext - 60) bubNext = 0;   // a new game restarts the clock
+  if (t > bubNext && bubbles.length < 3) {
+    bubNext = t + 4 + Math.random() * 6;
+    bubbles.push({ x: .08 * cw + Math.random() * .84 * cw, r: 14 + Math.random() * 46, sq: .82 + Math.random() * .36, rot: (Math.random() - .5) * .8, vy: 14 + Math.random() * 12, ph: Math.random() * 6.28, wob: 6 + Math.random() * 12, t0: t });
+  }
+  ctx.save(); ctx.lineWidth = 1.2;
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    const b = bubbles[i], age = t - b.t0, y = ch + b.r - b.vy * age;
+    if (age < 0 || y < -b.r) { bubbles.splice(i, 1); continue; }
+    const x = b.x + Math.sin(age * .5 + b.ph) * b.wob;
+    ctx.strokeStyle = T.lab ? "rgba(255,255,255,.2)" : "rgba(190,225,245,.12)"; ctx.fillStyle = T.lab ? "rgba(255,255,255,.035)" : "rgba(190,225,245,.025)";
+    ctx.beginPath(); ctx.ellipse(x, y, b.r, b.r * b.sq, b.rot, 0, 6.2832); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(x, y, b.r * .72, b.r * .72 * b.sq, b.rot, 3.7, 4.5); ctx.stroke();   // a faint glint arc
+  }
+  ctx.restore();
+}
 function drawIdle(cw, wy, rr) {
   if (G.over || G.builder.letters.length || allNodes().length) { idle.items.length = 0; return; }
   const cx = cw / 2, cy = (wy + 70) / 2, R0 = Math.max(70, Math.min(rr * 3.4, cw * .28, (wy - 90) * .4)), t = G.t;
@@ -1753,6 +1773,7 @@ function draw() {
   }
   ctx.globalAlpha = 1;
   
+  drawBubbles(cw, ch);
   // the border between the branch space and the letter space is a wide, slowly drifting sine wave
   {
     const amp = G.waveAmp * ks, wl = 230 * ks, ph = G.t * .5, y0 = wy, x0 = 0, x1 = cw;
