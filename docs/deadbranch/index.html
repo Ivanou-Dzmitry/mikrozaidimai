@@ -96,7 +96,8 @@
   #act .btn { height:56px; border-radius:14px; }
   #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
   #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
-  #act #go:disabled { opacity:.55; box-shadow:none; }
+  #act #go:disabled { opacity:1; box-shadow:none; background:#2a3640; color:#7d8c98; }
+  html.lab #act #go:disabled { background:#d3dbe0; color:#8b9aa5; }
   body.lefty #act { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
@@ -391,7 +392,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.37";   // keep in sync with the VERSION file
+const VERSION = "0.0.38";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1320,7 +1321,7 @@ const orbitActive = () => $("assist").value !== "off" && !!G.builder.base && !G.
 function syncOrbit(dt) {   // the letters that fit float along the two sides of the screen, so the word keeps the middle; the last bubble ("...") shows every letter
   const act = orbitActive(), b = G.builder, p = (b.base ? b.base.str : "") + b.letters.join("");
   cam.bandF += ((act ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);
-  const letters = act && G.allowed ? [...G.allowed].sort((x, y) => strHash(p + "|" + x) - strHash(p + "|" + y)) : [];   // shuffled for every prefix: a new letter must not sit where the old one left (that would be a hint)
+  const letters = act && G.allowed ? [...G.allowed].sort(G.orbitAll ? (x, y) => ALPHA.indexOf(x) - ALPHA.indexOf(y) : (x, y) => strHash(p + "|" + x) - strHash(p + "|" + y)) : [];   // shuffled for every prefix: a new letter must not sit where the old one left (that would be a hint)
   const want = letters.slice(); if (act) want.push("\u2026");   // with the full keyboard open the same bubble becomes a cross that closes it
   const key = want.join("") + "|" + p;
   if (key !== G.okey) {
@@ -1398,8 +1399,11 @@ function drawIdle(cw, wy, rr) {
 function drawOrbit(cw, wy0, SX, SY, ks) {
   const wy = G.ripeTop != null ? Math.min(wy0, G.ripeTop - 6) : wy0;   // the notice above the wave is never covered by a floating letter
   if (!G.orbit.size) { G.orbitTop = null; return; }
-  const tb = SR * ks * .95, tok = G.orbitAll ? tb : tb * ORB, top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
+  const tb = SR * ks * .95;
+  let tok = G.orbitAll ? tb : tb * ORB;
+  const top = 112 + tok * .55, bottom = wy - 22 - tok * .3, H = bottom - top;
   const colW = Math.min(cw, KW * ks * 1.12), cs = Math.min(tb * 2 + 8, (colW - 24) / 8), rs = tb * 2 + 8;
+  if (G.orbitAll) tok = Math.min(tb, cs * .38);   // the all-letters keyboard: a letter never grows beyond its cell, so none lies on another
   G.orbitTop = G.orbitAll ? wy - 16 - 2 * tb - 3 * rs : null;   // top of the all-letters keyboard (the action buttons must not lie on it)   // colW: the play column (all of the screen on a phone)
   const items = [...G.orbit.values()];
   for (const o of items) {
@@ -1418,7 +1422,7 @@ function drawOrbit(cw, wy0, SX, SY, ks) {
         tx = Math.max((cw - colW) / 2 + tok + 4, Math.min((cw + colW) / 2 - tok - 4, tx)); ty = Math.max(top, Math.min(bottom, ty));
       }
     }
-    o.tx = tx + (o.jx || 0); o.ty = ty + (o.jy || 0);
+    o.tx = tx + (G.orbitAll ? 0 : (o.jx || 0)); o.ty = ty + (G.orbitAll ? 0 : (o.jy || 0));
   }
   if (!G.orbitAll && items.length > 1) {   // the letters must neither lie on each other nor on the other words
     const base = G.builder.base, nodes = allNodes().filter(n => n !== base), m = tok * .9, wideW = Math.min(cw, colW * 1.8), xl = (cw - wideW) / 2 + tok + 4, xr = (cw + wideW) / 2 - tok - 4;   // on a wide screen the letters may spread beyond the narrow play column
