@@ -278,7 +278,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.3";   // keep in sync with the VERSION file
+const VERSION = "0.0.4";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -785,7 +785,8 @@ const ARCH_EDGE = 320, ARCH_EDGE_OLD = 154;   // the archive of finished branche
 function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
   const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
   const hx = G.W / 2 + 40;   // the camera may centre a word even at the very wall
-  let x0 = -hx, x1 = hx, top = G.H;
+  const xr = Math.max(0, hx - vw / 2);   // the camera may not leave the field so far that the view shows only empty water (on a wide screen the field fits and there is nothing to pan)
+  let x0 = -xr, x1 = xr, top = G.H;
   if (!archiveLocked()) for (const t of G.trees) if (t.dock && t.dock.ax != null) {
     const w = (t.bb.x1 - t.bb.x0) * DOCK_K;
     x0 = Math.min(x0, t.dock.axT - 40 + vw / 2 - 20); x1 = Math.max(x1, t.dock.axT + w + 40 - vw / 2 + 20); top = Math.max(top, t.dock.ay + 20);
