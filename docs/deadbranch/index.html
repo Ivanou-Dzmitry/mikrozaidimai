@@ -87,7 +87,7 @@
   canvas { flex:1; min-height:0; width:100%; display:block; }
   #tray { flex:none; height:max(24px,env(safe-area-inset-bottom)); }   /* only a margin under the keyboard: the system gesture strip (the assistant) lives right below it */
   #wzone { flex:none; width:max-content; max-width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; padding:3px 14px; border-radius:15px; background:rgba(10,18,27,.62); }
-  .acts { display:flex; gap:10px; }
+  .acts { display:flex; gap:16px; }   /* erase sits at the far left, the hint in the middle, Grow apart on the right: no mis-taps */
   #word { flex:none; max-width:min(72vw,380px); height:34px;   /* a viewport-based limit: a % of a shrink-wrapped box is circular and WebKit cut the word */ line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
   #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:0 1 auto; height:30px; min-width:0; }
   #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
@@ -95,7 +95,7 @@
   .chip { flex:none; position:relative; overflow:hidden; height:30px; padding:0 12px; border-radius:15px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:13px; font-weight:600; }
   .chip[hidden] { display:none; }
   #back { position:relative; overflow:hidden; }
-  #back i { position:absolute; inset:0 auto 0 0; width:0; background:#0a6a8040; }
+  #back i { position:absolute; inset:0 auto 0 0; width:0; background:#d9484140; }
   #back.hold i { width:100%; transition:width .65s linear; }   /* a fill shows how long to hold */
   #back svg { position:relative; }
   #btns { display:flex; gap:8px; justify-content:flex-end; }
@@ -107,7 +107,7 @@
   #act.on { opacity:1; } #act.on .btn, #act.on .chip { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
   #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
-  #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
+  #act #go { margin-left:12px; flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
   #act #go:disabled { opacity:1; box-shadow:none; background:#2a3640; color:#7d8c98; }
   html.lab #act #go:disabled { background:#d3dbe0; color:#8b9aa5; }
   body.lefty #act .acts { flex-direction:row-reverse; }
@@ -138,6 +138,8 @@
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
   html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #act .btn.sec { background:#e4ecf1; border-color:#b8c8d3; color:#46606f; }
+  #act #back { background:#3b2328; border-color:#6a343b; color:#f3a9a9; }   /* erase has a reddish tint */
+  html.lab #act #back { background:#f7e3e3; border-color:#e2b3b3; color:#b2423f; }
   #act .btn.sec:not(:disabled) { box-shadow:none; }
   html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel label { color:#4d6a7b; } html.lab #panel label.ck { color:#0f2f44; border-color:#c3d6e0; }
@@ -230,8 +232,8 @@
     </div>
   </div>
   <div class="acts">
-  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg class="ico"><use href="#i-lightbulb"/></svg></button>
   <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg class="ico"><use href="#i-backspace"/></svg></button>
+  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg class="ico"><use href="#i-lightbulb"/></svg></button>
   <button class="btn go" id="go"><span data-i18n="go"></span><svg class="ico"><use href="#i-check"/></svg></button>
   </div>
 </div>
@@ -409,7 +411,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.56";   // keep in sync with the VERSION file
+const VERSION = "0.0.57";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1509,13 +1511,13 @@ function startDemo() {
   const trees = G.trees.filter(t => t.dock && t.dock.ax != null).sort((a, b) => a.dock.axT - b.dock.axT), seq = [];
   for (const t of trees) for (const n of t.nodes) if (n.str) seq.push(n);
   if (!seq.length) { toast(tr("demoNone"), "bad"); return; }
-  G.demo = { seq, t: 0, cur: null, lit: new Map(), wx: null, started: false };
+  G.demo = { seq, t: -1.6, cur: null, lit: new Map(), wx: null, started: false };
   cam.zoom = 1; $("panel").classList.remove("open"); toast(tr("demoOn"), "gold");
 }
 function stopDemo() { if (!G.demo) return; G.demo = null; cam.manual = false; }
 function demoStep(dt) {
   const D = G.demo; if (!D) return;
-  D.t += dt; cam.manual = true; cam.lastDrag = performance.now(); cam.zoom += (1 - cam.zoom) * Math.min(1, dt * 2); cam.b += ((G.Hs + 20) - cam.b) * Math.min(1, dt * 1.5);
+  D.t += dt; cam.manual = true; cam.lastDrag = performance.now(); cam.zoom += (1 - cam.zoom) * Math.min(1, dt * 2);
   const pos = D.t / DEMO_STEP, idx = Math.floor(pos);
   D.lit.clear();
   for (let i = Math.max(0, idx - 2); i <= Math.min(D.seq.length - 1, idx + 2); i++) {   // a soft bump around each word's moment
@@ -1526,11 +1528,13 @@ function demoStep(dt) {
     if (D.sx == null) D.sx = target;
     D.sx += (target - D.sx) * (1 - Math.exp(-dt / 1.1)); cam.x += (D.sx - cam.x) * (1 - Math.exp(-dt / .9));
   };
+  const midB = wyWorld => wyWorld - (cv.clientHeight - bandPx() - HUD_H) / (2 * camScale());   // the camera's bottom edge that puts this world height at the middle of the field
+  const glideB = target => { if (D.sb == null) D.sb = target; D.sb += (target - D.sb) * (1 - Math.exp(-dt / 1.1)); cam.b += (D.sb - cam.b) * (1 - Math.exp(-dt / .9)); };
   if (idx < D.seq.length) {
-    D.cur = D.seq[idx];
-    if (D.wx != null) { if (!D.started) { cam.x = D.wx; D.sx = D.wx; D.started = true; } else glide(D.wx); }
+    D.cur = D.seq[Math.max(0, idx)];
+    if (D.wx != null) { if (D.t < 0 || !D.started) { cam.x = D.sx = D.wx; cam.b = D.sb = midB(D.wy); D.started = true; } else { glide(D.wx); glideB(midB(D.wy)); } }
   } else {   // the review is over: drift to the origin and hand the game back
-    D.cur = null; glide(0);
+    D.cur = null; glide(0); glideB(G.Hs);
     if (Math.abs(cam.x) < 4 || D.t > D.seq.length * DEMO_STEP + 12) stopDemo();
   }
 }
@@ -2068,7 +2072,7 @@ function draw() {
       const [mx, my] = M(n.x, n.y);
       const wob = d ? 0 : 1.5, x = SX(mx + Math.sin(G.t * 1.6 + n.id) * wob), y = SY(my + Math.cos(G.t * 1.3 + n.id) * wob);
       const leaf = aliveKids(n) === 0;
-      if (G.demo) { if (G.demo.cur === n) G.demo.wx = mx; const e = G.demo.lit.get(n); if (e) late.push(() => {   // demo: the circles of this word glow softly, then fade back to the silhouette
+      if (G.demo) { if (G.demo.cur === n) { G.demo.wx = mx; G.demo.wy = my; G.demo.sy = y; } const e = G.demo.lit.get(n); if (e) late.push(() => {   // demo: the circles of this word glow softly, then fade back to the silhouette
         const a0 = ctx.globalAlpha, k = sc * KS, g = molGeom(n.str), sh = molShift(n.str), rg = Math.max(34, n.w * k * .8);
         const gl = ctx.createRadialGradient(x, y, 0, x, y, rg); gl.addColorStop(0, T.lab ? "rgba(255,200,80,.5)" : "rgba(255,226,140,.32)"); gl.addColorStop(1, "rgba(255,200,80,0)");
         ctx.globalAlpha = e; ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(x, y, rg, 0, 6.2832); ctx.fill();
