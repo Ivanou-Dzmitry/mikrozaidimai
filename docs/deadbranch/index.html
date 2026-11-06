@@ -107,7 +107,7 @@
   #act.on { opacity:1; } #act.on .btn, #act.on .chip { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
   #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
-  #act #go { margin-left:12px; flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
+  #act #go { margin-left:12px; flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#0a8458,#006a44); box-shadow:0 3px 14px #006a4499, inset 0 1px 0 #ffffff44; }   /* the green of the Lithuanian flag (#006a44) */
   #act #go:disabled { opacity:1; box-shadow:none; background:#2a3640; color:#7d8c98; }
   html.lab #act #go:disabled { background:#d3dbe0; color:#8b9aa5; }
   body.lefty #act .acts { flex-direction:row-reverse; }
@@ -411,7 +411,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.57";   // keep in sync with the VERSION file
+const VERSION = "0.0.58";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
