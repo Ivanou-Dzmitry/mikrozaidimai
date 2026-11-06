@@ -23,7 +23,7 @@
     -webkit-mask-image:linear-gradient(#000 55%, transparent); mask-image:linear-gradient(#000 55%, transparent); }
   html.q-ultra #hud::before { -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }   /* only the top profile may blur what is under the header */
   html.lab #hud::before { background:linear-gradient(rgba(238,245,248,.8), rgba(238,245,248,0)); }
-  #dbg { text-align:center; margin-top:1px; pointer-events:none; }
+  #dbg { text-align:center; margin-top:6px; pointer-events:none; }
   #coords { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
   #fps { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
   #coords.home { color:#13997c; opacity:.7; }
@@ -33,7 +33,8 @@
   #hud .st { display:flex; flex-direction:column; min-width:0; text-shadow:0 1px 2px #0008; }
   #hud .st .k { font-size:10px; line-height:1.2; color:#9fb6c6; white-space:nowrap; }
   #hud .st b { font-size:19px; font-weight:700; line-height:1.15; }
-  #hud .st.pr { flex:1 1 auto; min-width:52px; max-width:120px; position:relative; padding-bottom:6px; }
+  #hud .st.pr { flex:1 1 auto; min-width:84px; max-width:170px; }
+  #hud .prow { display:flex; align-items:center; gap:7px; }
   #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
   .ico { width:1.2em; height:1.2em; fill:currentColor; flex:none; vertical-align:middle; }
   #hud .sub svg { width:17px; height:17px; color:#86efac; margin-right:-2px; }
@@ -42,7 +43,7 @@
   #go .ico { width:22px; height:22px; margin-left:3px; } #go { display:flex; align-items:center; justify-content:center; }
   #panel button .ico, #fbh .ico { width:20px; height:20px; margin-right:8px; } #panel #fbb, #fbh { display:flex; align-items:center; justify-content:center; }
   #hud .grow { flex:1; }
-  #dens { position:absolute; left:0; right:0; bottom:0; height:3px; border-radius:2px; background:#12202e; overflow:hidden; margin:0; }   /* the pressure bar underlines its block */
+  #dens { flex:1; min-width:22px; height:7px; border-radius:4px; background:#12202e; overflow:hidden; margin:0; }   /* the bar sits right of the pressure number */
   #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
   #gear, #helpb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:11px; width:40px; height:40px; font-size:20px; }
   /* wide screens (a monitor, 16:9): the canvas and the laboratory fill the window, the play column sits in the middle */
@@ -164,7 +165,7 @@
     <div class="stats">
       <div class="st"><span class="k" data-i18n="words"></span><b id="wn">0</b></div>
       <div class="st"><span class="k" data-i18n="branches" data-i18n-title="t_branches"></span><b id="tn">0</b></div>
-      <div class="st pr"><span class="k" data-i18n="pressure"></span><b id="denst">0%</b><div id="dens"><i></i></div></div>
+      <div class="st pr"><span class="k" data-i18n="pressure"></span><div class="prow"><b id="denst">0%</b><div id="dens"><i></i></div></div></div>
     </div>
     <button id="helpb" aria-label="help" data-i18n-aria="a_help"><svg class="ico"><use href="#i-help"/></svg></button>
     <button id="gear" aria-label="settings"><svg class="ico"><use href="#i-settings"/></svg></button>
@@ -406,7 +407,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.48";   // keep in sync with the VERSION file
+const VERSION = "0.0.49";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
