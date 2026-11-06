@@ -21,7 +21,8 @@
   #hud::before { content:""; position:absolute; z-index:-1; left:0; right:0; top:0; height:calc(100% + 40px); pointer-events:none;   /* frosted strip: whatever passes under the HUD is blurred and fades out */
     background:linear-gradient(rgba(4,24,43,.55), rgba(4,24,43,0)); 
     -webkit-mask-image:linear-gradient(#000 55%, transparent); mask-image:linear-gradient(#000 55%, transparent); }
-  html.q-ultra #hud::before { -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }   /* only the top profile may blur what is under the header */
+  html.q-ultra #hud::before { -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+  html.wide #hud::before { left:calc(50% - 50vw); right:auto; width:100vw; }   /* on a wide screen the frosted strip spans the whole width, not just the play column */   /* only the top profile may blur what is under the header */
   html.lab #hud::before { background:linear-gradient(rgba(238,245,248,.8), rgba(238,245,248,0)); }
   #dbg { text-align:center; margin-top:6px; pointer-events:none; }
   #coords { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
@@ -282,7 +283,7 @@ const I18N = {
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
-    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", helpHtml:`<h2>How to play</h2>
+    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
 <h3>What to do</h3>
 <ol>
@@ -330,7 +331,7 @@ const I18N = {
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
-    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", helpHtml:`<h2>Как играть</h2>
+    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
 <h3>Что делать</h3>
 <ol>
@@ -407,7 +408,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.51";   // keep in sync with the VERSION file
+const VERSION = "0.0.52";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2147,6 +2148,7 @@ function placeActions() {
   if (el._tf !== tf) { el._tf = tf; el.style.transform = tf; }
   G.actRect = { x0: cx, x1: cx + w, y0: cy, y1: cy + h };
 }
+let slowRun = 0;
 function frame(now) {
   requestAnimationFrame(frame);
   if (now - lastDraw < 1000 / Q.fps - 3) return;   // the quality profile caps the frame rate (fewer frames, less heat)
@@ -2156,6 +2158,10 @@ function frame(now) {
   const w0 = performance.now(); update(dt);
   try { draw(); placeActions(); } catch (e) { G.err = String((e && e.message) || e) + " @" + (String((e && e.stack) || "").split("\n")[1] || "").replace(/^.*[\/(]/, "").slice(0, 40); cv.width = cv.width; }   // an error in the middle of a frame leaves a clip on the canvas and old frames stop being erased: reset the canvas state and show the error in the FPS line
   const spent = performance.now() - w0;
+  if (Q === QUAL.ultra) {   // a safety net on any device: if the blur profile is too heavy for 45 frames in a row, fall back to High
+    slowRun = spent > 40 ? slowRun + 1 : 0;
+    if (slowRun > 45) { slowRun = 0; $("quality").value = "high"; $("quality").dispatchEvent(new Event("change")); toast(tr("qDown"), "bad"); }
+  } else slowRun = 0;
   fpsStat.n++; fpsStat.ms += spent;
   if (now - fpsStat.t0 >= 500) {   // a small counter: frames per second, the time one frame costs the processor, the canvas size
     if ($("showfps").checked) setText($("fps"), "v" + VERSION + " \u00b7 FPS " + Math.round(fpsStat.n * 1000 / (now - fpsStat.t0)) + " \u00b7 " + (fpsStat.ms / Math.max(1, fpsStat.n)).toFixed(1) + " ms \u00b7 " + cv.width + "\u00d7" + cv.height + " \u00b7 " + $("quality").value + (G.err ? " \u00b7 ERR " + G.err : ""));
@@ -2234,6 +2240,11 @@ window.addEventListener("pagehide", saveGame);
 
 /* ---------- boot ---------- */
 loadSettings();
+const IS_ANDROID = /Android/i.test(navigator.userAgent) || /[?&]android\b/.test(location.search);   // (the query form is for testing)
+if (IS_ANDROID) {   // blurring the canvas hangs or kills the browser on Android: that top profile is not offered there, and a saved choice of it is dropped
+  const o = $("quality").querySelector('option[value="ultra"]'); if (o) o.remove();
+  if ($("quality").value === "ultra") $("quality").value = "high";
+}
 $("lang").value = LANG; applyLang();
 // feedback: the message goes to the developer's Google Form (one text field) without leaving the game
 const FB_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe-PO7hDVbckje8ebuOQ5O0VpgdC7dAvTRPDnoUp7yZJCUcQg/formResponse", FB_FIELD = "entry.486355045";
