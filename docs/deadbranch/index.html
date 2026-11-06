@@ -17,34 +17,34 @@
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { margin:0; height:100%; background:linear-gradient(#0f5a73, #04182b); color:var(--fg); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; touch-action:none; user-select:none; }
   body { display:flex; flex-direction:column; height:100dvh; max-width:470px; margin:0 auto; position:relative; background:transparent; box-shadow:0 0 50px #0007; }   /* phone-sized column: HUD, field and buttons share one width */
-  #hud { position:absolute; top:0; left:0; right:0; z-index:5; display:block; padding:max(8px,env(safe-area-inset-top)) 12px 0; pointer-events:none; }
+  #hud { position:absolute; top:0; left:0; right:0; z-index:5; display:block; padding:max(6px,env(safe-area-inset-top)) 12px 0; pointer-events:none; }
   #hud::before { content:""; position:absolute; z-index:-1; left:0; right:0; top:0; height:calc(100% + 40px); pointer-events:none;   /* frosted strip: whatever passes under the HUD is blurred and fades out */
     background:linear-gradient(rgba(4,24,43,.55), rgba(4,24,43,0)); 
     -webkit-mask-image:linear-gradient(#000 55%, transparent); mask-image:linear-gradient(#000 55%, transparent); }
   html.q-ultra #hud::before { -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }   /* only the top profile may blur what is under the header */
   html.lab #hud::before { background:linear-gradient(rgba(238,245,248,.8), rgba(238,245,248,0)); }
-  #dbg { text-align:center; margin-top:3px; pointer-events:none; }
-  #coords { font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
-  #fps { font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
+  #dbg { text-align:center; margin-top:1px; pointer-events:none; }
+  #coords { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
+  #fps { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
   #coords.home { color:#13997c; opacity:.7; }
   #hud .hrow { display:flex; align-items:center; gap:8px; }
-  #hud .big { font-size:34px; font-weight:700; line-height:1; flex:none; }
+  #hud .big { font-size:32px; font-weight:700; line-height:1; flex:none; }
   #hud .stats { display:flex; align-items:flex-start; justify-content:center; gap:12px; flex:1; min-width:0; }
   #hud .st { display:flex; flex-direction:column; min-width:0; text-shadow:0 1px 2px #0008; }
   #hud .st .k { font-size:10px; line-height:1.2; color:#9fb6c6; white-space:nowrap; }
   #hud .st b { font-size:19px; font-weight:700; line-height:1.15; }
-  #hud .st.pr { flex:1 1 auto; min-width:52px; max-width:120px; }
+  #hud .st.pr { flex:1 1 auto; min-width:52px; max-width:120px; position:relative; padding-bottom:6px; }
   #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
   .ico { width:1.2em; height:1.2em; fill:currentColor; flex:none; vertical-align:middle; }
   #hud .sub svg { width:17px; height:17px; color:#86efac; margin-right:-2px; }
-  #gear .ico, #helpb .ico { width:26px; height:26px; }
+  #gear .ico, #helpb .ico { width:24px; height:24px; }
   #hintx .ico { width:24px; height:24px; }
   #go .ico { width:22px; height:22px; margin-left:3px; } #go { display:flex; align-items:center; justify-content:center; }
   #panel button .ico, #fbh .ico { width:20px; height:20px; margin-right:8px; } #panel #fbb, #fbh { display:flex; align-items:center; justify-content:center; }
   #hud .grow { flex:1; }
-  #dens { height:6px; border-radius:3px; background:#12202e; overflow:hidden; margin-top:3px; }
+  #dens { position:absolute; left:0; right:0; bottom:0; height:3px; border-radius:2px; background:#12202e; overflow:hidden; margin:0; }   /* the pressure bar underlines its block */
   #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
-  #gear, #helpb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:12px; width:44px; height:44px; font-size:20px; }
+  #gear, #helpb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:11px; width:40px; height:40px; font-size:20px; }
   /* wide screens (a monitor, 16:9): the canvas and the laboratory fill the window, the play column sits in the middle */
   html.wide body { max-width:none; box-shadow:none; }
   html.wide #hud { left:50%; right:auto; width:min(560px,100%); transform:translateX(-50%); }
@@ -406,7 +406,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.47";   // keep in sync with the VERSION file
+const VERSION = "0.0.48";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
