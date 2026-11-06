@@ -86,9 +86,9 @@
   #panel #ver, #panel details { grid-column:1 / -1; margin:0 !important; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
   #tray { flex:none; height:max(24px,env(safe-area-inset-bottom)); }   /* only a margin under the keyboard: the system gesture strip (the assistant) lives right below it */
-  #wzone { flex:none; max-width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; padding:3px 14px; border-radius:15px; background:rgba(10,18,27,.62); }
+  #wzone { flex:none; width:max-content; max-width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; padding:3px 14px; border-radius:15px; background:rgba(10,18,27,.62); }
   .acts { display:flex; gap:10px; }
-  #word { flex:none; max-width:60%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  #word { flex:none; max-width:min(72vw,380px); height:34px;   /* a viewport-based limit: a % of a shrink-wrapped box is circular and WebKit cut the word */ line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
   #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:0 1 auto; height:30px; min-width:0; }
   #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
   #ru:empty { display:none; }
@@ -408,7 +408,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.52";   // keep in sync with the VERSION file
+const VERSION = "0.0.53";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
