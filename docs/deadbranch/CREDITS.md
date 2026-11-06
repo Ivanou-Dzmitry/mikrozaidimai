@@ -12,3 +12,7 @@
 | Остальные русские переводы | Выполнены ИИ (Claude, Anthropic) и проверены по английским определениям Викисловаря; формы глагола «быть» добавлены вручную | Возможны ошибки; сомнительные переводы не показываются |
 
 Данные, полученные из Викисловаря и FrequencyWords, распространяются на условиях CC BY-SA: при публикации игры нужно сохранить указание источника и ту же лицензию для этих данных.
+
+## Icons
+
+Material Symbols (Outlined, weight 300) by Google: lightbulb, backspace, settings, help, eco, close, feedback, check. Apache License 2.0, https://github.com/google/material-design-icons

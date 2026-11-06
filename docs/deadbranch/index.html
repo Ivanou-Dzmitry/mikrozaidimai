@@ -28,7 +28,12 @@
   #coords.home { color:#13997c; opacity:.7; }
   #hud .big { font-size:26px; font-weight:700; line-height:1; }
   #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
-  #hud .sub svg { width:14px; height:14px; color:#86efac; margin-right:-2px; }
+  .ico { width:1.2em; height:1.2em; fill:currentColor; flex:none; vertical-align:middle; }
+  #hud .sub svg { width:17px; height:17px; color:#86efac; margin-right:-2px; }
+  #gear .ico, #helpb .ico { width:26px; height:26px; }
+  #hintx .ico { width:24px; height:24px; }
+  #go .ico { width:22px; height:22px; margin-left:3px; } #go { display:flex; align-items:center; justify-content:center; }
+  #panel button .ico, #fbh .ico { width:20px; height:20px; margin-right:8px; } #panel #fbb, #fbh { display:flex; align-items:center; justify-content:center; }
   #hud .grow { flex:1; }
   #dens { height:8px; border-radius:3px; background:#12202e; overflow:hidden; margin-top:8px; }
   #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
@@ -145,12 +150,12 @@
 </style>
 </head>
 <body>
-<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-lightbulb" viewBox="0 -960 960 960"><path d="M480-96.92q-30.31 0-52.27-21-21.96-21-23.88-51.31h152.3q-1.92 30.31-23.88 51.31-21.96 21-52.27 21Zm-150-127.7v-60h300v60H330ZM336.15-340q-62.84-39.08-99.49-102.12Q200-505.15 200-580q0-116.92 81.54-198.46T480-860q116.92 0 198.46 81.54T760-580q0 74.85-36.66 137.88-36.65 63.04-99.49 102.12h-287.7ZM354-400h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></symbol><symbol id="i-backspace" viewBox="0 -960 960 960"><path d="M367.69-220q-20.77 0-39.04-9.39-18.26-9.38-30.03-26.15L140-480l158.62-223.69q11.77-16.77 29.84-26.54 18.08-9.77 39.23-9.77h380q29.92 0 51.12 21.19Q820-697.61 820-667.69v375.38q0 29.92-21.19 51.12Q777.61-220 747.69-220h-380ZM760-280v-400 400Zm-392.31 0h380q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-375.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85h-380q-5.77 0-10.96 2.88-5.19 2.89-8.27 7.12L213.38-480l135.08 190q3.08 4.23 8.27 7.12 5.19 2.88 10.96 2.88Zm81.39-53.85 104-104 104 104L699.23-376l-104-104 104-104-42.15-42.15-104 104-104-104L406.92-584l104 104-104 104 42.16 42.15Z"/></symbol><symbol id="i-settings" viewBox="0 -960 960 960"><path d="m387.69-100-15.23-121.85q-16.07-5.38-32.96-15.07-16.88-9.7-30.19-20.77L196.46-210l-92.3-160 97.61-73.77q-1.38-8.92-1.96-17.92-.58-9-.58-17.93 0-8.53.58-17.34t1.96-19.27L104.16-590l92.3-159.23 112.46 47.31q14.47-11.46 30.89-20.96t32.27-15.27L387.69-860h184.62l15.23 122.23q18 6.54 32.57 15.27 14.58 8.73 29.43 20.58l114-47.31L855.84-590l-99.15 74.92q2.15 9.69 2.35 18.12.19 8.42.19 16.96 0 8.15-.39 16.58-.38 8.42-2.76 19.27L854.46-370l-92.31 160-112.61-48.08q-14.85 11.85-30.31 20.96-15.46 9.12-31.69 14.89L572.31-100H387.69ZM440-160h78.62L533-267.15q30.62-8 55.96-22.73 25.35-14.74 48.89-37.89L737.23-286l39.39-68-86.77-65.38q5-15.54 6.8-30.47 1.81-14.92 1.81-30.15 0-15.62-1.81-30.15-1.8-14.54-6.8-29.7L777.38-606 738-674l-100.54 42.38q-20.08-21.46-48.11-37.92-28.04-16.46-56.73-23.31L520-800h-79.38l-13.24 106.77q-30.61 7.23-56.53 22.15-25.93 14.93-49.47 38.46L222-674l-39.38 68L269-541.62q-5 14.24-7 29.62t-2 32.38q0 15.62 2 30.62 2 15 6.62 29.62l-86 65.38L222-286l99-42q22.77 23.38 48.69 38.31 25.93 14.92 57.31 22.92L440-160Zm40.46-200q49.92 0 84.96-35.04 35.04-35.04 35.04-84.96 0-49.92-35.04-84.96Q530.38-600 480.46-600q-50.54 0-85.27 35.04T360.46-480q0 49.92 34.73 84.96Q429.92-360 480.46-360ZM480-480Z"/></symbol><symbol id="i-help" viewBox="0 -960 960 960"><path d="M479.56-255.39q17.13 0 28.94-11.82 11.81-11.83 11.81-28.97 0-17.13-11.83-28.94-11.83-11.8-28.96-11.8-17.13 0-28.94 11.83-11.81 11.83-11.81 28.96 0 17.13 11.83 28.94 11.83 11.8 28.96 11.8Zm-28.33-143.23h56.31q.77-29.53 8.65-47.19 7.89-17.65 38.27-46.8 26.39-26.39 40.42-48.74 14.04-22.34 14.04-52.77 0-51.65-37.11-80.69-37.12-29.03-87.81-29.03-50.08 0-82.88 26.73-32.81 26.73-46.81 62.96l51.38 20.61q7.31-19.92 25-38.81 17.69-18.88 52.54-18.88 35.46 0 52.42 19.42 16.97 19.43 16.97 42.73 0 20.39-11.62 37.31-11.61 16.92-29.61 32.69-39.39 35.54-49.77 56.7-10.39 21.15-10.39 63.76ZM480.07-100q-78.84 0-148.21-29.92t-120.68-81.21q-51.31-51.29-81.25-120.63Q100-401.1 100-479.93q0-78.84 29.92-148.21t81.21-120.68q51.29-51.31 120.63-81.25Q401.1-860 479.93-860q78.84 0 148.21 29.92t120.68 81.21q51.31 51.29 81.25 120.63Q860-558.9 860-480.07q0 78.84-29.92 148.21t-81.21 120.68q-51.29 51.31-120.63 81.25Q558.9-100 480.07-100Zm-.07-60q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol><symbol id="i-eco" viewBox="0 -960 960 960"><path d="M229.85-190.04q-42.31-42.5-66.08-97.74Q140-343.02 140-402q0-59.15 22.66-117.38 22.65-58.23 73.19-108.77 36.54-36.54 91.5-60.2 54.96-23.65 124.5-36.03 69.54-12.39 151.57-14.43 82.04-2.03 172.12 5.27 6.46 86 4.42 167.12-2.04 81.11-14.19 151.26-12.16 70.16-35.5 126.35-23.35 56.19-60.12 92.96-49.54 49.93-105.96 72.89Q507.77-100 449.9-100q-60.67 0-119.21-23.77-58.54-23.77-100.84-66.27Zm89.69-6.58q30.15 18.93 63.73 27.77Q416.85-160 450-160q46.26 0 91.51-18.31 45.26-18.31 85.87-59.69 17.93-18 36.36-50.5 18.42-32.5 31.87-85t20.42-127Q723-575 718.77-678q-49-2-110.89-1.12-61.88.89-123.46 10.08-61.57 9.19-116.38 28.81-54.81 19.61-88.66 53.46-44.61 44.62-62 90.35Q200-450.69 200-409.69q0 56.69 22.12 102.54 22.11 45.84 46.03 68.07 33.54-75.38 94.27-144.65Q423.15-453 516.31-504.61q-70.47 61.46-120.7 135-50.23 73.53-76.07 172.99Zm0 0Zm0 0Z"/></symbol><symbol id="i-close" viewBox="0 -960 960 960"><path d="M256-213.85 213.85-256l224-224-224-224L256-746.15l224 224 224-224L746.15-704l-224 224 224 224L704-213.85l-224-224-224 224Z"/></symbol><symbol id="i-feedback" viewBox="0 -960 960 960"><path d="M480-371.54q13.92 0 23.11-9.19 9.2-9.19 9.2-23.12 0-13.92-9.2-23.11-9.19-9.19-23.11-9.19t-23.11 9.19q-9.2 9.19-9.2 23.11 0 13.93 9.2 23.12 9.19 9.19 23.11 9.19Zm-30-139.23h60v-241.54h-60v241.54ZM100-118.46v-669.23Q100-818 121-839q21-21 51.31-21h615.38Q818-860 839-839q21 21 21 51.31v455.38Q860-302 839-281q-21 21-51.31 21H241.54L100-118.46ZM216-320h571.69q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-455.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H172.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v523.08L216-320Zm-56 0v-480 480Z"/></symbol><symbol id="i-check" viewBox="0 -960 960 960"><path d="M382-253.85 168.62-467.23 211.38-510 382-339.38 748.62-706l42.76 42.77L382-253.85Z"/></symbol></svg>
 <div id="hud">
-  <div><div class="big" id="score">0</div><div class="sub"><span id="diff" data-i18n-title="t_diff"></span><span>·</span><span id="streak" data-i18n-title="t_streak">×1.0</span><span>·</span><span><span data-i18n="words"></span> <span id="wn">0</span></span><span>·</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l7-7"/></svg><span id="tn" data-i18n-title="t_branches">0</span></div></div>
+  <div><div class="big" id="score">0</div><div class="sub"><span id="diff" data-i18n-title="t_diff"></span><span>·</span><span id="streak" data-i18n-title="t_streak">×1.0</span><span>·</span><span><span data-i18n="words"></span> <span id="wn">0</span></span><span>·</span><svg class="ico"><use href="#i-eco"/></svg><span id="tn" data-i18n-title="t_branches">0</span></div></div>
   <div class="grow"><div class="sub" style="justify-content:flex-end"><span data-i18n="pressure"></span> <b id="denst">0%</b></div><div id="dens"><i></i></div></div>
-  <button id="helpb" aria-label="help" data-i18n-aria="a_help">?</button>
-  <button id="gear" aria-label="settings">⚙</button>
+  <button id="helpb" aria-label="help" data-i18n-aria="a_help"><svg class="ico"><use href="#i-help"/></svg></button>
+  <button id="gear" aria-label="settings"><svg class="ico"><use href="#i-settings"/></svg></button>
 </div>
 <div id="coords"></div>
 <div id="fps"></div>
@@ -192,7 +197,7 @@
   <label class="ck"><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
   <button id="restart" style="width:100%;margin-top:6px" data-i18n="restart"></button>
   <button id="resetlists" style="width:100%;margin-top:6px" data-i18n="resetlists"></button>
-  <button id="fbb" style="width:100%;margin-top:6px" data-i18n="fbOpen"></button>
+  <button id="fbb" style="width:100%;margin-top:6px"><svg class="ico"><use href="#i-feedback"/></svg><span data-i18n="fbOpen"></span></button>
   <div id="ver" style="margin-top:8px;font-size:11px;color:#6b8294;text-align:center"></div>
   <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer" data-i18n="sources"></summary><span data-i18n="sourcesText"></span></details>
 </div>
@@ -201,9 +206,9 @@
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
 <div id="act">
-  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></button>
-  <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 9l-5 6M12 9l5 6"/></svg></button>
-  <button class="btn go" id="go" data-i18n="go"></button>
+  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg class="ico"><use href="#i-lightbulb"/></svg></button>
+  <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg class="ico"><use href="#i-backspace"/></svg></button>
+  <button class="btn go" id="go"><span data-i18n="go"></span><svg class="ico"><use href="#i-check"/></svg></button>
 </div>
 <div id="tray">
   <div id="wzone">
@@ -222,7 +227,7 @@
   <div class="note" data-i18n="fbNote"></div>
   <div class="row"><button class="btn sec" id="fbcancel" data-i18n="fbCancel"></button><button class="btn go" id="fbsend" data-i18n="fbSend"></button></div>
 </div></div>
-<div id="help"><div class="card"><div id="helptext"></div><button class="btn sec" id="fbh" data-i18n="fbOpen"></button></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
+<div id="help"><div class="card"><div id="helptext"></div><button class="btn sec" id="fbh"><svg class="ico"><use href="#i-feedback"/></svg><span data-i18n="fbOpen"></span></button></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
 <div id="over"><h1 data-i18n="overTitle"></h1><div class="score" id="fscore">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px" data-i18n="again"></button></div>
 
 <script src="words.js?v=20"></script>
@@ -249,10 +254,10 @@ const I18N = {
     onlytr:"Only words with translation", hints:"Hints", haptics:"Haptic feedback", pressureT:"Timer pressure", best:"Best",
     fullscreen:"Fullscreen", fsauto:"Fullscreen on first touch", restart:"New game", resetlists:"Reset my word marks",
     sources:"Data sources",
-    sourcesText:"Hunspell lt_LT dictionary (A. Agejevas et al., BSD); word frequencies from FrequencyWords / OpenSubtitles (CC BY-SA); English and Russian Wiktionary dumps from kaikki.org (CC BY-SA), including verb forms; a noun list and the database of the author's study app; some translations were made by AI (Claude) and checked against Wiktionary. Details: CREDITS.md",
+    sourcesText:"Hunspell lt_LT dictionary (A. Agejevas et al., BSD); word frequencies from FrequencyWords / OpenSubtitles (CC BY-SA); English and Russian Wiktionary dumps from kaikki.org (CC BY-SA), including verb forms; a noun list and the database of the author's study app; some translations were made by AI (Claude) and checked against Wiktionary. Icons: Material Symbols (Google), Apache License 2.0. Details: CREDITS.md",
     nowrd:"✗ Not a word", t_nowrd:"Mark: there is no such word", yesw:"✓ It is a word", t_yesw:"It is a word: add it to the game",
     t_hintb:"Hint: which branches can still grow", a_hintb:"Hint",
-    t_back:"Erase a letter. Hold: finish the branch (or erase the whole word)", a_back:"Erase", go:"Grow ✓",
+    t_back:"Erase a letter. Hold: finish the branch (or erase the whole word)", a_back:"Erase", go:"Grow",
     overTitle:"Letters crushed", again:"Again",
     addLetters:"Add letters", need2:"At least 2 letters needed", alreadyLive:"already in a live branch", maybe:"maybe %0?",
     branchesEnded:"Branch ended: it closes in %0 s", harvested:"Branch closed! +%0", pickFirst:"Pick a branch word first",
@@ -299,10 +304,10 @@ const I18N = {
     onlytr:"Только слова с переводом", hints:"Подсказки", haptics:"Вибро-отклик", pressureT:"Давление по таймеру", best:"Рекорд",
     fullscreen:"Во весь экран", fsauto:"Весь экран по первому касанию", restart:"Новая игра", resetlists:"Сбросить мои отметки слов",
     sources:"Источники данных",
-    sourcesText:"Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Подробно: CREDITS.md",
+    sourcesText:"Словарь Hunspell lt_LT (A. Agejevas и др., BSD); частоты слов — FrequencyWords / OpenSubtitles (CC BY-SA); английский и русский Викисловарь, выгрузки kaikki.org (CC BY-SA), в том числе формы глаголов; список существительных и база учебного приложения автора игры; часть переводов сделана ИИ (Claude) и проверена по Викисловарю. Значки: Material Symbols (Google), лицензия Apache 2.0. Подробно: CREDITS.md",
     nowrd:"✗ Нет такого слова", t_nowrd:"Отметить: такого слова нет", yesw:"✓ Такое слово есть", t_yesw:"Такое слово есть: добавить в игру",
     t_hintb:"Подсказка: какие ветки ещё могут расти", a_hintb:"Подсказка",
-    t_back:"Стереть букву. Удерживай: завершить ветку (или стереть всё слово)", a_back:"Стереть", go:"Расти ✓",
+    t_back:"Стереть букву. Удерживай: завершить ветку (или стереть всё слово)", a_back:"Стереть", go:"Расти",
     overTitle:"Буквы сжаты", again:"Ещё раз",
     addLetters:"Добавь буквы", need2:"Нужно хотя бы 2 буквы", alreadyLive:"уже есть в живой ветке", maybe:"может, %0?",
     branchesEnded:"Ветка закончилась: завершится через %0 с", harvested:"Ветка завершена! +%0", pickFirst:"Сначала выбери слово ветки",
@@ -392,7 +397,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.43";   // keep in sync with the VERSION file
+const VERSION = "0.0.44";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1103,7 +1108,7 @@ $("hintb").onclick = () => {
       ? `<div><b>${n.str.toUpperCase()}</b> · ${tr("more", hi.c)} <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
       : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ${tr("finished")}</div>`);
   }
-  $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + tr("close") + '">\u00d7</button>' + rows.join("");
+  $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + tr("close") + '"><svg class="ico"><use href="#i-close"/></svg></button>' + rows.join("");
   $("hintpanel").classList.add("open");
   clearTimeout(window.__hintTO);
   window.__hintTO = setTimeout(() => $("hintpanel").classList.remove("open"), 10000);
