@@ -51,7 +51,6 @@
   html.wide #hud { left:50%; right:auto; width:min(560px,100%); transform:translateX(-50%); }
   html.wide #panel { right:calc(50% - 280px + 10px); }
   html.wide #hintpanel { left:calc(50% - 280px + 8px); right:calc(50% - 280px + 8px); }
-  html.wide #tray { padding-left:calc(50% - 280px + 12px); padding-right:calc(50% - 280px + 12px); }
   #helpb { font-size:20px; font-weight:700; }
   #fb { position:absolute; inset:0; z-index:13; display:none; align-items:center; justify-content:center; background:#050a10cc; }
   #fb.open { display:flex; }
@@ -85,11 +84,12 @@
   #panel button { min-height:36px; margin:0 !important; }
   #panel #ver, #panel details { grid-column:1 / -1; margin:0 !important; }
   canvas { flex:1; min-height:0; width:100%; display:block; }
-  #tray { flex:none; display:flex; flex-direction:row; align-items:center; gap:10px; padding:6px 12px max(30px,env(safe-area-inset-bottom)); background:#0a121b; border-top:1px solid #1a2b3a; }
-  #wzone { flex:1 1 0; height:44px; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px; min-width:0; }
-  #word { flex:none; max-width:55%; height:42px; line-height:42px; text-align:center; font-size:32px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
-  #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:1 1 0; height:30px; min-width:0; }
-  #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:16px; font-weight:400; color:#b4d3e6; }
+  #tray { flex:none; height:max(24px,env(safe-area-inset-bottom)); }   /* only a margin under the keyboard: the system gesture strip (the assistant) lives right below it */
+  #wzone { flex:none; max-width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; min-width:0; padding:3px 14px; border-radius:15px; background:rgba(10,18,27,.62); }
+  .acts { display:flex; gap:10px; }
+  #word { flex:none; max-width:60%; height:34px; line-height:34px; text-align:center; font-size:26px; font-weight:700; letter-spacing:2px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:clip; }
+  #sub { display:flex; align-items:center; justify-content:flex-start; gap:8px; flex:0 1 auto; height:30px; min-width:0; }
+  #ru { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:400; color:#b4d3e6; }
   #ru:empty { display:none; }
   .chip { flex:none; position:relative; overflow:hidden; height:30px; padding:0 12px; border-radius:15px; border:1px solid #2a4a62; background:#12263a; color:var(--fg); font-size:13px; font-weight:600; }
   .chip[hidden] { display:none; }
@@ -101,16 +101,15 @@
   #btns .btn { height:32px; border-radius:11px; }
   .btn.ic { flex:none; width:48px; padding:0; display:flex; align-items:center; justify-content:center; }
   .btn.ic svg { width:20px; height:20px; }
-  body.lefty #tray { flex-direction:row-reverse; }
   /* Grow and erase float just under the word being worked on: the finger does not have to travel to the bottom */
-  #act { position:absolute; left:0; top:0; z-index:5; display:flex; gap:10px; opacity:0; pointer-events:none; transition:opacity .15s; }
-  #act.on { opacity:1; } #act.on .btn { pointer-events:auto; }
+  #act { position:absolute; left:0; top:0; z-index:5; display:flex; flex-direction:column; align-items:center; gap:8px; max-width:calc(100% - 16px); opacity:0; pointer-events:none; transition:opacity .15s; }
+  #act.on { opacity:1; } #act.on .btn, #act.on .chip { pointer-events:auto; }
   #act .btn { height:56px; border-radius:14px; }
   #act #back, #act #hintb { width:56px; } #act #back svg, #act #hintb svg { width:24px; height:24px; }
   #act #go { flex:0 0 92px; font-size:19px; padding:0; color:#fff; background:linear-gradient(#2f8bff,#0a52e0); box-shadow:0 3px 14px #0a52e099, inset 0 1px 0 #ffffff55; }
   #act #go:disabled { opacity:1; box-shadow:none; background:#2a3640; color:#7d8c98; }
   html.lab #act #go:disabled { background:#d3dbe0; color:#8b9aa5; }
-  body.lefty #act { flex-direction:row-reverse; }
+  body.lefty #act .acts { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls { color:var(--fg); }
   #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
   #word .hint { color:#8aa3b5; font-size:16px; font-weight:400; letter-spacing:0; text-transform:none; }
@@ -142,7 +141,7 @@
   html.lab #panel { background:#ffffffee; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #panel label { color:#4d6a7b; } html.lab #panel label.ck { color:#0f2f44; border-color:#c3d6e0; }
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
-  html.lab #tray { background:#eef5f8f2; border-top-color:#b9cfdb; }
+  html.lab #wzone { background:rgba(255,255,255,.66); }
   html.lab #bs { color:#6f8796; } html.lab #ls { color:#0f2f44; } html.lab #word.word #ls { color:#15803d; } html.lab #word.dead #ls { color:#dc2626; }
   html.lab #word .hint { color:#58707f; } html.lab #ru { color:#3d5a6b; }
   html.lab .chip { background:#fff; border-color:#9bb8c8; color:#0f2f44; }
@@ -220,11 +219,6 @@
 <div id="hintpanel"></div>
 <canvas id="c"></canvas>
 <div id="act">
-  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg class="ico"><use href="#i-lightbulb"/></svg></button>
-  <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg class="ico"><use href="#i-backspace"/></svg></button>
-  <button class="btn go" id="go"><span data-i18n="go"></span><svg class="ico"><use href="#i-check"/></svg></button>
-</div>
-<div id="tray">
   <div id="wzone">
     <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint"></span></div>
     <div id="sub">
@@ -233,7 +227,13 @@
       <button class="chip" id="yesw" hidden data-i18n="yesw" data-i18n-title="t_yesw"></button>
     </div>
   </div>
+  <div class="acts">
+  <button class="btn sec ic" id="hintb" data-i18n-title="t_hintb" data-i18n-aria="a_hintb"><svg class="ico"><use href="#i-lightbulb"/></svg></button>
+  <button class="btn sec ic" id="back" data-i18n-title="t_back" data-i18n-aria="a_back"><i></i><svg class="ico"><use href="#i-backspace"/></svg></button>
+  <button class="btn go" id="go"><span data-i18n="go"></span><svg class="ico"><use href="#i-check"/></svg></button>
+  </div>
 </div>
+<div id="tray"></div>
 <div id="fb"><div class="box">
   <h3 data-i18n="fbTitle"></h3>
   <div class="types"><button data-t="word" data-i18n="fb_word"></button><button data-t="translation" data-i18n="fb_tr"></button><button data-t="bug" data-i18n="fb_bug"></button><button data-t="idea" data-i18n="fb_idea"></button></div>
@@ -407,7 +407,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.50";   // keep in sync with the VERSION file
+const VERSION = "0.0.51";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2124,7 +2124,13 @@ const fpsStat = { n: 0, ms: 0, t0: 0 };
 let HUD_H = 70;   // the header's height: toasts, hints and floating things keep below it
 new ResizeObserver(() => { HUD_H = $("hud").offsetHeight; document.documentElement.style.setProperty("--hud", HUD_H + "px"); }).observe($("hud"));
 let actOn = false;
-function placeActions() {   // the Grow / erase group sits a little under the word being worked on (and the floating hint letters keep clear of it)
+let trayCol = "", trayN = 0;
+function placeActions() {
+  if (trayN++ % 45 === 0) {   // the margin strip under the keyboard takes the colour of the water at the canvas bottom (sampled now and then)
+    let col = T.sky[2];
+    try { const d = ctx.getImageData(cv.width >> 1, cv.height - 2, 1, 1).data; col = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")"; } catch (e) {}
+    if (col !== trayCol) { trayCol = col; $("tray").style.background = col; }
+  }   // the Grow / erase group sits a little under the word being worked on (and the floating hint letters keep clear of it)
   const el = $("act"), b = G.builder, p = G.actPos, show = !!p && !G.over && (b.letters.length > 0 || !!b.base);
   const wasOn = actOn;
   if (show !== actOn) { actOn = show; el.classList.toggle("on", show); }
