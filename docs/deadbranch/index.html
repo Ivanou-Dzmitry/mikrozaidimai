@@ -211,6 +211,7 @@
   <label class="ck"><span data-i18n="fsauto"></span> <input type="checkbox" id="fsauto"></label>
   <button id="restart" style="width:100%;margin-top:6px" data-i18n="restart"></button>
   <button id="resetlists" style="width:100%;margin-top:6px" data-i18n="resetlists"></button>
+  <button id="demob" style="width:100%;margin-top:6px" data-i18n="demo"></button>
   <button id="fbb" style="width:100%;margin-top:6px"><svg class="ico"><use href="#i-feedback"/></svg><span data-i18n="fbOpen"></span></button>
   <div id="ver" style="margin-top:8px;font-size:11px;color:#6b8294;text-align:center"></div>
   <details style="margin-top:8px;font-size:11px;color:#8fb0c4;line-height:1.4"><summary style="cursor:pointer" data-i18n="sources"></summary><span data-i18n="sourcesText"></span></details>
@@ -283,7 +284,7 @@ const I18N = {
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
-    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
+    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", demo:"Demo mode", demoOn:"Demo: a calm look at your branches. Tap to stop", demoNone:"No closed branches yet: nothing to show", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
 <h3>What to do</h3>
 <ol>
@@ -331,7 +332,7 @@ const I18N = {
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
-    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
+    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", demo:"Демо-режим", demoOn:"Демо: спокойный обзор ваших веток. Нажмите, чтобы остановить", demoNone:"Завершённых веток ещё нет: показывать нечего", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
 <h3>Что делать</h3>
 <ol>
@@ -408,7 +409,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.54";   // keep in sync with the VERSION file
+const VERSION = "0.0.55";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -913,7 +914,7 @@ function fieldView() {   // which part of the world the branch field shows right
   return { sc, vw, vh, x, b, x0: x - vw / 2, x1: x + vw / 2, top: b + vh };
 }
 // while a branch is being worked on (a word is picked or letters are typed) the archive of finished branches is shut: no popping them out, no panning over to them
-const archiveLocked = () => !!G.builder.base || G.builder.letters.length > 0;
+const archiveLocked = () => !G.demo && (!!G.builder.base || G.builder.letters.length > 0);
 const ARCH_EDGE = 320, ARCH_EDGE_OLD = 154;   // the archive of finished branches starts this far from the centre, just outside the widest the live field gets (560 / 2 + margin), so on a wide screen it sits beside the words, never under them
 function camBounds() {   // how far the camera may go: over the whole field and the archive beside it, with a little slack
   const sc = camScale(), vw = cv.clientWidth / sc, vh = Math.max(60, cv.clientHeight - bandPx()) / sc;
@@ -1501,7 +1502,36 @@ function drawOrbit(cw, wy0, SX, SY, ks) {
 }
 
 /* ---------- update / draw ---------- */
+// DEMO MODE: a calm review of the archive. The camera starts at the oldest closed branch and slowly drifts to the origin; every second the next word
+// glows softly (fades in and out, neighbours overlap a little) in the order the words were grown.
+const DEMO_STEP = 1.2, DEMO_GLOW = 1.1;   // seconds per word; the glow of a word lasts DEMO_GLOW steps each side of its moment (neighbours overlap)
+function startDemo() {
+  const trees = G.trees.filter(t => t.dock && t.dock.ax != null).sort((a, b) => a.dock.axT - b.dock.axT), seq = [];
+  for (const t of trees) for (const n of t.nodes) if (n.str) seq.push(n);
+  if (!seq.length) { toast(tr("demoNone"), "bad"); return; }
+  G.demo = { seq, t: 0, cur: null, lit: new Map(), wx: null, started: false };
+  cam.zoom = 1; $("panel").classList.remove("open"); toast(tr("demoOn"), "gold");
+}
+function stopDemo() { if (!G.demo) return; G.demo = null; cam.manual = false; }
+function demoStep(dt) {
+  const D = G.demo; if (!D) return;
+  D.t += dt; cam.manual = true; cam.lastDrag = performance.now(); cam.zoom += (1 - cam.zoom) * Math.min(1, dt * 2); cam.b += ((G.Hs + 20) - cam.b) * Math.min(1, dt * 1.5);
+  const pos = D.t / DEMO_STEP, idx = Math.floor(pos);
+  D.lit.clear();
+  for (let i = Math.max(0, idx - 2); i <= Math.min(D.seq.length - 1, idx + 2); i++) {   // a soft bump around each word's moment
+    const e = Math.max(0, .5 + .5 * Math.cos(Math.PI * Math.min(1, Math.abs(pos - (i + .5)) / DEMO_GLOW)));
+    if (e > .01) D.lit.set(D.seq[i], e);
+  }
+  if (idx < D.seq.length) {
+    D.cur = D.seq[idx];
+    if (D.wx != null) { if (!D.started) { cam.x = D.wx; D.started = true; } else cam.x += (D.wx - cam.x) * Math.min(1, dt * 1.4); }
+  } else {   // the review is over: drift to the origin and hand the game back
+    D.cur = null; cam.x += (0 - cam.x) * Math.min(1, dt * 1.2);
+    if (Math.abs(cam.x) < 4 || D.t > D.seq.length * DEMO_STEP + 8) stopDemo();
+  }
+}
 function update(dt) {
+  demoStep(dt);
   dustStep(dt);
   camUpdate(dt);
   updateAllowed(dt);
@@ -2034,6 +2064,13 @@ function draw() {
       const [mx, my] = M(n.x, n.y);
       const wob = d ? 0 : 1.5, x = SX(mx + Math.sin(G.t * 1.6 + n.id) * wob), y = SY(my + Math.cos(G.t * 1.3 + n.id) * wob);
       const leaf = aliveKids(n) === 0;
+      if (G.demo) { if (G.demo.cur === n) G.demo.wx = mx; const e = G.demo.lit.get(n); if (e) late.push(() => {   // demo: the circles of this word glow softly, then fade back to the silhouette
+        const a0 = ctx.globalAlpha, k = sc * KS, g = molGeom(n.str), sh = molShift(n.str), rg = Math.max(34, n.w * k * .8);
+        const gl = ctx.createRadialGradient(x, y, 0, x, y, rg); gl.addColorStop(0, T.lab ? "rgba(255,200,80,.5)" : "rgba(255,226,140,.32)"); gl.addColorStop(1, "rgba(255,200,80,0)");
+        ctx.globalAlpha = e; ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(x, y, rg, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = T.lab ? "#f5b83d" : "#fde68a"; ctx.globalAlpha = e * .62;
+        for (const at of g.atoms) { ctx.beginPath(); ctx.arc(x + at.x * k, y - (at.y + sh) * k, AF * .46 * k, 0, 6.2832); ctx.fill(); }
+        ctx.globalAlpha = a0; }); }
       let tc = T.lab ? "#0b1620" : "#c9f7dc";
       if (n.done || t.harvest || (t.ripe && leaf)) tc = T.lab ? "#0b1620" : "#fff3c4";
       if (sil) molecule(x, y, sc * KS, n.str, { bond: silCol, atom: silCol, sil: true });
@@ -2268,6 +2305,9 @@ $("fbsend").onclick = async () => {
     fbLast = Date.now(); $("fb").classList.remove("open"); toast(tr("fbThanks"), "gold");
   } catch (e) { toast(tr("fbFail"), "bad"); }
 };
+$("demob").onclick = startDemo;
+cv.addEventListener("pointerdown", () => stopDemo(), true);
+document.addEventListener("keydown", () => stopDemo());
 const openHelp = () => {   // the help leaves the letter band free: a tap on the field or a letter closes it and is still played
   const r = cv.getBoundingClientRect(), h = $("help");
   h.style.bottom = Math.max(0, innerHeight - r.bottom + bandPx()) + "px";
