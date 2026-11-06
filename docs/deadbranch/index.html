@@ -407,7 +407,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.45";   // keep in sync with the VERSION file
+const VERSION = "0.0.46";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1831,7 +1831,7 @@ function draw() {
   const wy = ch - band;                                      // screen y of the wave
   const SX = x => cw / 2 + (x - V.x) * sc, SY = y => y <= G.Hs ? ch - y * ks : wy - (y - V.b) * sc, rr = R * sc;   // the branch field (y above the wave is clipped away)
   const KX = x => cw / 2 + x * ks, KY = y => ch - y * ks;   // the letter band
-  G.focus = null; G.orbitC = null; G.focusLow = null; G.focusRoot = false;
+  G.focus = null; G.orbitC = null; G.focusLow = null; G.focusRoot = false; G.rootRow = null;
   const late = [];   // enlarged (hovered) words are drawn last, on top
   G.ripeTop = null;   // top edge of the lowest-to-highest stack of 'branch closes in…' notices: floating letters and buttons keep above it
   let ripeSlot = 0;   // finished branches that wait for the harvest stack their notices upward from the wave
@@ -1936,7 +1936,10 @@ function draw() {
       if (ru) subText(cx0, cy0 + (CAPH - 6) * sc, w * sc - 8, Math.max(9, 12.5 * sc), T.pv.text, ru);
     } else {
       const pos = placeRoot(w, bl.letters.length, bl.rootX); G.focus = { x: pos.x, y: G.Hs + 10 + CAPH }; G.focusLow = pos.y; G.focusRoot = true;   // the camera does not chase the first word's changing height: a fixed mark
-      for (const l of slotsFor(pos, w, bl.letters)) glyphLean(SX(l.x), SY(l.y), rr * LRK * (l.s || 1), l.ch, T.pv.fill, T.pv.rim, T.pv.text, 2, leanAngle(l.x, l.y, pos.x, pos.y), false);
+      // the first word's letters lie in a row across the middle of the field, where the cross was; the buttons hang under the row
+      const n = bl.letters.length, r0 = rr * LRK * 1.25, sp = Math.min(r0 * 2.4, (cw - 24) / n), r = Math.min(r0, sp * .46), yRow = (wy + HUD_H) / 2, x0 = cw / 2 - (n - 1) * sp / 2;
+      bl.letters.forEach((ch, i) => glyph(x0 + i * sp, yRow, r, ch, T.pv.fill, T.pv.rim, T.pv.text, 2, false));
+      G.rootRow = { y: yRow, r, cw };
     }
     ctx.globalAlpha = 1;
   }
@@ -2094,8 +2097,8 @@ function draw() {
   ctx.globalAlpha = 1; for (const f of late) f();
   ctx.restore();
 
-  G.actPos = !G.focus ? null : G.focusRoot   // the first word: its height changes with every letter, so the buttons hang on fixed marks (the bottom row's edge, one word cell up) and do not follow it
-    ? { x: SX(G.builder.rootX != null ? G.builder.rootX : G.focus.x), y: SY(G.Hs + 10) + 38 * sc, yTop: SY(G.Hs + 10 + 2 * CAPH), wy: G.ripeTop != null ? Math.min(wy, G.ripeTop - 6) : wy, cw }
+  G.actPos = !G.focus ? null : G.focusRoot && G.rootRow   // the first word: its height changes with every letter, so the buttons hang on fixed marks (the bottom row's edge, one word cell up) and do not follow it
+    ? { x: cw / 2, y: G.rootRow.y + G.rootRow.r + 30, yTop: G.rootRow.y - G.rootRow.r - 12, wy: G.ripeTop != null ? Math.min(wy, G.ripeTop - 6) : wy, cw }
     : { x: SX(G.focus.x), y: SY(G.focusLow != null ? G.focusLow : G.focus.y) + (CAPH + 38) * sc, yTop: SY(G.focus.y) - CAPH * sc, wy: G.ripeTop != null ? Math.min(wy, G.ripeTop - 6) : wy, cw };
   drawIdle(cw, wy, rr);
   drawOrbit(cw, wy, SX, SY, ks);
