@@ -32,7 +32,7 @@
   #hud .stats { display:flex; align-items:flex-start; justify-content:center; gap:12px; flex:1; min-width:0; }
   #hud .st { display:flex; flex-direction:column; min-width:0; text-shadow:0 1px 2px #0008; }
   #hud .st .k { font-size:10px; line-height:1.2; color:#9fb6c6; white-space:nowrap; }
-  #hud .st b { font-size:19px; font-weight:700; line-height:1.15; }
+  #hud .st b { font-size:19px; font-weight:700; line-height:1.15; color:#9fd0ee; }
   #hud .st.pr { flex:1 1 auto; min-width:84px; max-width:170px; }
   #hud .prow { display:flex; align-items:center; gap:7px; }
   #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
@@ -134,7 +134,7 @@
   html.lab { background:linear-gradient(#eef5f8,#3b7ba6); color:#12303f; }
   html.lab body { color:#12303f; box-shadow:0 0 50px #4a6b7e55; }
   html.lab #hud .sub { color:#35566a; text-shadow:0 1px 0 #fff9; } html.lab #hud .sub svg { color:#13997c; }
-  html.lab #hud .st { text-shadow:0 1px 0 #fff9; } html.lab #hud .st .k { color:#4d6a7b; } html.lab #hud .st b { color:#0f2f44; }
+  html.lab #hud .st { text-shadow:0 1px 0 #fff9; } html.lab #hud .st .k { color:#6d8ea3; } html.lab #hud .st b { color:#3a7ca8; }   /* a calm blue, so the small numbers do not compete with the score */
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
   html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #act .btn.sec { background:#e4ecf1; border-color:#b8c8d3; color:#46606f; }
@@ -407,7 +407,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.49";   // keep in sync with the VERSION file
+const VERSION = "0.0.50";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
