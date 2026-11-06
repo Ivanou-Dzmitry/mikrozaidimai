@@ -409,7 +409,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.55";   // keep in sync with the VERSION file
+const VERSION = "0.0.56";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1337,7 +1337,7 @@ function updateAllowed(dt) {
 const orbitActive = () => $("assist").value !== "off" && !!G.builder.base && !G.builder.newMode && !G.over;
 function syncOrbit(dt) {   // the letters that fit float along the two sides of the screen, so the word keeps the middle; the last bubble ("...") shows every letter
   const act = orbitActive(), b = G.builder, p = (b.base ? b.base.str : "") + b.letters.join("");
-  cam.bandF += ((act ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);
+  cam.bandF += ((act || G.demo ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);   // the keyboard sinks while the demo plays and comes back after it
   const letters = act && G.allowed ? [...G.allowed].sort(G.orbitAll ? (x, y) => ALPHA.indexOf(x) - ALPHA.indexOf(y) : (x, y) => strHash(p + "|" + x) - strHash(p + "|" + y)) : [];   // shuffled for every prefix: a new letter must not sit where the old one left (that would be a hint)
   const want = letters.slice(); if (act) want.push("\u2026");   // with the full keyboard open the same bubble becomes a cross that closes it
   const key = want.join("") + "|" + p;
@@ -1522,12 +1522,16 @@ function demoStep(dt) {
     const e = Math.max(0, .5 + .5 * Math.cos(Math.PI * Math.min(1, Math.abs(pos - (i + .5)) / DEMO_GLOW)));
     if (e > .01) D.lit.set(D.seq[i], e);
   }
+  const glide = target => {   // two-stage smoothing: a slow moving mark, and the camera slowly following it: no jerks between words
+    if (D.sx == null) D.sx = target;
+    D.sx += (target - D.sx) * (1 - Math.exp(-dt / 1.1)); cam.x += (D.sx - cam.x) * (1 - Math.exp(-dt / .9));
+  };
   if (idx < D.seq.length) {
     D.cur = D.seq[idx];
-    if (D.wx != null) { if (!D.started) { cam.x = D.wx; D.started = true; } else cam.x += (D.wx - cam.x) * Math.min(1, dt * 1.4); }
+    if (D.wx != null) { if (!D.started) { cam.x = D.wx; D.sx = D.wx; D.started = true; } else glide(D.wx); }
   } else {   // the review is over: drift to the origin and hand the game back
-    D.cur = null; cam.x += (0 - cam.x) * Math.min(1, dt * 1.2);
-    if (Math.abs(cam.x) < 4 || D.t > D.seq.length * DEMO_STEP + 8) stopDemo();
+    D.cur = null; glide(0);
+    if (Math.abs(cam.x) < 4 || D.t > D.seq.length * DEMO_STEP + 12) stopDemo();
   }
 }
 function update(dt) {
