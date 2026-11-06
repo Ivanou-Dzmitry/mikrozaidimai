@@ -408,7 +408,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.53";   // keep in sync with the VERSION file
+const VERSION = "0.0.54";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1486,9 +1486,12 @@ function drawOrbit(cw, wy0, SX, SY, ks) {
       }
     }
   }
+  // a calm glide, independent of the frame rate: while the field is being dragged or pinched the letters almost stand still, after the finger lifts they drift to their places
+  const nowO = performance.now(), dtO = Math.min(.1, (nowO - (G.orbitT || nowO)) / 1000); G.orbitT = nowO;
+  const movingO = !!(cam.drag && cam.drag.moved) || !!cam.pinch, kO = 1 - Math.exp(-dtO / (movingO ? 2.4 : .6));
   for (const o of items) {
     const e = o.show * o.show * (3 - 2 * o.show), tx = o.tx, ty = o.ty;
-    if (o.dx == null || o.snap) { o.dx = tx; o.dy = ty; o.snap = false; } else { o.dx += (tx - o.dx) * .2; o.dy += (ty - o.dy) * .2; }   // letters appear in place (no flying in from the side)
+    if (o.dx == null || o.snap) { o.dx = tx; o.dy = ty; o.snap = false; } else { o.dx += (tx - o.dx) * kO; o.dy += (ty - o.dy) * kO; }   // letters appear in place (no flying in from the side)
     o.sx = o.dx; o.sy = o.dy;
     ctx.globalAlpha = Math.min(1, e); o.pulse = Math.max(0, o.pulse - .05);
     const dots = o.ch === "\u2026", cons = !dots && !VOWEL.has(o.ch);   // "…" calls the whole keyboard: a dark blue button, plainly not a letter; consonants are a shade darker than vowels
