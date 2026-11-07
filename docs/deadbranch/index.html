@@ -252,8 +252,8 @@
 <div id="help"><div class="card"><div id="helptext"></div><button class="btn sec" id="fbh"><svg class="ico"><use href="#i-feedback"/></svg><span data-i18n="fbOpen"></span></button></div><button class="btn" id="helpok" data-i18n="helpClose"></button></div>
 <div id="over"><h1 data-i18n="overTitle"></h1><div class="score" id="fscore">0</div><div id="fsub" style="color:var(--dim)"></div><button class="btn" id="again" style="margin-top:12px" data-i18n="again"></button></div>
 
-<script src="words.js?v=20"></script>
-<script src="ru.js?v=20"></script>
+<script src="words.js?v=21"></script>
+<script src="ru.js?v=21"></script>
 <script>
 "use strict";
 if (typeof WORDS_TXT === "undefined" || typeof RU_DATA === "undefined") {   // the data files did not load (typical when index.html is opened from a file manager)
@@ -286,7 +286,7 @@ const I18N = {
     holdBack:"Hold ⌫ to finish the branch", typeMark:"Type the word you want to mark", notInGame:"This word isn't in the game anyway",
     verified:"This word has a verified translation and can't be marked", marked:"«%0» marked as non-existent and no longer accepted",
     typeAdd:"Type the word you want to add", alreadyIn:"This word is already in the game", added:"«%0» added to the game (no translation)",
-    listsReset:"Your marks were reset", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
+    listsReset:"Your marks were reset", wordsCount:"%0 words", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
@@ -335,7 +335,7 @@ const I18N = {
     holdBack:"Удерживай ⌫, чтобы завершить ветку", typeMark:"Набери слово, которое хочешь отметить", notInGame:"Этого слова и так нет в игре",
     verified:"У слова есть проверенный перевод, отметить его нельзя", marked:"«%0» отмечено как несуществующее и больше не принимается",
     typeAdd:"Набери слово, которое хочешь добавить", alreadyIn:"Это слово уже есть в игре", added:"«%0» добавлено в игру (без перевода)",
-    listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
+    wordsCount:"%0 слов", listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
@@ -417,7 +417,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.60";   // keep in sync with the VERSION file
+const VERSION = "0.0.61";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -542,7 +542,9 @@ function buildLex(maxTier) {
     for (let i = 1; i < w.length; i++) PRE.add(w.slice(0, i));
   }
   for (const w of ADDED) if (!BANNED.has(w)) addWordToLex(w);
+  updateVer();
 }
+const updateVer = () => { const el = document.getElementById("ver"); if (el) el.textContent = "Dead Branch v" + VERSION + " \u00b7 " + tr("wordsCount", WORDS.size.toLocaleString(LANG === "ru" ? "ru-RU" : "en-US")); };
 
 /* ---------- state ---------- */
 const $ = id => document.getElementById(id);
@@ -2336,7 +2338,7 @@ $("helpb").onclick = openHelp; $("helpok").onclick = closeHelp;
 cv.addEventListener("pointerdown", () => { if ($("help").classList.contains("open")) closeHelp(); }, true);
 document.addEventListener("keydown", () => { if ($("help").classList.contains("open")) closeHelp(); });
 { let seen = false; try { seen = !!localStorage.getItem("db_help"); } catch (e) {} if (!seen) openHelp(); }
-$("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); };
+$("lang").onchange = () => { LANG = $("lang").value; try { localStorage.setItem("db_lang", LANG); } catch (e) {} applyLang(); updateTray(); updateDiff(); updateVer(); };
 { let stored = null; try { stored = JSON.parse(localStorage.getItem("db_settings") || "{}").quality; } catch (e) {}
   if (!stored) $("quality").value = "high"; }   // everyone starts on High (the light profile looked blurry)
 applyQuality();
@@ -2344,7 +2346,7 @@ const SAVED = readSave();   // read before reset(), which clears the stored game
 buildLex(+$("tier").value);
 reset(); layoutMode(); updateDiff();
 if (SAVED && SAVED.tier === +$("tier").value && SAVED.onlytr === $("onlytr").checked) { restoreGame(SAVED); saveGame(); toast(tr("restored"), "gold"); }
-$("ver").textContent = "Dead Branch v" + VERSION;
+updateVer();
 requestAnimationFrame(frame);
 if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js").catch(() => {});   // an offline copy once it has been opened with a network
 window.__dbg = { G, cam, step: dt => { update(dt); draw(); }, commit, WORDS: () => WORDS, PRE: () => PRE, reset };
