@@ -208,7 +208,7 @@
   <label><span data-i18n="ripe"></span>
     <select id="ripe"><option value="8" data-i18n="o_r8"></option><option value="15" data-i18n="o_r15"></option><option value="30" selected data-i18n="o_r30"></option></select>
   </label>
-  <label class="ck"><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr" checked></label>
+  <label class="ck"><span data-i18n="onlytr"></span> <input type="checkbox" id="onlytr"></label>
   <label class="ck"><span data-i18n="hints"></span> <input type="checkbox" id="hints" checked></label>
   <label class="ck"><span data-i18n="haptics"></span> <input type="checkbox" id="haptics" checked></label>
   <label class="ck"><span data-i18n="pressureT"></span> <input type="checkbox" id="pressure"></label>
@@ -417,7 +417,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.61";   // keep in sync with the VERSION file
+const VERSION = "0.0.62";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2274,12 +2274,12 @@ const SET_IDS = ["tier", "agony", "ripe", "assist", "quality"], SET_CHECKS = ["o
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem("db_settings") || "{}");
-    for (const id of SET_IDS) if (s[id] != null && [...$(id).options].some(o => o.value === s[id])) $(id).value = s[id];
-    for (const id of SET_CHECKS) if (typeof s[id] === "boolean") $(id).checked = s[id];
+    for (const id of SET_IDS) if (s[id] != null && !(s.v !== 2 && id === "tier") && [...$(id).options].some(o => o.value === s[id])) $(id).value = s[id];
+    for (const id of SET_CHECKS) if (typeof s[id] === "boolean" && !(s.v !== 2 && id === "onlytr")) $(id).checked = s[id];
   } catch (e) {}
 }
 function saveSettings() {
-  const s = {}; for (const id of SET_IDS) s[id] = $(id).value; for (const id of SET_CHECKS) s[id] = $(id).checked;
+  const s = { v: 2 }; for (const id of SET_IDS) s[id] = $(id).value; for (const id of SET_CHECKS) s[id] = $(id).checked;
   try { localStorage.setItem("db_settings", JSON.stringify(s)); } catch (e) {}
 }
 for (const id of [...SET_IDS, ...SET_CHECKS]) $(id).addEventListener("change", saveSettings);
