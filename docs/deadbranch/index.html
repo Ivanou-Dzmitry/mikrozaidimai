@@ -417,7 +417,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.59";   // keep in sync with the VERSION file
+const VERSION = "0.0.60";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2230,7 +2230,7 @@ function frame(now) {
 /* ---------- autosave ---------- */
 // The running game is written to localStorage every few seconds and when the page is hidden or closed, and restored on the next visit.
 // Not saved: swarm letters (they drift back to their keys by themselves), effects, hints. A finished game leaves no save.
-const SAVE_KEY = "db_save", SAVE_VER = 1;
+const SAVE_KEY = "db_save", SAVE_VER = 2;   // raise when the dictionary changes: an old save may hold words that are no longer in it
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
 function readSave() { try { const d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return d && d.v === SAVE_VER ? d : null; } catch (e) { return null; } }
 function saveGame() {
