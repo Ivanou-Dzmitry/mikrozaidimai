@@ -28,25 +28,25 @@
   #coords { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.6px; white-space:pre; color:#d97706; opacity:.85; }
   #fps { font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre; color:#35566a; opacity:.8; }
   #coords.home { color:#13997c; opacity:.7; }
-  #hud .hrow { display:flex; align-items:center; gap:8px; }
+  #hud .hrow { display:flex; align-items:center; gap:6px; }
   #hud .big { font-size:32px; font-weight:700; line-height:1; flex:none; }
-  #hud .stats { display:flex; align-items:flex-start; justify-content:center; gap:12px; flex:1; min-width:0; }
-  #hud .st { display:flex; flex-direction:column; min-width:0; text-shadow:0 1px 2px #0008; }
-  #hud .st .k { font-size:10px; line-height:1.2; color:#9fb6c6; white-space:nowrap; }
+  #hud .stats { display:flex; flex-direction:column; gap:3px; flex:1; min-width:0; }
+  #hud .srow { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  #hud .st { display:flex; flex-direction:column; min-width:0; flex:none; text-shadow:0 1px 2px #0008; }
+  #hud .st .k { font-size:9.5px; line-height:1.2; color:#9fb6c6; white-space:nowrap; }
   #hud .st b { font-size:19px; font-weight:700; line-height:1.15; color:#9fd0ee; }
-  #hud .st.pr { flex:1 1 auto; min-width:84px; max-width:170px; }
-  #hud .prow { display:flex; align-items:center; gap:7px; }
   #hud .sub { white-space:nowrap; font-size:13px; color:#c3d9e6; margin-top:3px; display:flex; align-items:center; gap:5px; text-shadow:0 1px 2px #0008; }
   .ico { width:1.2em; height:1.2em; fill:currentColor; flex:none; vertical-align:middle; }
   #hud .sub svg { width:17px; height:17px; color:#86efac; margin-right:-2px; }
-  #gear .ico, #helpb .ico { width:24px; height:24px; }
+  #gear .ico, #helpb .ico, #homeb .ico { width:24px; height:24px; }
+  #homeb { opacity:.55; transition:opacity .25s, color .25s; } #homeb.off { opacity:1; color:#1b7cb8; }   /* lit when the view is away from the start */
   #hintx .ico { width:24px; height:24px; }
   #go .ico { width:22px; height:22px; margin-left:3px; } #go { display:flex; align-items:center; justify-content:center; }
   #panel button .ico, #fbh .ico { width:20px; height:20px; margin-right:8px; } #panel #fbb, #fbh { display:flex; align-items:center; justify-content:center; }
   #hud .grow { flex:1; }
-  #dens { flex:1; min-width:22px; height:7px; border-radius:4px; background:#12202e; overflow:hidden; margin:0; }   /* the bar sits right of the pressure number */
+  #dens { height:3px; border-radius:2px; background:#12202e; overflow:hidden; margin:0; }   /* the pressure bar lies under all three blocks, across their whole width */
   #dens > i { display:block; height:100%; width:0; background:var(--sky); transition:width .2s, background .2s; }
-  #gear, #helpb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:11px; width:40px; height:40px; font-size:20px; }
+  #gear, #helpb, #homeb { pointer-events:auto; background:#10202e; border:1px solid #1d3547; color:var(--fg); border-radius:11px; width:40px; height:40px; font-size:20px; }
   /* wide screens (a monitor, 16:9): the canvas and the laboratory fill the window, the play column sits in the middle */
   html.wide body { max-width:none; box-shadow:none; }
   html.wide #hud { left:50%; right:auto; width:min(560px,100%); transform:translateX(-50%); }
@@ -136,7 +136,7 @@
   html.lab #hud .sub { color:#35566a; text-shadow:0 1px 0 #fff9; } html.lab #hud .sub svg { color:#13997c; }
   html.lab #hud .st { text-shadow:0 1px 0 #fff9; } html.lab #hud .st .k { color:#6d8ea3; } html.lab #hud .st b { color:#3a7ca8; }   /* a calm blue, so the small numbers do not compete with the score */
   html.lab #hud .big { color:#0f2f44; text-shadow:0 1px 0 #fff9; } html.lab #dens { background:#bcd0db; }
-  html.lab #gear, html.lab #helpb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
+  html.lab #gear, html.lab #helpb, html.lab #homeb { background:#ffffffb8; border-color:#9bb8c8; color:#0f2f44; }
   html.lab #act .btn.sec { background:#e4ecf1; border-color:#b8c8d3; color:#46606f; }
   #act #back { background:#3b2328; border-color:#6a343b; color:#f3a9a9; }   /* erase has a reddish tint */
   html.lab #act #back { background:#f7e3e3; border-color:#e2b3b3; color:#b2423f; }
@@ -160,15 +160,19 @@
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-lightbulb" viewBox="0 -960 960 960"><path d="M480-96.92q-30.31 0-52.27-21-21.96-21-23.88-51.31h152.3q-1.92 30.31-23.88 51.31-21.96 21-52.27 21Zm-150-127.7v-60h300v60H330ZM336.15-340q-62.84-39.08-99.49-102.12Q200-505.15 200-580q0-116.92 81.54-198.46T480-860q116.92 0 198.46 81.54T760-580q0 74.85-36.66 137.88-36.65 63.04-99.49 102.12h-287.7ZM354-400h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></symbol><symbol id="i-backspace" viewBox="0 -960 960 960"><path d="M367.69-220q-20.77 0-39.04-9.39-18.26-9.38-30.03-26.15L140-480l158.62-223.69q11.77-16.77 29.84-26.54 18.08-9.77 39.23-9.77h380q29.92 0 51.12 21.19Q820-697.61 820-667.69v375.38q0 29.92-21.19 51.12Q777.61-220 747.69-220h-380ZM760-280v-400 400Zm-392.31 0h380q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-375.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85h-380q-5.77 0-10.96 2.88-5.19 2.89-8.27 7.12L213.38-480l135.08 190q3.08 4.23 8.27 7.12 5.19 2.88 10.96 2.88Zm81.39-53.85 104-104 104 104L699.23-376l-104-104 104-104-42.15-42.15-104 104-104-104L406.92-584l104 104-104 104 42.16 42.15Z"/></symbol><symbol id="i-settings" viewBox="0 -960 960 960"><path d="m387.69-100-15.23-121.85q-16.07-5.38-32.96-15.07-16.88-9.7-30.19-20.77L196.46-210l-92.3-160 97.61-73.77q-1.38-8.92-1.96-17.92-.58-9-.58-17.93 0-8.53.58-17.34t1.96-19.27L104.16-590l92.3-159.23 112.46 47.31q14.47-11.46 30.89-20.96t32.27-15.27L387.69-860h184.62l15.23 122.23q18 6.54 32.57 15.27 14.58 8.73 29.43 20.58l114-47.31L855.84-590l-99.15 74.92q2.15 9.69 2.35 18.12.19 8.42.19 16.96 0 8.15-.39 16.58-.38 8.42-2.76 19.27L854.46-370l-92.31 160-112.61-48.08q-14.85 11.85-30.31 20.96-15.46 9.12-31.69 14.89L572.31-100H387.69ZM440-160h78.62L533-267.15q30.62-8 55.96-22.73 25.35-14.74 48.89-37.89L737.23-286l39.39-68-86.77-65.38q5-15.54 6.8-30.47 1.81-14.92 1.81-30.15 0-15.62-1.81-30.15-1.8-14.54-6.8-29.7L777.38-606 738-674l-100.54 42.38q-20.08-21.46-48.11-37.92-28.04-16.46-56.73-23.31L520-800h-79.38l-13.24 106.77q-30.61 7.23-56.53 22.15-25.93 14.93-49.47 38.46L222-674l-39.38 68L269-541.62q-5 14.24-7 29.62t-2 32.38q0 15.62 2 30.62 2 15 6.62 29.62l-86 65.38L222-286l99-42q22.77 23.38 48.69 38.31 25.93 14.92 57.31 22.92L440-160Zm40.46-200q49.92 0 84.96-35.04 35.04-35.04 35.04-84.96 0-49.92-35.04-84.96Q530.38-600 480.46-600q-50.54 0-85.27 35.04T360.46-480q0 49.92 34.73 84.96Q429.92-360 480.46-360ZM480-480Z"/></symbol><symbol id="i-help" viewBox="0 -960 960 960"><path d="M479.56-255.39q17.13 0 28.94-11.82 11.81-11.83 11.81-28.97 0-17.13-11.83-28.94-11.83-11.8-28.96-11.8-17.13 0-28.94 11.83-11.81 11.83-11.81 28.96 0 17.13 11.83 28.94 11.83 11.8 28.96 11.8Zm-28.33-143.23h56.31q.77-29.53 8.65-47.19 7.89-17.65 38.27-46.8 26.39-26.39 40.42-48.74 14.04-22.34 14.04-52.77 0-51.65-37.11-80.69-37.12-29.03-87.81-29.03-50.08 0-82.88 26.73-32.81 26.73-46.81 62.96l51.38 20.61q7.31-19.92 25-38.81 17.69-18.88 52.54-18.88 35.46 0 52.42 19.42 16.97 19.43 16.97 42.73 0 20.39-11.62 37.31-11.61 16.92-29.61 32.69-39.39 35.54-49.77 56.7-10.39 21.15-10.39 63.76ZM480.07-100q-78.84 0-148.21-29.92t-120.68-81.21q-51.31-51.29-81.25-120.63Q100-401.1 100-479.93q0-78.84 29.92-148.21t81.21-120.68q51.29-51.31 120.63-81.25Q401.1-860 479.93-860q78.84 0 148.21 29.92t120.68 81.21q51.31 51.29 81.25 120.63Q860-558.9 860-480.07q0 78.84-29.92 148.21t-81.21 120.68q-51.29 51.31-120.63 81.25Q558.9-100 480.07-100Zm-.07-60q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol><symbol id="i-eco" viewBox="0 -960 960 960"><path d="M229.85-190.04q-42.31-42.5-66.08-97.74Q140-343.02 140-402q0-59.15 22.66-117.38 22.65-58.23 73.19-108.77 36.54-36.54 91.5-60.2 54.96-23.65 124.5-36.03 69.54-12.39 151.57-14.43 82.04-2.03 172.12 5.27 6.46 86 4.42 167.12-2.04 81.11-14.19 151.26-12.16 70.16-35.5 126.35-23.35 56.19-60.12 92.96-49.54 49.93-105.96 72.89Q507.77-100 449.9-100q-60.67 0-119.21-23.77-58.54-23.77-100.84-66.27Zm89.69-6.58q30.15 18.93 63.73 27.77Q416.85-160 450-160q46.26 0 91.51-18.31 45.26-18.31 85.87-59.69 17.93-18 36.36-50.5 18.42-32.5 31.87-85t20.42-127Q723-575 718.77-678q-49-2-110.89-1.12-61.88.89-123.46 10.08-61.57 9.19-116.38 28.81-54.81 19.61-88.66 53.46-44.61 44.62-62 90.35Q200-450.69 200-409.69q0 56.69 22.12 102.54 22.11 45.84 46.03 68.07 33.54-75.38 94.27-144.65Q423.15-453 516.31-504.61q-70.47 61.46-120.7 135-50.23 73.53-76.07 172.99Zm0 0Zm0 0Z"/></symbol><symbol id="i-close" viewBox="0 -960 960 960"><path d="M256-213.85 213.85-256l224-224-224-224L256-746.15l224 224 224-224L746.15-704l-224 224 224 224L704-213.85l-224-224-224 224Z"/></symbol><symbol id="i-feedback" viewBox="0 -960 960 960"><path d="M480-371.54q13.92 0 23.11-9.19 9.2-9.19 9.2-23.12 0-13.92-9.2-23.11-9.19-9.19-23.11-9.19t-23.11 9.19q-9.2 9.19-9.2 23.11 0 13.93 9.2 23.12 9.19 9.19 23.11 9.19Zm-30-139.23h60v-241.54h-60v241.54ZM100-118.46v-669.23Q100-818 121-839q21-21 51.31-21h615.38Q818-860 839-839q21 21 21 51.31v455.38Q860-302 839-281q-21 21-51.31 21H241.54L100-118.46ZM216-320h571.69q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-455.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H172.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v523.08L216-320Zm-56 0v-480 480Z"/></symbol><symbol id="i-check" viewBox="0 -960 960 960"><path d="M382-253.85 168.62-467.23 211.38-510 382-339.38 748.62-706l42.76 42.77L382-253.85Z"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-lightbulb" viewBox="0 -960 960 960"><path d="M480-96.92q-30.31 0-52.27-21-21.96-21-23.88-51.31h152.3q-1.92 30.31-23.88 51.31-21.96 21-52.27 21Zm-150-127.7v-60h300v60H330ZM336.15-340q-62.84-39.08-99.49-102.12Q200-505.15 200-580q0-116.92 81.54-198.46T480-860q116.92 0 198.46 81.54T760-580q0 74.85-36.66 137.88-36.65 63.04-99.49 102.12h-287.7ZM354-400h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></symbol><symbol id="i-backspace" viewBox="0 -960 960 960"><path d="M367.69-220q-20.77 0-39.04-9.39-18.26-9.38-30.03-26.15L140-480l158.62-223.69q11.77-16.77 29.84-26.54 18.08-9.77 39.23-9.77h380q29.92 0 51.12 21.19Q820-697.61 820-667.69v375.38q0 29.92-21.19 51.12Q777.61-220 747.69-220h-380ZM760-280v-400 400Zm-392.31 0h380q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-375.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85h-380q-5.77 0-10.96 2.88-5.19 2.89-8.27 7.12L213.38-480l135.08 190q3.08 4.23 8.27 7.12 5.19 2.88 10.96 2.88Zm81.39-53.85 104-104 104 104L699.23-376l-104-104 104-104-42.15-42.15-104 104-104-104L406.92-584l104 104-104 104 42.16 42.15Z"/></symbol><symbol id="i-settings" viewBox="0 -960 960 960"><path d="m387.69-100-15.23-121.85q-16.07-5.38-32.96-15.07-16.88-9.7-30.19-20.77L196.46-210l-92.3-160 97.61-73.77q-1.38-8.92-1.96-17.92-.58-9-.58-17.93 0-8.53.58-17.34t1.96-19.27L104.16-590l92.3-159.23 112.46 47.31q14.47-11.46 30.89-20.96t32.27-15.27L387.69-860h184.62l15.23 122.23q18 6.54 32.57 15.27 14.58 8.73 29.43 20.58l114-47.31L855.84-590l-99.15 74.92q2.15 9.69 2.35 18.12.19 8.42.19 16.96 0 8.15-.39 16.58-.38 8.42-2.76 19.27L854.46-370l-92.31 160-112.61-48.08q-14.85 11.85-30.31 20.96-15.46 9.12-31.69 14.89L572.31-100H387.69ZM440-160h78.62L533-267.15q30.62-8 55.96-22.73 25.35-14.74 48.89-37.89L737.23-286l39.39-68-86.77-65.38q5-15.54 6.8-30.47 1.81-14.92 1.81-30.15 0-15.62-1.81-30.15-1.8-14.54-6.8-29.7L777.38-606 738-674l-100.54 42.38q-20.08-21.46-48.11-37.92-28.04-16.46-56.73-23.31L520-800h-79.38l-13.24 106.77q-30.61 7.23-56.53 22.15-25.93 14.93-49.47 38.46L222-674l-39.38 68L269-541.62q-5 14.24-7 29.62t-2 32.38q0 15.62 2 30.62 2 15 6.62 29.62l-86 65.38L222-286l99-42q22.77 23.38 48.69 38.31 25.93 14.92 57.31 22.92L440-160Zm40.46-200q49.92 0 84.96-35.04 35.04-35.04 35.04-84.96 0-49.92-35.04-84.96Q530.38-600 480.46-600q-50.54 0-85.27 35.04T360.46-480q0 49.92 34.73 84.96Q429.92-360 480.46-360ZM480-480Z"/></symbol><symbol id="i-help" viewBox="0 -960 960 960"><path d="M479.56-255.39q17.13 0 28.94-11.82 11.81-11.83 11.81-28.97 0-17.13-11.83-28.94-11.83-11.8-28.96-11.8-17.13 0-28.94 11.83-11.81 11.83-11.81 28.96 0 17.13 11.83 28.94 11.83 11.8 28.96 11.8Zm-28.33-143.23h56.31q.77-29.53 8.65-47.19 7.89-17.65 38.27-46.8 26.39-26.39 40.42-48.74 14.04-22.34 14.04-52.77 0-51.65-37.11-80.69-37.12-29.03-87.81-29.03-50.08 0-82.88 26.73-32.81 26.73-46.81 62.96l51.38 20.61q7.31-19.92 25-38.81 17.69-18.88 52.54-18.88 35.46 0 52.42 19.42 16.97 19.43 16.97 42.73 0 20.39-11.62 37.31-11.61 16.92-29.61 32.69-39.39 35.54-49.77 56.7-10.39 21.15-10.39 63.76ZM480.07-100q-78.84 0-148.21-29.92t-120.68-81.21q-51.31-51.29-81.25-120.63Q100-401.1 100-479.93q0-78.84 29.92-148.21t81.21-120.68q51.29-51.31 120.63-81.25Q401.1-860 479.93-860q78.84 0 148.21 29.92t120.68 81.21q51.31 51.29 81.25 120.63Q860-558.9 860-480.07q0 78.84-29.92 148.21t-81.21 120.68q-51.29 51.31-120.63 81.25Q558.9-100 480.07-100Zm-.07-60q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol><symbol id="i-eco" viewBox="0 -960 960 960"><path d="M229.85-190.04q-42.31-42.5-66.08-97.74Q140-343.02 140-402q0-59.15 22.66-117.38 22.65-58.23 73.19-108.77 36.54-36.54 91.5-60.2 54.96-23.65 124.5-36.03 69.54-12.39 151.57-14.43 82.04-2.03 172.12 5.27 6.46 86 4.42 167.12-2.04 81.11-14.19 151.26-12.16 70.16-35.5 126.35-23.35 56.19-60.12 92.96-49.54 49.93-105.96 72.89Q507.77-100 449.9-100q-60.67 0-119.21-23.77-58.54-23.77-100.84-66.27Zm89.69-6.58q30.15 18.93 63.73 27.77Q416.85-160 450-160q46.26 0 91.51-18.31 45.26-18.31 85.87-59.69 17.93-18 36.36-50.5 18.42-32.5 31.87-85t20.42-127Q723-575 718.77-678q-49-2-110.89-1.12-61.88.89-123.46 10.08-61.57 9.19-116.38 28.81-54.81 19.61-88.66 53.46-44.61 44.62-62 90.35Q200-450.69 200-409.69q0 56.69 22.12 102.54 22.11 45.84 46.03 68.07 33.54-75.38 94.27-144.65Q423.15-453 516.31-504.61q-70.47 61.46-120.7 135-50.23 73.53-76.07 172.99Zm0 0Zm0 0Z"/></symbol><symbol id="i-close" viewBox="0 -960 960 960"><path d="M256-213.85 213.85-256l224-224-224-224L256-746.15l224 224 224-224L746.15-704l-224 224 224 224L704-213.85l-224-224-224 224Z"/></symbol><symbol id="i-feedback" viewBox="0 -960 960 960"><path d="M480-371.54q13.92 0 23.11-9.19 9.2-9.19 9.2-23.12 0-13.92-9.2-23.11-9.19-9.19-23.11-9.19t-23.11 9.19q-9.2 9.19-9.2 23.11 0 13.93 9.2 23.12 9.19 9.19 23.11 9.19Zm-30-139.23h60v-241.54h-60v241.54ZM100-118.46v-669.23Q100-818 121-839q21-21 51.31-21h615.38Q818-860 839-839q21 21 21 51.31v455.38Q860-302 839-281q-21 21-51.31 21H241.54L100-118.46ZM216-320h571.69q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-455.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H172.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v523.08L216-320Zm-56 0v-480 480Z"/></symbol><symbol id="i-check" viewBox="0 -960 960 960"><path d="M382-253.85 168.62-467.23 211.38-510 382-339.38 748.62-706l42.76 42.77L382-253.85Z"/></symbol><symbol id="i-my_location" viewBox="0 -960 960 960"><path d="M450-72v-69.23q-125-12.85-210.46-98.31Q154.08-325 141.23-450H72v-60h69.23q12.85-125 98.31-210.46Q325-805.92 450-818.77V-888h60v69.23q125 12.85 210.46 98.31Q805.92-635 818.77-510H888v60h-69.23q-12.85 125-98.31 210.46Q635-154.08 510-141.23V-72h-60Zm30-128q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-140q-57.75 0-98.87-41.13Q340-422.25 340-480q0-57.75 41.13-98.87Q422.25-620 480-620q57.75 0 98.87 41.13Q620-537.75 620-480q0 57.75-41.13 98.87Q537.75-340 480-340Zm0-60q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400Zm0-80Z"/></symbol></svg>
 <div id="hud">
   <div class="hrow">
     <div class="big" id="score">0</div>
     <div class="stats">
-      <div class="st"><span class="k" data-i18n="words"></span><b id="wn">0</b></div>
-      <div class="st"><span class="k" data-i18n="branches" data-i18n-title="t_branches"></span><b id="tn">0</b></div>
-      <div class="st pr"><span class="k" data-i18n="pressure"></span><div class="prow"><b id="denst">0%</b><div id="dens"><i></i></div></div></div>
+      <div class="srow">
+        <div class="st"><span class="k" data-i18n="words"></span><b id="wn">0</b></div>
+        <div class="st"><span class="k" data-i18n="branches" data-i18n-title="t_branches"></span><b id="tn">0</b></div>
+        <div class="st"><span class="k" data-i18n="pressure"></span><b id="denst">0%</b></div>
+      </div>
+      <div id="dens"><i></i></div>
     </div>
+    <button id="homeb" aria-label="Back to the start" data-i18n-aria="a_home" data-i18n-title="a_home"><svg class="ico"><use href="#i-my_location"/></svg></button>
     <button id="helpb" aria-label="help" data-i18n-aria="a_help"><svg class="ico"><use href="#i-help"/></svg></button>
     <button id="gear" aria-label="settings"><svg class="ico"><use href="#i-settings"/></svg></button>
   </div>
@@ -286,13 +290,14 @@ const I18N = {
     diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
-    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", demo:"Demo mode", demoOn:"Demo: a calm look at your branches. Tap to stop", demoNone:"No closed branches yet: nothing to show", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
+    restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", a_home:"Back to the start", demo:"Demo mode", demoOn:"Demo: a calm look at your branches. Tap to stop", demoNone:"No closed branches yet: nothing to show", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
 <p>Dead Branch is a game for learning Lithuanian. You build Lithuanian words from letters; every word grows on screen like a molecule, with its Russian translation underneath.</p>
 <h3>What to do</h3>
 <ol>
 <li>Tap letters at the bottom to spell a word of 2+ letters and press <b>Grow ✓</b>.</li>
 <li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. One word can have up to 3 shoots.</li>
 <li>A new word starts by itself when the current branch is closed. Under the word you are working on there are buttons: <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
+<li>The target button left of “?” brings the view back to the start, the middle of the field, when you have scrolled far along the archive.</li>
 </ol>
 <h3>What gives points</h3>
 <p>Every correct word. The longer the word and the rarer its letters, the more it gives (4 letters ≈ 9, 6 letters ≈ 20, 8 letters ≈ 35 before the multiplier). Shorter words that appear inside your word on the way count as well, ×1.5. A streak multiplier grows by 0.1 with every correct word in a row (up to ×2.0), and a mistake drops it back to ×1.0. When a branch is finished you get a bonus for closing it: +25% of its points.</p>
@@ -334,13 +339,14 @@ const I18N = {
     diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
-    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", demo:"Демо-режим", demoOn:"Демо: спокойный обзор ваших веток. Нажмите, чтобы остановить", demoNone:"Завершённых веток ещё нет: показывать нечего", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
+    restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", a_home:"К началу", demo:"Демо-режим", demoOn:"Демо: спокойный обзор ваших веток. Нажмите, чтобы остановить", demoNone:"Завершённых веток ещё нет: показывать нечего", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
 <p>Dead Branch: игра для изучения литовского языка. Вы собираете литовские слова из букв, каждое слово растёт на экране как молекула, а под ним написан русский перевод.</p>
 <h3>Что делать</h3>
 <ol>
 <li>Нажимайте на буквы внизу, чтобы составить слово из 2+ букв, и нажмите <b>Расти ✓</b>.</li>
 <li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. У одного слова может быть до 3 побегов.</li>
 <li>Новое слово начинается само, когда текущая ветка завершена. Под словом, с которым вы работаете, есть кнопки: <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
+<li>Кнопка-прицел слева от «?» возвращает вид к началу, в центр поля, откуда растут слова, если вы далеко отмотали архив.</li>
 </ol>
 <h3>За что дают очки</h3>
 <p>За каждое правильное слово. Чем длиннее слово и реже его буквы, тем больше очков (4 буквы ≈ 9, 6 букв ≈ 20, 8 букв ≈ 35 до множителя). Более короткие слова, которые получаются по пути внутри вашего слова, тоже считаются, ×1.5. Множитель серии растёт на 0.1 с каждым правильным словом подряд (до ×2.0), а ошибка сбрасывает его до ×1.0. Когда ветка закончена, вы получаете бонус за завершение: +25% от её очков.</p>
@@ -411,7 +417,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.58";   // keep in sync with the VERSION file
+const VERSION = "0.0.59";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -941,10 +947,13 @@ function camUpdate(dt) {
   if (cam.manual && !cam.drag && !cam.pinch && performance.now() - cam.lastDrag > 6000) cam.manual = false;   // left alone for 6 s: back to the work, which sits in the middle of the field
   const tx = f ? Math.max(-B.hx + 40, Math.min(B.hx - 40, f.x)) : 0;
   const tb = f ? Math.max(B.b0, Math.min(B.b1 - 40, f.y - B.vh * .5)) : G.Hs;
-  if (!cam.manual) { const k = Math.min(1, dt * 4); cam.x += (tx - cam.x) * k; cam.b += (tb - cam.b) * k; }
+  if (cam.homing && cam.manual) cam.homing = false;
+  if (cam.homing) { cam.zoom += (1 - cam.zoom) * Math.min(1, dt * 3); if (Math.abs(cam.zoom - 1) < .01) { cam.zoom = 1; cam.homing = false; } }
+  if (!cam.manual) { const k = Math.min(1, dt * (cam.homing ? 2.2 : 4)); cam.x += (tx - cam.x) * k; cam.b += (tb - cam.b) * k; }
   const tx2 = tx, tb2 = tb;
   cam.tx = tx2; cam.tb = tb2;   // the camera's home: where it rests while following the work
   const dx = cam.x - tx2, dy = cam.b - tb2, home = Math.abs(dx) < 1.5 && Math.abs(dy) < 1.5, fmt = v => (Math.round(v) < 0 ? "\u2212" : "+") + String(Math.abs(Math.round(v))).padStart(3, "0");
+  { const hb = $("homeb"); if (hb._h !== home) { hb._h = home; hb.classList.toggle("off", !home); } }
   const ce = $("coords"); setText(ce, (home ? "\u25cf " : "") + "X " + (home ? "+000" : fmt(dx)) + "  Y " + (home ? "+000" : fmt(dy)) + "  \u00d7" + cam.zoom.toFixed(2)); if (ce._h !== home) { ce._h = home; ce.classList.toggle("home", home); }
 }
 // zoom the branch field around a screen point (the wheel, or two fingers)
@@ -1183,7 +1192,7 @@ function updateDiff() {
   $("diff").style.color = lvl === 3 ? "#f87171" : lvl === 2 ? "#fbbf24" : "#4ade80";
 }
 function updateHud() {
-  setText($("score"), G.score);
+  setText($("score"), G.score); { const fs = G.score >= 10000 ? 24 : G.score >= 1000 ? 28 : 32, sc = $("score"); if (sc._fs !== fs) { sc._fs = fs; sc.style.fontSize = fs + "px"; } }   // a long score shrinks so the header always fits
   setText($("streak"), "×" + Math.min(2, 1 + .1 * G.streak).toFixed(1));
   setText($("wn"), G.wordsN);
   setText($("tn"), G.harvested);
@@ -2314,6 +2323,7 @@ $("fbsend").onclick = async () => {
   } catch (e) { toast(tr("fbFail"), "bad"); }
 };
 $("demob").onclick = startDemo;
+$("homeb").onclick = () => { stopDemo(); cam.manual = false; cam.homing = true; };   // back to the start: the camera glides home and the zoom returns to normal
 cv.addEventListener("pointerdown", () => stopDemo(), true);
 document.addEventListener("keydown", () => stopDemo());
 const openHelp = () => {   // the help leaves the letter band free: a tap on the field or a letter closes it and is still played
