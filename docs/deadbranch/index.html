@@ -113,12 +113,7 @@
   body.lefty #act .acts { flex-direction:row-reverse; }
   #bs { color:#7f95a7; } #ls, #pls { color:var(--fg); }
   #word.word #ls, #word.word #pls { color:var(--ok); } #word.dead #ls, #word.dead #pls { color:var(--bad); }
-  /* two rings at the ends of the chosen word: a tap lights one, and the letters then grow on that side (front = prefix, back = suffix) */
-  #word .dot { position:relative; display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid #7f95a7; margin:0 10px; vertical-align:middle; cursor:pointer; opacity:.75; transition:opacity .2s, box-shadow .2s, background .2s; }
-  #word .dot::after { content:""; position:absolute; inset:-14px; }
-  #word .dot.on { border-color:#bfe9ff; background:#7dd3fc; box-shadow:0 0 10px 3px rgba(125,211,252,.9); opacity:1; }
-  #word .dot.off { opacity:.22; pointer-events:none; }
-  #word .dot[hidden] { display:none; }
+
   #word .hint { color:#8aa3b5; font-size:16px; font-weight:400; letter-spacing:0; text-transform:none; }
   .btn { border:0; border-radius:14px; height:48px; min-width:48px; padding:0 14px; font-size:16px; font-weight:700; color:#06111a; background:var(--sky); }
   .btn.sec { background:#16304a; color:var(--fg); border:1px solid #1f3a50; }
@@ -152,7 +147,6 @@
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
   html.lab #wzone { background:rgba(255,255,255,.66); }
   html.lab #bs { color:#6f8796; } html.lab #ls, html.lab #pls { color:#0f2f44; } html.lab #word.word #ls, html.lab #word.word #pls { color:#15803d; } html.lab #word.dead #ls, html.lab #word.dead #pls { color:#dc2626; }
-  html.lab #word .dot { border-color:#58707f; } html.lab #word .dot.on { border-color:#0284c7; background:#38bdf8; box-shadow:0 0 10px 3px rgba(14,165,233,.7); }
   html.lab #word .hint { color:#58707f; } html.lab #ru { color:#3d5a6b; }
   html.lab .chip { background:#fff; border-color:#9bb8c8; color:#0f2f44; }
   html.lab .btn.sec { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
@@ -235,7 +229,7 @@
 <canvas id="c"></canvas>
 <div id="act">
   <div id="wzone">
-    <div id="word"><i class="dot" id="dotS" hidden></i><span id="pls"></span><span id="bs"></span><span id="ls"></span><i class="dot" id="dotE" hidden></i><span class="hint" id="hint"></span></div>
+    <div id="word"><span id="pls"></span><span id="bs"></span><span id="ls"></span><span class="hint" id="hint"></span></div>
     <div id="sub">
       <div id="ru"></div>
       <button class="chip" id="nowrd" hidden data-i18n="nowrd" data-i18n-title="t_nowrd"></button>
@@ -424,7 +418,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.63";   // keep in sync with the VERSION file
+const VERSION = "0.0.64";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1059,6 +1053,10 @@ function onTap(ev, inBand) {   // inBand: the tap landed on the letter band, whi
     return false;
   };
   if (tapTrophy(true)) return;
+  if (!inBand && b.base && G.sideDots && G.t - G.sideT < .3) {   // the two rings on the chosen word: front (prefix) and back (suffix)
+    const rc = cv.getBoundingClientRect(), sx = ev.clientX - rc.left, sy = ev.clientY - rc.top;
+    for (const [side, key] of [["start", "S"], ["end", "E"]]) { const d = G.sideDots[key]; if (d && Math.hypot(d[0] - sx, d[1] - sy) <= Math.max(24, d[2] * 2.6)) { setSide(side); return; } }
+  }
   let bestN = null, bd = 1e9;
   if (!inBand) for (const n of allNodes()) {
     const zp = zoomPt(n.tree, n.x, n.y), zz = n.tree.z || 1;
@@ -1219,13 +1217,6 @@ function updateTray() {
   if (b._sb !== b.base) { b._sb = b.base; b.side = b.base && !canExtendSide(b.base, "end") ? "start" : null; }   // a new word: letters go to its end, unless only the front is open
   const side = effSide(b), bs = b.base ? b.base.str : "", ls = b.letters.join("");
   $("pls").textContent = side === "start" ? ls : ""; $("bs").textContent = bs; $("ls").textContent = side === "end" ? ls : "";
-  const dS = $("dotS"), dE = $("dotE");
-  dS.hidden = dE.hidden = !b.base;
-  if (b.base) {
-    dS.classList.toggle("on", b.side === "start"); dE.classList.toggle("on", b.side === "end" || (!b.side && ls.length > 0));
-    dS.classList.toggle("off", !canExtendSide(b.base, "start")); dE.classList.toggle("off", !canExtendSide(b.base, "end"));
-    dS.title = tr("dotPre"); dE.title = tr("dotSuf");
-  }
   const s = joinWord(b), w = $("word"); w.className = "";
   const ru = s && WORDS.has(s) ? ruOf(s) : "", lem = ru ? lemmaOf(s) : "", g = ru ? gramOf(s) : null;
   const alt = !ru && ls && !WORDS.has(s) ? FOLD.get(fold(s)) : null;   // typed with plain letters where the word needs diacritics
@@ -1252,7 +1243,6 @@ function setSide(side) {
   if (b.letters.length) { b.letters = []; b.src = []; }   // the letters belong to the old side
   b.side = side; updateTray(); haptic("tap");
 }
-$("dotS").onclick = () => setSide("start"); $("dotE").onclick = () => setSide("end");
 function updateDiff() {
   const lvl = 4 - +$("tier").value;   // hard dictionary = 3 stars, easy = 1
   $("diff").textContent = "★".repeat(lvl) + "☆".repeat(3 - lvl);
@@ -2193,6 +2183,23 @@ function draw() {
           capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2.2 - 1.4 * u, false, n.tilt);
         }
         ctx.globalAlpha = a0;
+        if (!G.over && !G.demo) {   // two rings at the ends of the chosen word: the left one grows a prefix, the right one a suffix; a tapped ring lights up
+          const bd = G.builder, hw = n.w * sc / 2, r = Math.max(5, rr * .3), off = hw + r * 2.6, cy = y - molShift(n.str) * sc, cs = Math.cos(n.tilt || 0), sn = Math.sin(n.tilt || 0);
+          G.sideDots = {}; G.sideT = G.t;
+          for (const [side, k, key] of [["start", -1, "S"], ["end", 1, "E"]]) {
+            const dx = x + k * off * cs, dy = cy + k * off * sn, ok = canExtendSide(n, side), on = bd.side === side || (side === "end" && !bd.side && bd.letters.length > 0);
+            G.sideDots[key] = [dx, dy, r];
+            ctx.globalAlpha = a0 * (ok ? 1 : .25);
+            if (on) {
+              ctx.fillStyle = T.lab ? "rgba(14,165,233,.16)" : "rgba(125,211,252,.2)"; ctx.beginPath(); ctx.arc(dx, dy, r * 2.4, 0, 6.2832); ctx.fill();
+              ctx.fillStyle = T.lab ? "rgba(14,165,233,.28)" : "rgba(125,211,252,.35)"; ctx.beginPath(); ctx.arc(dx, dy, r * 1.7, 0, 6.2832); ctx.fill();
+              ctx.fillStyle = T.lab ? "#38bdf8" : "#7dd3fc";
+            } else ctx.fillStyle = "rgba(0,0,0,0)";
+            ctx.beginPath(); ctx.arc(dx, dy, r, 0, 6.2832); ctx.fill();
+            ctx.lineWidth = 1; ctx.strokeStyle = on ? (T.lab ? "#0284c7" : "#bfe9ff") : (T.lab ? "rgba(30,90,125,.95)" : "rgba(190,230,255,.95)"); ctx.stroke();
+          }
+          ctx.globalAlpha = a0;
+        } else G.sideDots = null;
       }
     }
     if (t.ripe && !t.harvest) {
