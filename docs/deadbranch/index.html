@@ -418,7 +418,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.66";   // keep in sync with the VERSION file
+const VERSION = "0.0.67";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -2184,7 +2184,7 @@ function draw() {
         for (const off of [0, .5]) {
           const u = (G.t / 6.3 + off) % 1, e = 1 - (1 - u) * (1 - u), k = 1.02 + .6 * e;   // slow and smooth: it slows down as it spreads, like rings on water
           ctx.globalAlpha = a0 * Math.min(1, u * 12) * Math.pow(1 - u, 2) * .9;
-          capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", 2.2 - 1.4 * u, false, n.tilt);
+          capsule(x, y, n.w * sc * k + 8, 2 * rr * k * CAPK + 8, "rgba(0,0,0,0)", T.halo, "", "", .3 + 2 * (1 - u), false, n.tilt);
         }
         ctx.globalAlpha = a0;
         if (!G.over && !G.demo) {   // two rings at the ends of the chosen word: the left one grows a prefix, the right one a suffix; a tapped ring lights up
@@ -2209,7 +2209,7 @@ function draw() {
             }
             if (on) for (const o2 of [0, .5]) {   // the chosen side: slow rings spread from it, the same ripple as round the word
               const u = (G.t / 6.3 + o2) % 1, e = 1 - (1 - u) * (1 - u);
-              ctx.globalAlpha = a0 * Math.min(1, u * 12) * Math.pow(1 - u, 2) * .9; ctx.lineWidth = 2.8 - 1.8 * u; ctx.strokeStyle = T.halo;
+              ctx.globalAlpha = a0 * Math.min(1, u * 12) * Math.pow(1 - u, 2) * .9; ctx.lineWidth = .3 + 2.6 * (1 - u); ctx.strokeStyle = T.halo;
               ctx.beginPath(); ctx.arc(dx, dy, r * (1.6 + 2.8 * e), 0, 6.2832); ctx.stroke();
             }
             const fx = G.sideFx;
@@ -2218,7 +2218,7 @@ function draw() {
               for (const o2 of [0, .3]) {
                 const v = (u0 - o2) / (1 - o2); if (v <= 0 || v >= 1) continue;
                 const e = 1 - (1 - v) * (1 - v);
-                ctx.globalAlpha = a0 * Math.pow(1 - v, 1.5); ctx.lineWidth = 2.6 - 1.6 * v; ctx.strokeStyle = "#ef4444";
+                ctx.globalAlpha = a0 * Math.pow(1 - v, 1.5); ctx.lineWidth = .3 + 2.4 * (1 - v); ctx.strokeStyle = "#ef4444";
                 ctx.beginPath(); ctx.arc(dx, dy, r * (1.3 + 3.2 * e), 0, 6.2832); ctx.stroke();
               }
               if (u0 >= 1.5) G.sideFx = null;
