@@ -111,8 +111,14 @@
   #act #go:disabled { opacity:1; box-shadow:none; background:#2a3640; color:#7d8c98; }
   html.lab #act #go:disabled { background:#d3dbe0; color:#8b9aa5; }
   body.lefty #act .acts { flex-direction:row-reverse; }
-  #bs { color:#7f95a7; } #ls { color:var(--fg); }
-  #word.word #ls { color:var(--ok); } #word.dead #ls { color:var(--bad); }
+  #bs { color:#7f95a7; } #ls, #pls { color:var(--fg); }
+  #word.word #ls, #word.word #pls { color:var(--ok); } #word.dead #ls, #word.dead #pls { color:var(--bad); }
+  /* two rings at the ends of the chosen word: a tap lights one, and the letters then grow on that side (front = prefix, back = suffix) */
+  #word .dot { position:relative; display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid #7f95a7; margin:0 10px; vertical-align:middle; cursor:pointer; opacity:.75; transition:opacity .2s, box-shadow .2s, background .2s; }
+  #word .dot::after { content:""; position:absolute; inset:-14px; }
+  #word .dot.on { border-color:#bfe9ff; background:#7dd3fc; box-shadow:0 0 10px 3px rgba(125,211,252,.9); opacity:1; }
+  #word .dot.off { opacity:.22; pointer-events:none; }
+  #word .dot[hidden] { display:none; }
   #word .hint { color:#8aa3b5; font-size:16px; font-weight:400; letter-spacing:0; text-transform:none; }
   .btn { border:0; border-radius:14px; height:48px; min-width:48px; padding:0 14px; font-size:16px; font-weight:700; color:#06111a; background:var(--sky); }
   .btn.sec { background:#16304a; color:var(--fg); border:1px solid #1f3a50; }
@@ -145,7 +151,8 @@
   html.lab #panel label { color:#4d6a7b; } html.lab #panel label.ck { color:#0f2f44; border-color:#c3d6e0; }
   html.lab #panel select, html.lab #panel button { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
   html.lab #wzone { background:rgba(255,255,255,.66); }
-  html.lab #bs { color:#6f8796; } html.lab #ls { color:#0f2f44; } html.lab #word.word #ls { color:#15803d; } html.lab #word.dead #ls { color:#dc2626; }
+  html.lab #bs { color:#6f8796; } html.lab #ls, html.lab #pls { color:#0f2f44; } html.lab #word.word #ls, html.lab #word.word #pls { color:#15803d; } html.lab #word.dead #ls, html.lab #word.dead #pls { color:#dc2626; }
+  html.lab #word .dot { border-color:#58707f; } html.lab #word .dot.on { border-color:#0284c7; background:#38bdf8; box-shadow:0 0 10px 3px rgba(14,165,233,.7); }
   html.lab #word .hint { color:#58707f; } html.lab #ru { color:#3d5a6b; }
   html.lab .chip { background:#fff; border-color:#9bb8c8; color:#0f2f44; }
   html.lab .btn.sec { background:#fff; color:#0f2f44; border-color:#9bb8c8; }
@@ -228,7 +235,7 @@
 <canvas id="c"></canvas>
 <div id="act">
   <div id="wzone">
-    <div id="word"><span id="bs"></span><span id="ls"></span><span class="hint" id="hint"></span></div>
+    <div id="word"><i class="dot" id="dotS" hidden></i><span id="pls"></span><span id="bs"></span><span id="ls"></span><i class="dot" id="dotE" hidden></i><span class="hint" id="hint"></span></div>
     <div id="sub">
       <div id="ru"></div>
       <button class="chip" id="nowrd" hidden data-i18n="nowrd" data-i18n-title="t_nowrd"></button>
@@ -287,7 +294,7 @@ const I18N = {
     verified:"This word has a verified translation and can't be marked", marked:"«%0» marked as non-existent and no longer accepted",
     typeAdd:"Type the word you want to add", alreadyIn:"This word is already in the game", added:"«%0» added to the game (no translation)",
     listsReset:"Your marks were reset", wordsCount:"%0 words", noBranches:"No branches yet", more:"%0 more:", finished:"✓ finished", close:"Close",
-    diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", plusLetters:" + letters",
+    diacritics:"Needs diacritics:", formOf:"word form of", newHint:"New branch: 2+ letters", wordHint:"Build a word", dotPre:"Add letters in front (prefix)", dotSuf:"Add letters at the end (suffix)", noSide:"Nothing can be added on that side", plusLetters:" + letters",
     fell:"A letter fell", cdWarn:"⚠ letters crushed · end in %0 s", overSub:"Words: %0 · Best: %1",
     noMore:"No more words", locked:"Locked in", ripeTitle:"Branch closes in %0 s", ripeSub:"Branch reached the end · You can still add a shoot",
     restored:"Game restored", a_help:"How to play", helpClose:"Got it", fbOpen:"Send feedback", fbTitle:"Feedback", fb_word:"New word", fb_tr:"Translation error", fb_bug:"Bug", fb_idea:"Idea", fbPh:"Describe the problem, or write the word you want to add", fbSend:"Send", fbCancel:"Cancel", fbNote:"It goes to the developer together with the game version and the word you are on.", fbThanks:"Thank you! Sent.", fbFail:"Could not send, check the connection", fbWait:"One moment, you just sent a message", a_home:"Back to the start", demo:"Demo mode", demoOn:"Demo: a calm look at your branches. Tap to stop", demoNone:"No closed branches yet: nothing to show", qDown:"Max quality was too heavy for this device: switched to High", helpHtml:`<h2>How to play</h2>
@@ -295,7 +302,7 @@ const I18N = {
 <h3>What to do</h3>
 <ol>
 <li>Tap letters at the bottom to spell a word of 2+ letters and press <b>Grow ✓</b>.</li>
-<li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. One word can have up to 3 shoots.</li>
+<li>To make a word longer, tap its capsule (it gets a ring) and add letters so that a longer word appears that starts with it, for example JAUS → JAUSTI. Two small rings sit at the ends of the chosen word: tap the left one to add letters in front (a prefix, for example LAIMĖ → NELAIMĖ), the right one to add them at the end (a suffix); the ring you tapped lights up. One word can have up to 3 shoots.</li>
 <li>A new word starts by itself when the current branch is closed. Under the word you are working on there are buttons: <b>💡</b> shows which words can still grow, <b>⌫</b> erases a letter (hold it to finish the branch).</li>
 <li>The target button left of “?” brings the view back to the start, the middle of the field, when you have scrolled far along the archive.</li>
 </ol>
@@ -336,7 +343,7 @@ const I18N = {
     verified:"У слова есть проверенный перевод, отметить его нельзя", marked:"«%0» отмечено как несуществующее и больше не принимается",
     typeAdd:"Набери слово, которое хочешь добавить", alreadyIn:"Это слово уже есть в игре", added:"«%0» добавлено в игру (без перевода)",
     wordsCount:"%0 слов", listsReset:"Свои отметки сброшены", noBranches:"Веток пока нет", more:"ещё %0:", finished:"✓ закончена", close:"Закрыть",
-    diacritics:"Нужна диакритика:", formOf:"форма слова", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
+    diacritics:"Нужна диакритика:", formOf:"форма слова", dotPre:"Добавить буквы в начало (приставка)", dotSuf:"Добавить буквы в конец (суффикс)", noSide:"С этой стороны ничего не добавить", newHint:"Новая ветка: 2+ буквы", wordHint:"Собери слово", plusLetters:" + буквы",
     fell:"Упала буква", cdWarn:"⚠ буквы сжаты · конец через %0 с", overSub:"Слов: %0 · Рекорд: %1",
     noMore:"Больше слов нет", locked:"Зафиксировано", ripeTitle:"Ветка завершится через %0 с", ripeSub:"Ветка дошла до конца · Можно добавить побег",
     restored:"Партия восстановлена", a_help:"Как играть", helpClose:"Понятно", fbOpen:"Написать разработчику", fbTitle:"Обратная связь", fb_word:"Новое слово", fb_tr:"Ошибка в переводе", fb_bug:"Ошибка в игре", fb_idea:"Идея", fbPh:"Опишите проблему или напишите слово, которое нужно добавить", fbSend:"Отправить", fbCancel:"Отмена", fbNote:"Уходит разработчику вместе с версией игры и словом, на котором вы сейчас.", fbThanks:"Спасибо! Отправлено.", fbFail:"Не удалось отправить, проверьте соединение", fbWait:"Секунду, вы только что отправили сообщение", a_home:"К началу", demo:"Демо-режим", demoOn:"Демо: спокойный обзор ваших веток. Нажмите, чтобы остановить", demoNone:"Завершённых веток ещё нет: показывать нечего", qDown:"Максимальное качество слишком тяжёлое для устройства: включено «Высокое»", helpHtml:`<h2>Как играть</h2>
@@ -344,7 +351,7 @@ const I18N = {
 <h3>Что делать</h3>
 <ol>
 <li>Нажимайте на буквы внизу, чтобы составить слово из 2+ букв, и нажмите <b>Расти ✓</b>.</li>
-<li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. У одного слова может быть до 3 побегов.</li>
+<li>Чтобы удлинить слово, нажмите на его капсулу (появится кольцо) и добавьте буквы так, чтобы получилось более длинное слово, которое начинается с него, например JAUS → JAUSTI. По краям выбранного слова две маленькие окружности: нажмите левую, чтобы добавлять буквы в начало (приставка, например LAIMĖ → NELAIMĖ), правую — в конец (суффикс); нажатая окружность загорается. У одного слова может быть до 3 побегов.</li>
 <li>Новое слово начинается само, когда текущая ветка завершена. Под словом, с которым вы работаете, есть кнопки: <b>💡</b> показывает, какие слова ещё могут расти, <b>⌫</b> стирает букву (удержите, чтобы завершить ветку).</li>
 <li>Кнопка-прицел слева от «?» возвращает вид к началу, в центр поля, откуда растут слова, если вы далеко отмотали архив.</li>
 </ol>
@@ -417,7 +424,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.62";   // keep in sync with the VERSION file
+const VERSION = "0.0.63";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -515,7 +522,7 @@ let BANNED = new Set(), ADDED = new Set();
 try { BANNED = new Set(JSON.parse(localStorage.getItem("db_banned") || "[]")); ADDED = new Set(JSON.parse(localStorage.getItem("db_added") || "[]")); } catch (e) {}
 const saveLists = () => { try { localStorage.setItem("db_banned", JSON.stringify([...BANNED])); localStorage.setItem("db_added", JSON.stringify([...ADDED])); } catch (e) {} };
 function addWordToLex(w) {
-  WORDS.add(w);
+  sufCache.clear(); WORDS.add(w);
   const f = fold(w); if (f !== w) { const a = FOLD.get(f); if (a) { if (!a.includes(w)) a.push(w); } else FOLD.set(f, [w]); }
   for (let i = 1; i < w.length; i++) PRE.add(w.slice(0, i));
 }
@@ -528,7 +535,7 @@ function gramOf(w) { const i = LABEL_IDX.get(w); return i === undefined || typeo
 function subOf(w) { const ru = ruOf(w), g = ru ? gramOf(w) : null; return ru ? ru + (g ? " (" + g[0] + ")" : "") : ""; }   // second line inside a capsule
 function lemmaOf(w) { const i = LEMMA_IDX.get(w); return i === undefined || !RU_DATA[i] ? "" : RU_DATA[i][0]; }
 function buildLex(maxTier) {
-  FOLD.clear();
+  FOLD.clear(); sufCache.clear();
   const onlyTr = $("onlytr") ? $("onlytr").checked : false;
   WORDS = new Set(); PRE = new Set();
   for (const e of WORDS_TXT.split("|")) {
@@ -559,7 +566,7 @@ function reset() {
     W: 470, H: 720, tW: 470, tH: 720, Hs: bandH(),
     swarm: [], dead: [], trees: [], used: new Set(),
     score: 0, streak: 0, wordsN: 0, over: false, agony: 0, t: 0, pressureT: 0, density: 0,
-    builder: { base: null, letters: [], src: [], rootX: null, newMode: false }, fx: [], hintT: 0, hint: new Map(), dockOff: [0, 0], harvested: 0, idleT: 0, sugg: null, usedVer: 0, waveAmp: 7, waveTarget: 7, waveT: 0
+    builder: { base: null, letters: [], src: [], rootX: null, newMode: false, side: null }, fx: [], hintT: 0, hint: new Map(), dockOff: [0, 0], harvested: 0, idleT: 0, sugg: null, usedVer: 0, waveAmp: 7, waveTarget: 7, waveT: 0
   });
   for (const ch of ALPHA) {
     const h = homeOf(ch);
@@ -588,15 +595,45 @@ function award(s, matryoshka, tree, bucket) {
 /* ---------- tree helpers ---------- */
 /* A node is one word-step (a capsule). Letters merge into it; a longer word grows from it. */
 const aliveKids = n => n.children.filter(c => c.alive).length;
-const isTerminal = n => !PRE.has(n.str);
-// can a word still grow? true if some unused longer word starts with it (cached until the set of used words changes)
-function canExtend(n) {
-  if (n._v === G.usedVer) return n._c;
-  let ok = false;
-  if (PRE.has(n.str)) for (const w of WORDS) if (w.length > n.str.length && w.startsWith(n.str) && !G.used.has(w)) { ok = true; break; }
-  n._v = G.usedVer; n._c = ok;
-  return ok;
+// letters can grow on either end of a word: side "end" (suffix, the default) or "start" (prefix)
+const effSide = b => b.base && b.side === "start" ? "start" : "end";
+const joinWord = b => !b.base ? b.letters.join("") : effSide(b) === "start" ? b.letters.join("") + b.base.str : b.base.str + b.letters.join("");
+const sufCache = new Map();   // does any word end with this string? (cleared when the dictionary changes)
+function hasSuf(str) {
+  let v = sufCache.get(str);
+  if (v === undefined) { v = false; for (const w of WORDS) if (w.length > str.length && w.endsWith(str)) { v = true; break; } sufCache.set(str, v); }
+  return v;
 }
+const isTerminal = n => !PRE.has(n.str) && !hasSuf(n.str);
+let scKey = "", scList = [];
+function startCands(bs) {   // unused words that end with the chosen word: what a prefix can still become
+  const k = bs + "|" + G.usedVer + "|" + WORDS.size; if (k === scKey) return scList;
+  scKey = k; scList = []; for (const w of WORDS) if (w.length > bs.length && w.endsWith(bs) && !G.used.has(w)) scList.push(w);
+  return scList;
+}
+// can the typed letters still become a word on the chosen side?
+function partialOk(b) {
+  const s = joinWord(b);
+  if (effSide(b) === "end") return PRE.has(s) || WORDS.has(s);
+  const L = b.letters.join(""), bs = b.base.str;
+  return startCands(bs).some(w => w.length >= L.length + bs.length && w.startsWith(L));
+}
+function nextOk(b, ch) {   // may the letter `ch` be added next?
+  if (effSide(b) === "end") { const w = joinWord(b) + ch; return PRE.has(w) || WORDS.has(w); }
+  const L = b.letters.join("") + ch, bs = b.base.str;
+  return startCands(bs).some(w => w.length >= L.length + bs.length && w.startsWith(L));
+}
+// can a word still grow? true if some unused longer word starts with it (cached until the set of used words changes)
+function canExtendSide(n, side) {
+  if (n._v !== G.usedVer) { n._v = G.usedVer; n._ce = undefined; n._cs = undefined; }
+  if (side === "start") {
+    if (n._cs === undefined) { n._cs = false; for (const w of WORDS) if (w.length > n.str.length && w.endsWith(n.str) && !G.used.has(w)) { n._cs = true; break; } }
+    return n._cs;
+  }
+  if (n._ce === undefined) { n._ce = false; if (PRE.has(n.str)) for (const w of WORDS) if (w.length > n.str.length && w.startsWith(n.str) && !G.used.has(w)) { n._ce = true; break; } }
+  return n._ce;
+}
+const canExtend = n => canExtendSide(n, "end") || canExtendSide(n, "start");
 const CAPK = 2.5, CAPH = R * CAPK;   // the cell of a word is tall enough for a six-atom ring and a small russian line under it
 const RU_MAX = 26;
 // A word is drawn as a molecule: its letters are atoms joined by bonds at multiples of 30 degrees.
@@ -625,10 +662,14 @@ function molGeom(s) {
   molCache.set(s, g);
   return g;
 }
+function gensOf(m) {   // letters of a word by growth step; a prefix step owns the letters at the front
+  const pg = m.parent ? gensOf(m.parent) : []; let d = 0; for (let q = m.parent; q; q = q.parent) d++;
+  const mine = m.added.map(() => d);
+  return m.pre ? mine.concat(pg) : pg.concat(mine);
+}
 function wordGens(n) {   // which step of growth each letter came from, so the weight of the type shows what grew from what
   if (n._gens && n._gs === n.str) return n._gens;
-  const chain = []; for (let m = n; m; m = m.parent) chain.unshift(m);
-  const g = []; chain.forEach((m, d) => { for (let i = 0; i < m.added.length; i++) g.push(d); });
+  const g = gensOf(n);
   while (g.length < n.str.length) g.push(g.length ? g[g.length - 1] : 0);
   g.length = n.str.length;
   n._gens = g; n._gs = n.str; return g;
@@ -744,11 +785,11 @@ function placeRoot(w, n, xHint) {
   }
   return fallback;
 }
-function makeNode(str, added, parent, tree, pos) {
+function makeNode(str, added, parent, tree, pos, pre) {
   const w = nodeW(str), n = parent ? 0 : added.length;   // only a root word keeps its source letters around it
   const node = { id: nodeId++, str, added, parent, children: [], tree, alive: true, done: false, x: pos.x, y: pos.y, w,
     hh: halfH(n), born: G.t, box: boxFor(pos.x, pos.y, w, n), lets: n ? slotsFor(pos, w, added) : [], tilt: 0 };
-  node.tilt = tiltDir(node.id, parent, pos);
+  node.tilt = tiltDir(node.id, parent, pos); if (pre) node.pre = true;
   if (parent) parent.children.push(node);
   tree.nodes.push(node);
   return node;
@@ -774,6 +815,12 @@ function suggest() {
     for (const w of WORDS) if (w.length > pre.length && w.startsWith(pre) && !G.used.has(w)) { c.push(w); min = Math.min(min, w.length); }
     return c.filter(w => w.length <= min + 1);
   };
+  if (b.base && effSide(b) === "start" && !b.newMode) {
+    const L = b.letters.join(""), bs = b.base.str, c = startCands(bs).filter(w => w.startsWith(L) && w.length > L.length + bs.length);
+    if (!c.length) return null;
+    const min = c.reduce((m, w) => Math.min(m, w.length), 99), w = pick(c.filter(x => x.length <= min + 1));
+    return { word: w, letters: [w[L.length]], node: null, t0: G.t };
+  }
   if ((b.base || b.letters.length) && !(b.newMode && !b.letters.length)) {
     const pre = (b.base ? b.base.str : "") + b.letters.join(""), c = ext(pre);
     if (!c.length) return null;
@@ -792,7 +839,7 @@ function suggest() {
 }
 document.addEventListener("pointerdown", () => { G.idleT = 0; G.sugg = null; }, true);
 function clearBuilder() {
-  $("hintpanel").classList.remove("open"); const b = G.builder; b.base = null; b.letters = []; b.src = []; b.rootX = null; b.newMode = false; }
+  $("hintpanel").classList.remove("open"); const b = G.builder; b.base = null; b.letters = []; b.src = []; b.rootX = null; b.newMode = false; b.side = null; }
 
 // A branch is always selected while there is something to grow: the player never types "into the void".
 // Default = the newest open tip (an end of a branch), otherwise any growable word. "＋ новое слово" is the only way to start a separate tree.
@@ -812,12 +859,12 @@ function commit() {
   const b = G.builder, base = b.base, L = b.letters, need = base ? 1 : 2;
   let made = null;
   if (L.length < need) { toast(base ? tr("addLetters") : tr("need2"), "bad"); return; }
-  const s = (base ? base.str : "") + L.join("");
+  const s = joinWord(b), pre = effSide(b) === "start";
   if (WORDS.has(s) && !G.used.has(s)) {
     const from = b.src.map(l => ({ ch: l.ch, x: l.x, y: l.y, field: l.field }));
     const ab = base ? null : autoBase(s);
     if (ab) made = success(s, ab, [...s.slice(ab.str.length)], null, from);
-    else made = success(s, base, L, b.rootX, from);
+    else made = success(s, base, L, b.rootX, from, pre);
   } else fail(s, base, L, WORDS.has(s) ? tr("alreadyLive") : null);
   clearBuilder();
   if (made && selectable(made)) G.builder.base = made;   // keep growing the word that was just made
@@ -825,15 +872,16 @@ function commit() {
   updateTray(); updateHud();
 }
 
-function success(s, base, L, rootX, from) {
+function success(s, base, L, rootX, from, pre) {
   G.tW = Math.min(560, G.tW + 8 * L.length);
   G.tH = Math.min(TH_MAX, G.tH + 50);
   let tree = base ? base.tree : null;
   if (!tree) { tree = { nodes: [], pts: 0, harvest: false, t: 0, ripe: false, ripeT: 0 }; G.trees.push(tree); }
   const w = nodeW(s), got = [];
-  const node = makeNode(s, L, base, tree, base ? place(base, w, 0) : placeRoot(w, L.length, rootX));
+  const node = makeNode(s, L, base, tree, base ? place(base, w, 0) : placeRoot(w, L.length, rootX), pre);
   // words met on the way inside the final word score as "matryoshka"
-  for (let k = (base ? base.str.length : 1) + 1; k < s.length; k++) {
+  if (pre) { for (let k = 1; k < L.length; k++) { const p = s.slice(k); if (WORDS.has(p) && !G.used.has(p)) award(p, true, tree, got); } }   // front growth: the words are the tails
+  else for (let k = (base ? base.str.length : 1) + 1; k < s.length; k++) {
     const p = s.slice(0, k);
     if (WORDS.has(p) && !G.used.has(p)) award(p, true, tree, got);
   }
@@ -1081,13 +1129,13 @@ function finishTree() {
   b.base = null; harvest(tree); ensureBase(); updateTray(); updateHud();
 }
 // word feedback: "no such word" (only for words WITHOUT a verified translation) and "such a word exists"
-const typedWord = () => (G.builder.base ? G.builder.base.str : "") + G.builder.letters.join("");
+const typedWord = () => joinWord(G.builder);
 $("nowrd").onclick = () => {
   const b = G.builder, s = typedWord();
   if (!b.letters.length) { toast(tr("typeMark"), "bad"); return; }
   if (!WORDS.has(s)) { toast(tr("notInGame"), "bad"); return; }
   if (ruOf(s)) { toast(tr("verified"), "bad"); return; }
-  BANNED.add(s); ADDED.delete(s); WORDS.delete(s); saveLists();
+  BANNED.add(s); ADDED.delete(s); WORDS.delete(s); sufCache.clear(); saveLists();
   toast(tr("marked", s), "gold");
   b.letters = []; b.src = []; updateTray();
 };
@@ -1107,7 +1155,7 @@ $("hintb").onclick = () => {
   G.hint = new Map();
   for (const n of nodes) {
     let c = 0; const cand = [];
-    if (!n.done && aliveKids(n) < MAXKIDS) for (const w of WORDS) if (w.length > n.str.length && w.startsWith(n.str) && !G.used.has(w)) { c++; cand.push(w); }
+    if (!n.done && aliveKids(n) < MAXKIDS) for (const w of WORDS) if (w.length > n.str.length && (w.startsWith(n.str) || w.endsWith(n.str)) && !G.used.has(w)) { c++; cand.push(w); }
     // greedy "most different": from a random sample take the word sharing the shortest start with those already chosen
     const common = (p, q) => { let i = 0; while (i < p.length && i < q.length && p[i] === q[i]) i++; return i; };
     const picked = [];
@@ -1123,14 +1171,14 @@ $("hintb").onclick = () => {
       picked.push(bestW);
     }
     const ex = picked.sort((p, q) => p.length - q.length || (p < q ? -1 : 1));
-    G.hint.set(n.id, { c, ex: ex.map(w => w.slice(n.str.length)) });
+    G.hint.set(n.id, { c, ex: ex.map(w => w.startsWith(n.str) ? n.str + "<u>" + w.slice(n.str.length) + "</u>" : "<u>" + w.slice(0, w.length - n.str.length) + "</u>" + n.str) });
   }
   G.hintT = 10;
   const rows = [];
   for (const n of nodes) {
     const hi = G.hint.get(n.id);
     rows.push(hi.c > 0
-      ? `<div><b>${n.str.toUpperCase()}</b> · ${tr("more", hi.c)} <i>${hi.ex.map(e => n.str + "<u>" + e + "</u>").join(" · ")}</i></div>`
+      ? `<div><b>${n.str.toUpperCase()}</b> · ${tr("more", hi.c)} <i>${hi.ex.join(" · ")}</i></div>`
       : `<div class="fin"><b>${n.str.toUpperCase()}</b> · ${tr("finished")}</div>`);
   }
   $("hintpanel").innerHTML = '<button id="hintx" aria-label="' + tr("close") + '"><svg class="ico"><use href="#i-close"/></svg></button>' + rows.join("");
@@ -1167,9 +1215,18 @@ function toast(t, kind) {
   while ($("toasts").children.length > 4) $("toasts").firstChild.remove();
 }
 function updateTray() {
-  const b = G.builder, bs = b.base ? b.base.str : "", ls = b.letters.join("");
-  $("bs").textContent = bs; $("ls").textContent = ls;
-  const s = bs + ls, w = $("word"); w.className = "";
+  const b = G.builder;
+  if (b._sb !== b.base) { b._sb = b.base; b.side = b.base && !canExtendSide(b.base, "end") ? "start" : null; }   // a new word: letters go to its end, unless only the front is open
+  const side = effSide(b), bs = b.base ? b.base.str : "", ls = b.letters.join("");
+  $("pls").textContent = side === "start" ? ls : ""; $("bs").textContent = bs; $("ls").textContent = side === "end" ? ls : "";
+  const dS = $("dotS"), dE = $("dotE");
+  dS.hidden = dE.hidden = !b.base;
+  if (b.base) {
+    dS.classList.toggle("on", b.side === "start"); dE.classList.toggle("on", b.side === "end" || (!b.side && ls.length > 0));
+    dS.classList.toggle("off", !canExtendSide(b.base, "start")); dE.classList.toggle("off", !canExtendSide(b.base, "end"));
+    dS.title = tr("dotPre"); dE.title = tr("dotSuf");
+  }
+  const s = joinWord(b), w = $("word"); w.className = "";
   const ru = s && WORDS.has(s) ? ruOf(s) : "", lem = ru ? lemmaOf(s) : "", g = ru ? gramOf(s) : null;
   const alt = !ru && ls && !WORDS.has(s) ? FOLD.get(fold(s)) : null;   // typed with plain letters where the word needs diacritics
   if (alt) { $("ru").textContent = tr("diacritics") + " " + alt.slice(0, 3).join(", "); } else
@@ -1181,13 +1238,21 @@ function updateTray() {
   else hint.textContent = "";
   if ($("hints").checked && ls) {
     if (WORDS.has(s) && !G.used.has(s)) w.className = "word";
-    else if (!PRE.has(s) && !(WORDS.has(s))) w.className = "dead";
+    else if (!partialOk(b) && !(WORDS.has(s))) w.className = "dead";
   }
   $("go").disabled = G.over || !ls || (!b.base && ls.length < 2);
   // small actions appear only when they make sense: the word cannot be continued / is unverified / a branch is selected and nothing typed
   $("nowrd").hidden = !(ls && WORDS.has(s) && !ruOf(s));
-  $("yesw").hidden = !(ls && s.length >= 2 && !WORDS.has(s) && !PRE.has(s) && !alt);
+  $("yesw").hidden = !(ls && s.length >= 2 && !WORDS.has(s) && !partialOk(b) && !alt);
 }
+function setSide(side) {
+  const b = G.builder; if (!b.base || G.over) return;
+  if (!canExtendSide(b.base, side)) { toast(tr("noSide"), "bad"); return; }
+  if (b.side === side) return;
+  if (b.letters.length) { b.letters = []; b.src = []; }   // the letters belong to the old side
+  b.side = side; updateTray(); haptic("tap");
+}
+$("dotS").onclick = () => setSide("start"); $("dotE").onclick = () => setSide("end");
 function updateDiff() {
   const lvl = 4 - +$("tier").value;   // hard dictionary = 3 stars, easy = 1
   $("diff").textContent = "★".repeat(lvl) + "☆".repeat(3 - lvl);
@@ -1330,13 +1395,13 @@ function archiveBonds(sc, SX, SY, alpha) {   // thin bonds joining the finished 
 // The full keyboard stays for the first word and for a new branch.
 const strHash = str => { let h = 7; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; };
 function updateAllowed(dt) {
-  const b = G.builder, mode = $("assist").value, p = (b.base ? b.base.str : "") + b.letters.join("");
+  const b = G.builder, mode = $("assist").value, p = joinWord(b);
   if (p !== G.oprefix) { G.oprefix = p; G.orbitAll = false; }   // the "every letter" bubble works for the current prefix only
-  const key = mode + "|" + p + "|" + (b.newMode ? 1 : 0) + "|" + G.usedVer + "|" + (G.over ? 1 : 0) + "|" + (G.orbitAll ? 1 : 0) + "|" + (b.base ? 1 : 0);
+  const key = mode + "|" + p + "|" + (b.newMode ? 1 : 0) + "|" + G.usedVer + "|" + (G.over ? 1 : 0) + "|" + (G.orbitAll ? 1 : 0) + "|" + (b.base ? 1 : 0) + "|" + effSide(b);
   if (key !== G.akey) {
     G.akey = key; G.allowed = null;
     if (mode !== "off" && !G.over && !b.newMode && b.base) {
-      const ok = new Set(); for (const l of G.swarm) { const w = p + l.ch; if (PRE.has(w) || WORDS.has(w)) ok.add(l.ch); }
+      const ok = new Set(); for (const l of G.swarm) if (nextOk(b, l.ch)) ok.add(l.ch);
       if (ok.size || WORDS.has(p)) {   // a mistyped (dead) prefix gets the full keyboard back so it can be erased and fixed
         G.allowed = ok;
         if (G.orbitAll) for (const l of G.swarm) ok.add(l.ch);
@@ -1349,7 +1414,7 @@ function updateAllowed(dt) {
 
 const orbitActive = () => $("assist").value !== "off" && !!G.builder.base && !G.builder.newMode && !G.over;
 function syncOrbit(dt) {   // the letters that fit float along the two sides of the screen, so the word keeps the middle; the last bubble ("...") shows every letter
-  const act = orbitActive(), b = G.builder, p = (b.base ? b.base.str : "") + b.letters.join("");
+  const act = orbitActive(), b = G.builder, p = joinWord(b) + effSide(b);
   cam.bandF += ((act || G.demo ? 0 : 1) - cam.bandF) * Math.min(1, dt * 5);   // the keyboard sinks while the demo plays and comes back after it
   const letters = act && G.allowed ? [...G.allowed].sort(G.orbitAll ? (x, y) => ALPHA.indexOf(x) - ALPHA.indexOf(y) : (x, y) => strHash(p + "|" + x) - strHash(p + "|" + y)) : [];   // shuffled for every prefix: a new letter must not sit where the old one left (that would be a hint)
   const want = letters.slice(); if (act) want.push("\u2026");   // with the full keyboard open the same bubble becomes a cross that closes it
@@ -2238,7 +2303,7 @@ function readSave() { try { const d = JSON.parse(localStorage.getItem(SAVE_KEY) 
 function saveGame() {
   if (G.over || !G.trees) return;
   try {
-    const rec = n => ({ id: n.id, str: n.str, added: n.added, parent: n.parent ? n.parent.id : null, alive: n.alive, done: n.done, x: n.x, y: n.y, w: n.w, hh: n.hh, born: n.born, box: n.box, lets: n.lets, tilt: n.tilt, words: n.words || null });
+    const rec = n => ({ id: n.id, str: n.str, added: n.added, parent: n.parent ? n.parent.id : null, alive: n.alive, done: n.done, x: n.x, y: n.y, w: n.w, hh: n.hh, born: n.born, box: n.box, lets: n.lets, tilt: n.tilt, words: n.words || null, pre: !!n.pre });
     const b = G.builder;
     localStorage.setItem(SAVE_KEY, JSON.stringify({
       v: SAVE_VER, tier: +$("tier").value, onlytr: $("onlytr").checked,
@@ -2308,7 +2373,7 @@ $("lang").value = LANG; applyLang();
 // feedback: the message goes to the developer's Google Form (one text field) without leaving the game
 const FB_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe-PO7hDVbckje8ebuOQ5O0VpgdC7dAvTRPDnoUp7yZJCUcQg/formResponse", FB_FIELD = "entry.486355045";
 let fbType = "word", fbLast = 0;
-const fbContext = () => { const b = G.builder; return (b.base ? b.base.str : "") + b.letters.join(""); };
+const fbContext = () => joinWord(G.builder);
 function openFeedback() { $("fb").classList.add("open"); $("fbtext").value = ""; setFbType(fbType); }
 function setFbType(t) { fbType = t; document.querySelectorAll("#fb .types button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); }
 document.querySelectorAll("#fb .types button").forEach(b => { b.onclick = () => setFbType(b.dataset.t); });
