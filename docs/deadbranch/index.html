@@ -418,7 +418,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.65";   // keep in sync with the VERSION file
+const VERSION = "0.0.66";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -984,6 +984,8 @@ function camBounds() {   // how far the camera may go: over the whole field and 
 }
 function camUpdate(dt) {
   if (!cv.clientWidth) return;
+  if (G.archA == null) G.archA = 1;
+  G.archA += ((archiveLocked() ? 0 : 1) - G.archA) * Math.min(1, dt * 4);
   const B = camBounds(), f = G.focus, bs = G.builder;
   if (archiveLocked()) { cam.x = Math.max(B.x0, Math.min(B.x1, cam.x)); for (const t of G.trees) if (t.dock) t.dock.popT = 99; }   // a trophy that is open sinks back
   const key = (bs.base ? bs.base.id : -1) + ":" + bs.letters.length + ":" + G.trees.reduce((a, t) => a + t.nodes.length, 0) + ":" + G.wordsN;
@@ -2027,10 +2029,10 @@ function draw() {
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, cw, wy); ctx.clip();   // everything of the branch field stays above the wave
   if (Q.blur && "filter" in ctx) ctx.filter = "blur(" + (1.4 * ks * (1 - away)).toFixed(1) + "px)";   // the trophies far behind are out of focus, so they never compete with the live branch
   drawTrees(isBg);
-  archiveBonds(sc, SX, SY, .3 + .5 * away);
+  if (G.archA > .015) archiveBonds(sc, SX, SY, (.3 + .5 * away) * G.archA);
   if (Q.blur && "filter" in ctx) ctx.filter = "none";
   { const nw = G.trees.filter(t => t.dock && t.dock.ax != null && t.dock.e > .9).sort((a, b) => b.dock.axT - a.dock.axT)[0];
-    if (nw && away < .6) drawPeek(nw, SX, SY, cw, wy, sc, .8 * (1 - away)); }
+    if (nw && away < .6 && G.archA > .015) drawPeek(nw, SX, SY, cw, wy, sc, .8 * (1 - away) * G.archA); }
   if (bl.base && !bl.letters.length) { const bb = bl.base.box; G.focus = { x: bl.base.x, y: bl.base.y }; G.focusLow = bl.base.y; G.orbitC = { x: bl.base.x, y: bl.base.y }; G.orbitR = Math.max(bl.base.x - bb.x0, bb.x1 - bl.base.x, bl.base.y - bb.y0, bb.y1 - bl.base.y) * sc; }
   if (bl.letters.length) {
     const str = (bl.base ? bl.base.str : "") + bl.letters.join(""), w = nodeW(str);
@@ -2085,8 +2087,10 @@ function draw() {
     const KS = d ? (1 + (DOCK_K - 1) * d.e) * (1 - pp) + popK * pp : (t.z || 1);
     const rotNow = d ? d.rot + d.amp * Math.sin(G.t * d.w + d.ph) : 0;
     const swx = d ? d.sx * Math.sin(G.t * d.w2 + d.ph * 2) : 0, swy = d ? d.sy * Math.cos(G.t * d.w2 * .8 + d.ph) : 0;
+    if (d && G.archA < .015) continue;
     const sil = !!d && d.e > .02 && pp < .5 && away < .5;   // resting trophies are quiet dark silhouettes; a tapped one shows its words
-    const dp = sil ? (Math.sin(d.ph * 3) + 1) / 2 : 0, ga = sil ? (T.lab ? .32 + .38 * (1 - dp) : .14 + .26 * (1 - dp)) * Math.min(1, .25 + d.e) : (d && pp < .5 ? .3 + .7 * away : 1);   // each trophy sits at its own depth: farther = paler and more transparent
+    const dp = sil ? (Math.sin(d.ph * 3) + 1) / 2 : 0, ga0 = sil ? (T.lab ? .32 + .38 * (1 - dp) : .14 + .26 * (1 - dp)) * Math.min(1, .25 + d.e) : (d && pp < .5 ? .3 + .7 * away : 1);
+    const ga = ga0 * (d ? G.archA : 1);   // while a word is being typed the archive of finished branches fades away: nothing but the live branches around the work   // each trophy sits at its own depth: farther = paler and more transparent
     const M = (x, y) => {
       if (!d) return zoomPt(t, x, y);
       const bb = t.bb, bw = bb.x1 - bb.x0, bh = bb.y1 - bb.y0;

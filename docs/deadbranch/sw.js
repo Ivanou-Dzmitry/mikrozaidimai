@@ -1,5 +1,5 @@
 // Offline copy of the game. Network first (so a new version always wins), the cache only when there is no network.
-const CACHE = "deadbranch-0.0.65";
+const CACHE = "deadbranch-0.0.66";
 const FILES = ["./", "./index.html", "./words.js?v=21", "./ru.js?v=21", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => {
   self.skipWaiting();
