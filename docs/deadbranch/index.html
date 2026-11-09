@@ -418,7 +418,7 @@ function dustStep(dt) {
   }
 }
 const ripeT = () => +$("ripe").value;   // seconds a finished branch waits before it ripens (setting)
-const VERSION = "0.0.64";   // keep in sync with the VERSION file
+const VERSION = "0.0.65";   // keep in sync with the VERSION file
 const FLOOR = 14;   // thickness of the dark bottom strip the dead letters land on
 const R = 20, LINK = 52, MAXKIDS = 3, DENS_MAX = 0.66, PILE_PACK = 1.15, SWARM_ACC = 150, SWARM_SPEED = 8, SWARM_K = 4;
 // letters drift around their own place (a "key"). Two layouts: a fan of arcs around the thumb (default) and plain QWERTY
@@ -1238,7 +1238,7 @@ function updateTray() {
 }
 function setSide(side) {
   const b = G.builder; if (!b.base || G.over) return;
-  if (!canExtendSide(b.base, side)) { toast(tr("noSide"), "bad"); return; }
+  if (!canExtendSide(b.base, side)) { toast(tr("noSide"), "bad"); G.sideFx = { side, t: G.t }; haptic("bad"); return; }   // and red rings spread from the ring itself
   if (b.side === side) return;
   if (b.letters.length) { b.letters = []; b.src = []; }   // the letters belong to the old side
   b.side = side; updateTray(); haptic("tap");
@@ -2189,14 +2189,36 @@ function draw() {
           for (const [side, k, key] of [["start", -1, "S"], ["end", 1, "E"]]) {
             const dx = x + k * off * cs, dy = cy + k * off * sn, ok = canExtendSide(n, side), on = bd.side === side || (side === "end" && !bd.side && bd.letters.length > 0);
             G.sideDots[key] = [dx, dy, r];
-            ctx.globalAlpha = a0 * (ok ? 1 : .25);
-            if (on) {
-              ctx.fillStyle = T.lab ? "rgba(14,165,233,.16)" : "rgba(125,211,252,.2)"; ctx.beginPath(); ctx.arc(dx, dy, r * 2.4, 0, 6.2832); ctx.fill();
-              ctx.fillStyle = T.lab ? "rgba(14,165,233,.28)" : "rgba(125,211,252,.35)"; ctx.beginPath(); ctx.arc(dx, dy, r * 1.7, 0, 6.2832); ctx.fill();
-              ctx.fillStyle = T.lab ? "#38bdf8" : "#7dd3fc";
-            } else ctx.fillStyle = "rgba(0,0,0,0)";
-            ctx.beginPath(); ctx.arc(dx, dy, r, 0, 6.2832); ctx.fill();
-            ctx.lineWidth = 1; ctx.strokeStyle = on ? (T.lab ? "#0284c7" : "#bfe9ff") : (T.lab ? "rgba(30,90,125,.95)" : "rgba(190,230,255,.95)"); ctx.stroke();
+            ctx.globalAlpha = a0 * (ok ? 1 : .6);
+            if (on) {   // chosen: bigger, solid, breathing glow
+              const pu = .5 + .5 * Math.sin(G.t * 3.2), rb = r * (1.3 + .14 * pu);
+              ctx.fillStyle = T.lab ? "rgba(14,165,233,.18)" : "rgba(125,211,252,.22)"; ctx.beginPath(); ctx.arc(dx, dy, r * (3 + .5 * pu), 0, 6.2832); ctx.fill();
+              ctx.fillStyle = T.lab ? "rgba(14,165,233,.32)" : "rgba(125,211,252,.4)"; ctx.beginPath(); ctx.arc(dx, dy, r * (2.1 + .3 * pu), 0, 6.2832); ctx.fill();
+              ctx.fillStyle = T.lab ? "#0ea5e9" : "#7dd3fc"; ctx.beginPath(); ctx.arc(dx, dy, rb, 0, 6.2832); ctx.fill();
+              ctx.lineWidth = 2; ctx.strokeStyle = T.lab ? "#0369a1" : "#ffffff"; ctx.stroke();
+            } else if (!ok) {   // nothing can be added here: a grey dashed ring with a cross
+              const gc = T.lab ? "rgba(100,116,128,.95)" : "rgba(160,175,190,.9)", q = r * .6;
+              ctx.beginPath(); ctx.arc(dx, dy, r, 0, 6.2832); ctx.lineWidth = 1.4; ctx.strokeStyle = gc; ctx.setLineDash([2, 2]); ctx.stroke(); ctx.setLineDash([]);
+              ctx.beginPath(); ctx.moveTo(dx - q, dy - q); ctx.lineTo(dx + q, dy + q); ctx.moveTo(dx + q, dy - q); ctx.lineTo(dx - q, dy + q); ctx.stroke();
+            } else {   // free: a thin ring that can be tapped
+              ctx.beginPath(); ctx.arc(dx, dy, r, 0, 6.2832); ctx.lineWidth = 1; ctx.strokeStyle = T.lab ? "rgba(30,90,125,.95)" : "rgba(190,230,255,.95)"; ctx.stroke();
+            }
+            if (on) for (const o2 of [0, .5]) {   // the chosen side: slow rings spread from it, the same ripple as round the word
+              const u = (G.t / 6.3 + o2) % 1, e = 1 - (1 - u) * (1 - u);
+              ctx.globalAlpha = a0 * Math.min(1, u * 12) * Math.pow(1 - u, 2) * .9; ctx.lineWidth = 2.8 - 1.8 * u; ctx.strokeStyle = T.halo;
+              ctx.beginPath(); ctx.arc(dx, dy, r * (1.6 + 2.8 * e), 0, 6.2832); ctx.stroke();
+            }
+            const fx = G.sideFx;
+            if (fx && fx.side === side) {   // a tap on a side where nothing can be added: red rings spread from the ring
+              const u0 = (G.t - fx.t) / 1;
+              for (const o2 of [0, .3]) {
+                const v = (u0 - o2) / (1 - o2); if (v <= 0 || v >= 1) continue;
+                const e = 1 - (1 - v) * (1 - v);
+                ctx.globalAlpha = a0 * Math.pow(1 - v, 1.5); ctx.lineWidth = 2.6 - 1.6 * v; ctx.strokeStyle = "#ef4444";
+                ctx.beginPath(); ctx.arc(dx, dy, r * (1.3 + 3.2 * e), 0, 6.2832); ctx.stroke();
+              }
+              if (u0 >= 1.5) G.sideFx = null;
+            }
           }
           ctx.globalAlpha = a0;
         } else G.sideDots = null;
