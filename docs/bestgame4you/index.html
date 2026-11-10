@@ -37,6 +37,8 @@ body{font-family:"InterLight",Inter,system-ui,sans-serif;font-weight:300;touch-a
 .icon{-webkit-mask:var(--img) center/contain no-repeat;mask:var(--img) center/contain no-repeat;background-color:#fff}
 .btn{cursor:-webkit-image-set(url(assets/cursor32.png) 1x,url(assets/cursor64.png) 2x) 4 0,url(assets/cursor32.png) 4 0,pointer}
 .credit{font-size:20px;color:#959595}
+#fsBtn{--img:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%20fill='none'%20stroke='%23fff'%20stroke-width='6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M8%2024V8h16'/%3E%3Cpath%20d='M40%208h16v16'/%3E%3Cpath%20d='M56%2040v16H40'/%3E%3Cpath%20d='M24%2056H8V40'/%3E%3C/svg%3E")}
+.fs #fsBtn{--img:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%20fill='none'%20stroke='%23fff'%20stroke-width='6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M24%208v16H8'/%3E%3Cpath%20d='M40%208v16h16'/%3E%3Cpath%20d='M56%2040H40v16'/%3E%3Cpath%20d='M8%2040h16v16'/%3E%3C/svg%3E")}
 .about{text-decoration:none}
 .about:hover{color:#005cf0;text-decoration:underline}
 .left{justify-content:flex-start}
@@ -54,6 +56,7 @@ best
 game
 for
 you</div>
+  <div class="e icon btn" id="fsBtn" hidden title="Full screen" style="--x:1850;--y:70;--w:64;--h:64"></div>
   <div class="e t light-txt credit" style="--x:960;--y:1020;--w:600;--h:40">© Dzmitry Ivanou, 2026. Version 1.0</div>
   <a class="e t light-txt credit about btn" id="about" href="https://www.frosofco.com/games/the-best-game-for-you" target="_blank" rel="noopener" style="--x:960;--y:1060;--w:600;--h:40">page with description</a>
 </div></section>
@@ -230,6 +233,22 @@ const iconBtn = (el, panel, base, hover, click, blink, phantom = true) =>
 
 /* 0 title */
 textBtn($("#title"), 0, () => show(1), { interval: 2, opacity: 50 });
+/* 0 full screen (hidden where the browser has no Fullscreen API, e.g. iPhone) */
+(() => {
+  const el = $("#fsBtn"), root = document.documentElement;
+  const can = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+  if (!can) return;
+  const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const toggle = () => {
+    if (isFs()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+  };
+  const sync = () => { root.classList.toggle("fs", isFs()); el.title = isFs() ? "Exit full screen" : "Full screen"; };
+  document.addEventListener("fullscreenchange", sync);
+  document.addEventListener("webkitfullscreenchange", sync);
+  el.hidden = false;
+  iconBtn(el, 0, [0.58, 0.58, 0.58, 1], BLUE, toggle, null, false);
+})();
 /* 1 menu */
 textBtn($("#startBtn"), 1, () => show(2), { interval: 1, opacity: 25 });
 $$(".loc").forEach(el => widget(el, 1, {
