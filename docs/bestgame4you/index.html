@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Best Game For You</title>
+<meta name="description" content="The best game for you is the one you imagine.">
+<meta name="theme-color" content="#e4e4e4">
+<style>
+@font-face{font-family:"InterThin";src:url(assets/inter-thin.woff) format("woff");font-display:block}
+@font-face{font-family:"InterLight";src:url(assets/inter-light.woff) format("woff");font-display:block}
+
+html,body{margin:0;height:100%;overflow:hidden;background:#e4e4e4}
+html,body,*{cursor:url(assets/cursor.png) 18 0,auto}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+body{font-family:"InterLight",Inter,system-ui,sans-serif;font-weight:300;touch-action:manipulation}
+
+/* One full-window layer per screen; the 1920x1080 stage inside is scaled to fit. */
+.screen{position:fixed;inset:0;display:none;overflow:hidden}
+.screen.on{display:block}
+/* vignette drawn with gradients, no image */
+.screen.light{background:
+  linear-gradient(to right,rgba(0,0,0,0.222) 0.00%,rgba(0,0,0,0.183) 1.04%,rgba(0,0,0,0.131) 2.60%,rgba(0,0,0,0.061) 5.21%,rgba(0,0,0,0.017) 7.81%,rgba(0,0,0,0) 10.42%,rgba(0,0,0,0) 89.58%,rgba(0,0,0,0.017) 92.19%,rgba(0,0,0,0.061) 94.79%,rgba(0,0,0,0.131) 97.40%,rgba(0,0,0,0.183) 98.96%,rgba(0,0,0,0.222) 100.00%),
+  linear-gradient(to bottom,rgba(0,0,0,0.222) 0.00%,rgba(0,0,0,0.183) 1.85%,rgba(0,0,0,0.131) 4.63%,rgba(0,0,0,0.061) 9.26%,rgba(0,0,0,0.017) 13.89%,rgba(0,0,0,0) 18.52%,rgba(0,0,0,0) 81.48%,rgba(0,0,0,0.017) 86.11%,rgba(0,0,0,0.061) 90.74%,rgba(0,0,0,0.131) 95.37%,rgba(0,0,0,0.183) 98.15%,rgba(0,0,0,0.222) 100.00%),
+  #e5e5e5}
+.screen.dark{background:#000}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;
+  transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:50% 50%}
+
+/* element placed by centre point (x,y) and size (w,h) in stage pixels */
+.e{position:absolute;left:calc((var(--x) - var(--w) / 2) * 1px);top:calc((var(--y) - var(--h) / 2) * 1px);
+  width:calc(var(--w) * 1px);height:calc(var(--h) * 1px)}
+.t{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.21;color:#000;white-space:pre-line}
+.thin{font-family:"InterThin","InterLight",sans-serif;font-weight:100;text-transform:uppercase;font-size:130px}
+.light-txt{font-family:"InterLight",sans-serif;font-weight:300}
+.s80{font-size:80px}
+.icon{-webkit-mask:var(--img) center/contain no-repeat;mask:var(--img) center/contain no-repeat;background-color:#fff}
+.btn{cursor:url(assets/cursor.png) 18 0,pointer}
+.credit{font-size:20px;color:#959595}
+.about{text-decoration:none}
+.about:hover{color:#005cf0;text-decoration:underline}
+.left{justify-content:flex-start}
+.right{justify-content:flex-end}
+#top{opacity:1}
+#top > *{opacity:.5}
+</style>
+</head>
+<body>
+
+<!-- 0: title -->
+<section class="screen light on" id="p0"><div class="stage">
+  <div class="e t thin btn" id="title" style="--x:960;--y:500;--w:600;--h:1000">The
+best
+game
+for
+you</div>
+  <div class="e t light-txt credit" style="--x:960;--y:1020;--w:600;--h:40">© Dzmitry Ivanou, 2026. Version 1.0</div>
+  <a class="e t light-txt credit about btn" id="about" href="https://www.frosofco.com/games/the-best-game-for-you" target="_blank" rel="noopener" style="--x:960;--y:1060;--w:600;--h:40">frosofco.com</a>
+</div></section>
+
+<!-- 1: menu -->
+<section class="screen light" id="p1"><div class="stage">
+  <div class="e t thin btn" id="startBtn" data-key="start" style="--x:960;--y:331;--w:1920;--h:360"></div>
+  <div class="e t light-txt btn loc" data-loc="be" style="--x:570;--y:616;--w:130;--h:130;font-size:54.79px">BY</div>
+  <div class="e t light-txt btn loc" data-loc="en" style="--x:700;--y:616;--w:130;--h:130;font-size:54.79px">EN</div>
+  <div class="e t light-txt btn loc" data-loc="fr" style="--x:830;--y:616;--w:130;--h:130;font-size:54.79px">FR</div>
+  <div class="e t light-txt btn loc" data-loc="de" style="--x:960;--y:616;--w:130;--h:130;font-size:54.79px">DE</div>
+  <div class="e t light-txt btn loc" data-loc="lt" style="--x:1090;--y:616;--w:130;--h:130;font-size:54.79px">LT</div>
+  <div class="e t light-txt btn loc" data-loc="it" style="--x:1220;--y:616;--w:130;--h:130;font-size:54.79px">IT</div>
+  <div class="e t light-txt btn loc" data-loc="es" style="--x:1350;--y:616;--w:130;--h:130;font-size:54.79px">ES</div>
+  <div class="e icon btn" id="menuClose" style="--x:960;--y:785;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+</div></section>
+
+<!-- 2: rule 1 -->
+<section class="screen light" id="p2"><div class="stage">
+  <div class="e t light-txt s80" data-key="rule1" style="--x:960;--y:456;--w:1640;--h:450"></div>
+  <div class="e icon btn" id="close2" style="--x:846;--y:785;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+  <div class="e icon btn" id="next2" style="--x:1074;--y:785;--w:128;--h:128;--img:url(assets/arrow_forward.png)"></div>
+</div></section>
+
+<!-- 3: rule 2 (choose seconds) -->
+<section class="screen light" id="p3"><div class="stage">
+  <div class="e t light-txt s80" data-key="rule2" style="--x:960;--y:331;--w:1640;--h:200"></div>
+  <div class="e t light-txt s80 btn cnt" data-sec="10" style="--x:730;--y:576;--w:130;--h:130">10</div>
+  <div class="e t light-txt s80 btn cnt" data-sec="20" style="--x:960;--y:576;--w:130;--h:130">20</div>
+  <div class="e t light-txt s80 btn cnt" data-sec="30" style="--x:1190;--y:576;--w:130;--h:130">30</div>
+  <div class="e icon btn" id="close3" style="--x:846;--y:785;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+  <div class="e icon btn" id="next3" style="--x:1074;--y:785;--w:128;--h:128;--img:url(assets/arrow_forward.png)"></div>
+</div></section>
+
+<!-- 4: rule 3 (setup complete) -->
+<section class="screen light" id="p4"><div class="stage">
+  <div class="e t light-txt s80" id="rule3" style="--x:960;--y:456;--w:1640;--h:450"></div>
+  <div class="e icon btn" id="close4" style="--x:846;--y:785;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+  <div class="e icon btn" id="next4" style="--x:1074;--y:785;--w:128;--h:128;--img:url(assets/arrow_forward.png)"></div>
+</div></section>
+
+<!-- 5: the game itself -->
+<section class="screen dark" id="p5"><div class="stage">
+  <div id="top">
+    <div class="e icon" style="--x:100;--y:100;--w:100;--h:100;--img:url(assets/heart_icon.png)"></div>
+    <div class="e t light-txt s80 left" style="--x:275;--y:100;--w:200;--h:100;color:#fff">100%</div>
+    <div class="e icon" style="--x:1692;--y:100;--w:100;--h:100;--img:url(assets/timer_icon.png)"></div>
+    <div class="e t light-txt s80 right" id="time" style="--x:1806;--y:100;--w:128;--h:200;color:#fff">30</div>
+  </div>
+  <div class="e icon btn" id="cancel5" style="--x:960;--y:966;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+</div></section>
+
+<!-- 6: game over -->
+<section class="screen light" id="p6"><div class="stage">
+  <div class="e t thin" data-key="gameover" style="--x:960;--y:456;--w:1640;--h:450"></div>
+  <div class="e icon btn" id="close6" style="--x:960;--y:785;--w:128;--h:128;--img:url(assets/cancel_icon.png)"></div>
+</div></section>
+
+<script>
+"use strict";
+/* Texts of the Unity localization table (LocTable01). */
+const LOC = {
+ "be": {
+  "start": "ПАЧАЦЬ ГУЛЬНЮ",
+  "rule1": "Уявіце відэагульню, у якую вы хацелі б пагуляць. Не спяшайцеся. Калі будзеце гатовыя, націсніце →. Калі такой гульні няма, націсніце X.",
+  "rule2": "Колькі секунд вы хочаце ў яе пагуляць?",
+  "rule3": "Наладка завершана! Націсніце →. Заплюшчыце вочы. Гуляйце ў прыдуманую гульню {0} секунд.",
+  "gameover": "КАНЕЦ ГУЛЬНІ"
+ },
+ "de": {
+  "start": "SPIEL STARTEN",
+  "rule1": "Stellen Sie sich ein Videospiel vor, das Sie gerne spielen würden. Lassen Sie sich Zeit. Wenn Sie bereit sind, drücken Sie →. Wenn Ihnen kein solches Spiel einfällt, drücken Sie X.",
+  "rule2": "Wie viele Sekunden möchten Sie es spielen?",
+  "rule3": "Einrichtung abgeschlossen! Drücken Sie →. Schließen Sie die Augen. Spielen Sie {0} Sekunden lang Ihr ausgedachtes Spiel.",
+  "gameover": "SPIEL VORBEI"
+ },
+ "en": {
+  "start": "START GAME",
+  "rule1": "Imagine a video game you would like to play. Take your time. When you're ready, press →. If there isn't one, press X.",
+  "rule2": "How many seconds would you like to play it?",
+  "rule3": "Setup complete! Press →. Close your eyes. Play your imaginary game for {0} seconds.",
+  "gameover": "GAME OVER"
+ },
+ "es": {
+  "start": "INICIAR PARTIDA",
+  "rule1": "Imagina un videojuego al que te gustaría jugar. No tengas prisa. Cuando estés listo, pulsa →. Si no se te ocurre ninguno, pulsa X.",
+  "rule2": "¿Cuántos segundos quieres jugarlo?",
+  "rule3": "¡Configuración completada! Pulsa →. Cierra los ojos. Juega a tu juego imaginario durante {0} segundos.",
+  "gameover": "FIN DEL JUEGO"
+ },
+ "fr": {
+  "start": "COMMENCER LA PARTIE",
+  "rule1": "Imaginez un jeu vidéo auquel vous aimeriez jouer. Prenez votre temps. Lorsque vous êtes prêt, appuyez sur →. S'il n'y en a pas, appuyez sur X.",
+  "rule2": "Combien de secondes souhaitez-vous y jouer ?",
+  "rule3": "Configuration terminée ! Appuyez sur →. Fermez les yeux. Jouez à votre jeu imaginaire pendant {0} secondes.",
+  "gameover": "FIN DE PARTIE"
+ },
+ "it": {
+  "start": "INIZIA PARTITA",
+  "rule1": "Immagina un videogioco a cui vorresti giocare. Non avere fretta. Quando sei pronto, premi →. Se non te ne viene in mente nessuno, premi X.",
+  "rule2": "Per quanti secondi vuoi giocarci?",
+  "rule3": "Configurazione completata! Premi →. Chiudi gli occhi. Gioca al tuo gioco immaginario per {0} secondi.",
+  "gameover": "FINE DEL GIOCO"
+ },
+ "lt": {
+  "start": "PRADĖTI ŽAIDIMĄ",
+  "rule1": "Įsivaizduokite vaizdo žaidimą, kurį norėtumėte žaisti. Neskubėkite. Kai būsite pasiruošę, paspauskite →. Jei tokio žaidimo nėra, paspauskite X.",
+  "rule2": "Kiek sekundžių norite jį žaisti?",
+  "rule3": "Nustatymas baigtas! Paspauskite →. Užmerkite akis. Žaiskite savo įsivaizduojamą žaidimą {0} sekundžių.",
+  "gameover": "ŽAIDIMAS BAIGTAS"
+ }
+};
+
+const DEFAULT_LOCALE = "en", DEFAULT_SECONDS = 10, IDLE_TIMEOUT = 30, FADE_SECONDS = 3, PHANTOM = 0.15;
+const BLACK = [0, 0, 0, 1], BLUE = [0, 0.3608, 0.9412, 1], PINK = [1, 0, 0.5729, 1],
+      WHITE = [1, 1, 1, 1], RED = [0.75, 0, 0, 1];
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const now = () => performance.now() / 1000;
+const rgba = ([r, g, b, a]) => `rgba(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)},${a})`;
+const pingPong = (t, len) => { t = ((t % (len * 2)) + len * 2) % (len * 2); return len - Math.abs(t - len); };
+
+/* ---------- state ---------- */
+let locale = DEFAULT_LOCALE;
+let seconds = DEFAULT_SECONDS;
+let current = 0;
+const PANELS = 7;
+const widgets = [];                       // interactive elements, each belongs to one panel
+
+/* ---------- localisation ---------- */
+function applyTexts() {
+  document.documentElement.lang = locale;
+  const tr = LOC[locale] || LOC[DEFAULT_LOCALE];
+  $$("[data-key]").forEach(el => { el.textContent = tr[el.dataset.key]; });
+  $("#rule3").textContent = tr.rule3.replace("{0}", seconds);
+  widgets.forEach(w => w.render());
+}
+function setLocale(code) { if (LOC[code]) { locale = code; applyTexts(); } }
+function setSeconds(v) { if (seconds !== v) { seconds = v; applyTexts(); } }
+
+/* ---------- widgets (hover colour, blinking, click) ---------- */
+function widget(el, panel, o) {
+  const w = { el, panel, hover: false, since: 0, blink: o.blink || null, phantom: !!o.phantom, alpha: 1 };
+  w.render = () => {
+    const c = o.color(w).slice();
+    if (w.blink && !w.hover) c[3] *= w.alpha;
+    if (el.classList.contains("icon")) el.style.backgroundColor = rgba(c);
+    else el.style.color = rgba(c);
+  };
+  w.reset = () => { w.hover = false; w.since = now(); w.render(); };
+  w.tick = t => {
+    if (!w.blink) return;
+    const cycle = w.blink.interval > 0 ? pingPong(t, w.blink.interval) / w.blink.interval : 0;
+    w.alpha = 1 + (w.blink.opacity / 100 - 1) * cycle;
+    w.render();
+  };
+  el.addEventListener("pointerenter", e => {
+    if (e.pointerType !== "mouse") return;
+    if (w.phantom && now() - w.since < PHANTOM) return;
+    w.hover = true; w.render();
+  });
+  el.addEventListener("pointerleave", () => { w.hover = false; w.render(); });
+  el.addEventListener("click", () => o.click && o.click());
+  widgets.push(w);
+  w.render();
+  return w;
+}
+
+const textBtn = (el, panel, click, blink) =>
+  widget(el, panel, { color: w => w.hover ? BLUE : BLACK, click, blink });
+const iconBtn = (el, panel, base, hover, click, blink, phantom = true) =>
+  widget(el, panel, { color: w => w.hover ? hover : base, click, blink, phantom });
+
+/* 0 title */
+textBtn($("#title"), 0, () => show(1), { interval: 2, opacity: 50 });
+/* 1 menu */
+textBtn($("#startBtn"), 1, () => show(2), { interval: 1, opacity: 25 });
+$$(".loc").forEach(el => widget(el, 1, {
+  color: w => w.hover ? BLUE : (el.dataset.loc === locale ? PINK : BLACK),
+  click: () => setLocale(el.dataset.loc)
+}));
+iconBtn($("#menuClose"), 1, WHITE, RED, () => show(0));
+/* 2..4 rules */
+const next = { 2: 3, 3: 4, 4: 5 };
+for (const p of [2, 3, 4]) {
+  iconBtn($("#close" + p), p, WHITE, RED, () => show(1));
+  iconBtn($("#next" + p), p, BLACK, [0, 0, 1, 1], () => show(next[p]), { interval: 1, opacity: 25 });
+}
+/* 3 seconds */
+$$(".cnt").forEach(el => widget(el, 3, {
+  color: w => w.hover ? [0, 0, 1, 1] : (+el.dataset.sec === seconds ? [1, 0.0157, 0.6665, 1] : BLACK),
+  click: () => setSeconds(+el.dataset.sec),
+  phantom: true
+}));
+/* 5 game: nearly invisible cancel button */
+iconBtn($("#cancel5"), 5, [0.25, 0.25, 0.25, 0.0118], RED, () => show(6));
+/* 6 game over */
+iconBtn($("#close6"), 6, WHITE, RED, () => show(0));
+
+/* ---------- panels ---------- */
+let remaining = 0, fadeElapsed = 0;
+function show(i) {
+  if (i === current) return;               // SetActive(true) on an active panel does nothing
+  $("#p" + current).classList.remove("on");
+  current = i;
+  $("#p" + i).classList.add("on");
+  widgets.filter(w => w.panel === i).forEach(w => w.reset());
+  if (i === 5) {                            // PanelCountdown + PanelFadeOut
+    remaining = seconds; fadeElapsed = 0;
+    $("#top").style.opacity = 1;
+    $("#time").textContent = Math.ceil(remaining);
+  }
+}
+
+/* ---------- idle timer ---------- */
+let idle = 0, idleTriggered = false;
+function activity() { idle = 0; idleTriggered = false; }
+["pointermove", "pointerdown", "keydown", "wheel", "touchstart"].forEach(ev =>
+  addEventListener(ev, activity, { passive: true }));
+
+/* ---------- main loop ---------- */
+let last = now();
+function frame() {
+  const t = now();
+  const dt = Math.min(t - last, 0.1);       // a hidden tab pauses the game like Unity does
+  last = t;
+
+  if (!idleTriggered) {
+    idle += dt;
+    if (idle >= IDLE_TIMEOUT) {
+      idleTriggered = true;
+      show(0);
+      locale = DEFAULT_LOCALE; seconds = DEFAULT_SECONDS; applyTexts();
+    }
+  }
+  if (current === 5) {
+    remaining -= dt;
+    if (remaining <= 0) { remaining = 0; $("#time").textContent = 0; show(6); }
+    else $("#time").textContent = Math.ceil(remaining);
+    if (fadeElapsed < FADE_SECONDS) {
+      fadeElapsed += dt;
+      $("#top").style.opacity = 1 - Math.min(1, fadeElapsed / FADE_SECONDS);
+    }
+  }
+  widgets.forEach(w => { if (w.panel === current) w.tick(t); });
+  requestAnimationFrame(frame);
+}
+
+/* ---------- scale 1920x1080 stage to the window ---------- */
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.documentElement.style.setProperty("--s", s);
+}
+addEventListener("resize", fit);
+fit();
+
+applyTexts();
+widgets.filter(w => w.panel === 0).forEach(w => w.reset());
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
