@@ -11,7 +11,7 @@
 @font-face{font-family:"InterLight";src:url(assets/inter-light.woff) format("woff");font-display:block}
 
 html,body{margin:0;height:100%;overflow:hidden;background:#e4e4e4}
-html,body,*{cursor:url(assets/cursor.png) 9 0,auto}
+html,body,*{cursor:-webkit-image-set(url(assets/cursor32.png) 1x,url(assets/cursor64.png) 2x) 4 0,url(assets/cursor32.png) 4 0,auto}
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 body{font-family:"InterLight",Inter,system-ui,sans-serif;font-weight:300;touch-action:manipulation}
 
@@ -35,7 +35,7 @@ body{font-family:"InterLight",Inter,system-ui,sans-serif;font-weight:300;touch-a
 .light-txt{font-family:"InterLight",sans-serif;font-weight:300}
 .s80{font-size:80px}
 .icon{-webkit-mask:var(--img) center/contain no-repeat;mask:var(--img) center/contain no-repeat;background-color:#fff}
-.btn{cursor:url(assets/cursor.png) 9 0,pointer}
+.btn{cursor:-webkit-image-set(url(assets/cursor32.png) 1x,url(assets/cursor64.png) 2x) 4 0,url(assets/cursor32.png) 4 0,pointer}
 .credit{font-size:20px;color:#959595}
 .about{text-decoration:none}
 .about:hover{color:#005cf0;text-decoration:underline}
