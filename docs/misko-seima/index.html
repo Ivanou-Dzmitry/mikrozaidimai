@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Miško šeima — игра на литовские падежи · v1.4</title>
+<title>Miško šeima — игра на литовские падежи · v1.5</title>
 <style>
   html,body{margin:0;height:100%;background:#1b1e24;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
   #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
@@ -120,17 +120,17 @@
     <g id="treesFront"></g>
   </svg>
 
-  <div id="ver" style="position:absolute;right:20px;bottom:14px;font-size:20px;color:rgba(255,255,255,.75)">Miško šeima v1.4</div>
+  <div id="ver" style="position:absolute;right:20px;bottom:14px;font-size:20px;color:rgba(255,255,255,.75)">Miško šeima v1.5</div>
   <div id="hud">Taškai: <b id="score">0</b> &nbsp;·&nbsp; Klaidos: <span class="bad" id="errs">0</span></div>
 
   <div id="sheet"><h3 id="sheetH">📋 Шпаргалка: роль слова → падеж</h3><div id="sheetRows"></div></div>
 
   <div id="stone"><h3 id="stoneH">ОКОНЧАНИЯ</h3>
-    <table><tr><th>слово</th><th>kas?</th><th>ką?</th><th>kam?</th></tr>
-      <tr><td>mama, teta</td><td>-a</td><td>-ą</td><td>-ai</td></tr>
-      <tr><td>močiutė, dėdė</td><td>-ė</td><td>-ę</td><td>-ei</td></tr>
-      <tr><td>brolis, senelis</td><td>-is</td><td>-į</td><td>-iui</td></tr>
-      <tr><td>sūnus</td><td>-us</td><td>-ų</td><td>-ui</td></tr></table>
+    <table><tr><th>kas?</th><th>ką?</th><th>kam?</th></tr>
+      <tr><td>-a</td><td>-ą</td><td>-ai</td></tr>
+      <tr><td>-ė</td><td>-ę</td><td>-ei</td></tr>
+      <tr><td>-is</td><td>-į</td><td>-iui</td></tr>
+      <tr><td>-us</td><td>-ų</td><td>-ui</td></tr></table>
     <div class="n">sesuo, duktė: seser- / dukter- + <b>-į</b> (ką), <b>-iai</b> (kam)<br>tėtis: ką <b>tėtį</b>, kam <b>tėčiui</b> (t → č)</div></div>
 
   <div id="dlg">
@@ -146,7 +146,7 @@
 
   <div id="start">
     <div class="box">
-      <h1>Miško šeima <span style="font-size:22px;color:#a9b0bb">v1.4</span></h1>
+      <h1>Miško šeima <span style="font-size:22px;color:#a9b0bb">v1.5</span></h1>
       <div style="color:#a9b0bb;margin:-6px 0 12px">«Лесная семья» · у ворот замка</div>
       <div>Из леса один за другим выходят члены лесной семьи. Каждому нужно попасть в замок, но у ворот стоит стражник и допрашивает его.</div>
       <ul>
@@ -160,7 +160,7 @@
 </div>
 
 <script>
-const VERSION="v1.4";
+const VERSION="v1.5";
 let level=1; // 1: kas / ką / kam,  2: все 7 падежей
 /* ---------- scaling ---------- */
 const stage=document.getElementById("stage");
