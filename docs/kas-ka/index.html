@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kas? Ką? — тренажёр падежей · v1.3</title>
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#fff; --ink:#1f2328; --muted:#6b6f76; --line:#e3dfd6;
+    --nom:#1f7a4d; --nom-bg:#e3f4ea; --acc:#2456a6; --acc-bg:#e4ecfa;
+    --bad:#b3261e; --bad-bg:#fbe7e5; --accent:#c8641e;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#17181b; --card:#212328; --ink:#ececec; --muted:#9a9ea6; --line:#33363d;
+      --nom:#5fd09a; --nom-bg:#1d3a2c; --acc:#8fb4ff; --acc-bg:#1f2c47; --bad:#ff8a80; --bad-bg:#47201d; --accent:#f0a060; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+  h1{font-size:26px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:15px}
+  .tag{padding:3px 10px;border-radius:999px;font-weight:600}
+  .tag.nom{background:var(--nom-bg);color:var(--nom)}
+  .tag.acc{background:var(--acc-bg);color:var(--acc)}
+  button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:default}
+  .modes{display:grid;gap:10px}
+  .modes button{text-align:left;padding:14px 16px}
+  .modes b{display:block}
+  .modes span{color:var(--muted);font-size:15px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--muted);font-size:15px}
+  .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:18px}
+  .bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+  .task{color:var(--muted);margin-bottom:14px}
+  .sentence{font-size:26px;line-height:1.9;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:8px}
+  .w{padding:2px 10px;border-radius:8px;border:2px solid transparent}
+  .w.click{cursor:pointer;border-color:var(--line);background:var(--bg)}
+  .w.click:hover{border-color:var(--accent)}
+  .w.nom small,.w.acc small,.w.wrong small{color:inherit}
+  .w.nom{background:var(--nom-bg);color:var(--nom);border-color:var(--nom)}
+  .w.acc{background:var(--acc-bg);color:var(--acc);border-color:var(--acc)}
+  .w.wrong{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+  .w small{display:block;color:var(--muted);font-size:12px;line-height:1.2;font-weight:600;text-align:center}
+  .slot{min-width:130px;min-height:46px;border:2px dashed var(--muted);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;color:var(--muted);font-size:16px}
+  .slot.over{border-color:var(--accent);background:var(--bg)}
+  .slot.filled{border-style:solid;font-size:26px;color:var(--ink)}
+  .slot.ok{border-color:var(--nom);background:var(--nom-bg);color:var(--nom)}
+  .slot.bad{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+  .hint{color:var(--muted);font-size:15px;margin-bottom:16px}
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 4px}
+  .chip{font-size:20px;padding:8px 14px;text-align:center;border-radius:10px;border:2px solid var(--accent);background:var(--card);color:var(--ink);cursor:grab;touch-action:none;user-select:none}
+  .chip small{display:block;font-size:11px;line-height:1.2;color:var(--muted);text-align:center;font-weight:600}
+  .chip.done{pointer-events:none;border-color:var(--line);opacity:.55;cursor:default}
+  .chip.right{opacity:1;border-color:var(--nom);background:var(--nom-bg);color:var(--nom)}
+  .chip.right small{color:var(--nom)}
+  .chip.wrong{opacity:1;border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+  .chip.wrong small{color:var(--bad)}
+  .ghost{position:fixed;pointer-events:none;z-index:99;opacity:.9;transform:translate(-50%,-50%)}
+  .fb{margin-top:16px;padding:12px 14px;border-radius:10px;display:none}
+  .fb.show{display:block}
+  .fb.ok{background:var(--nom-bg)}
+  .fb.bad{background:var(--bad-bg)}
+  .fb > b:first-child{display:block;margin-bottom:2px}
+  .lit{font-size:20px;margin:4px 0 8px}
+  .lit .lbl{display:block;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .lit .nm{color:var(--nom);font-weight:700} .lit .ac{color:var(--acc);font-weight:700}
+  .tr{color:var(--muted);font-style:italic}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .score{font-size:40px;font-weight:700;margin:4px 0}
+  .mist{border-top:1px solid var(--line);padding:10px 0;font-size:15px}
+  .mist:first-child{border-top:0}
+  .mist .s{font-size:18px}
+  .mist .you{color:var(--bad)} .mist .right{color:var(--nom)}
+  .note{font-size:14px;color:var(--muted);margin-top:10px;min-height:1em}
+  textarea{width:100%;min-height:140px;font:14px/1.4 ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--ink);display:none;margin-top:10px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start">
+    <h1>Kas? Ką?</h1>
+    <p class="sub">Именительный и винительный: кто действует, а на кого направлено действие</p>
+    <div class="card">
+      <div class="legend">
+        <span class="tag nom">kas? · именит. · тот, кто действует</span>
+        <span class="tag acc">ką? · винит. · на кого направлено действие</span>
+      </div>
+      <p style="margin:12px 0 0;color:var(--muted);font-size:15px">Порядок слов в литовском свободный. Кто что делает, видно только по окончанию.</p>
+    </div>
+    <div class="modes">
+      <button data-mode="who"><b>1. Кто действует?</b><span>Порядок слов перемешан. Кликни на того, кто делает действие.</span></button>
+      <button data-mode="fill"><b>2. Вставь форму</b><span>Слово дано во всех 7 падежах, правильная форма одна. Перетащи её в пропуск или кликни.</span></button>
+      <button data-mode="mix"><b>3. Всё вперемешку</b><span>Оба типа заданий.</span></button>
+    </div>
+    <div class="card" id="savedBox" style="margin-top:16px;display:none">
+      <b>Сохранённые ошибки</b> <span id="savedCount" style="color:var(--muted)"></span>
+      <div class="row">
+        <button id="practiceSaved" class="primary">Тренировать их</button>
+        <button id="clearSaved">Очистить</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="top"><span id="counter"></span><button id="quit" style="padding:4px 10px;font-size:14px">Выйти</button></div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="card">
+      <div class="task" id="task"></div>
+      <div class="sentence" id="sentence"></div>
+      <div class="hint" id="hint"></div>
+      <div class="chips" id="chips"></div>
+      <div class="fb" id="fb"></div>
+      <div class="row"><button id="next" class="primary hidden">Дальше →</button></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="hidden">
+    <div class="card">
+      <div style="color:var(--muted)">Результат</div>
+      <div class="score" id="score"></div>
+      <div id="resMsg"></div>
+      <div class="row">
+        <button id="saveFile" class="primary">Сохранить ошибки в файл</button>
+        <button id="copyBtn">Копировать</button>
+        <button id="retryMist">Повторить ошибки</button>
+        <button id="home">В начало</button>
+      </div>
+      <div class="note" id="saveNote"></div>
+      <textarea id="txt" readonly></textarea>
+    </div>
+    <div class="card" id="mistCard">
+      <b>Ошибки</b>
+      <div id="mistList"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const VERSION="v1.3";
+/* ---------- DATA ---------- */
+// type "who": tokens, index of doer (nom) and object (acc)
+const WHO = [
+  {t:["Anūką","myli","močiutė."], n:2, a:0, gl:["внука","любит","бабушка"], tr:"Бабушка любит внука."},
+  {t:["Močiutę","myli","anūkas."], n:2, a:0, gl:["бабушку","любит","внук"], tr:"Внук любит бабушку."},
+  {t:["Močiutė","myli","anūką."], n:0, a:2, gl:["бабушка","любит","внука"], tr:"Бабушка любит внука."},
+  {t:["Mergaitę","kviečia","berniukas."], n:2, a:0, gl:["девочку","приглашает","мальчик"], tr:"Мальчик приглашает девочку."},
+  {t:["Berniuką","kviečia","mergaitė."], n:2, a:0, gl:["мальчика","приглашает","девочка"], tr:"Девочка приглашает мальчика."},
+  {t:["Mamą","girdi","tėtis."], n:2, a:0, gl:["маму","слышит","папа"], tr:"Папа слышит маму."},
+  {t:["Tėtį","girdi","mama."], n:2, a:0, gl:["папу","слышит","мама"], tr:"Мама слышит папу."},
+  {t:["Pelę","mato","katė."], n:2, a:0, gl:["мышку","видит","кошка"], tr:"Кошка видит мышь."},
+  {t:["Katė","mato","pelę."], n:0, a:2, gl:["кошка","видит","мышку"], tr:"Кошка видит мышь."},
+  {t:["Draugą","piešia","brolis."], n:2, a:0, gl:["друга","рисует","брат"], tr:"Брат рисует друга."},
+  {t:["Brolis","piešia","draugą."], n:0, a:2, gl:["брат","рисует","друга"], tr:"Брат рисует друга."},
+  {t:["Draugas","piešia","brolį."], n:0, a:2, gl:["друг","рисует","брата"], tr:"Друг рисует брата."},
+];
+// all 7 cases: [vard, kilm, naud, gal, įnag, viet, šauksm]
+const CASES=[
+  {lt:"vardininkas", q:"kas?", ru:"именительный"},
+  {lt:"kilmininkas", q:"ko?", ru:"родительный"},
+  {lt:"naudininkas", q:"kam?", ru:"дательный"},
+  {lt:"galininkas", q:"ką?", ru:"винительный"},
+  {lt:"įnagininkas", q:"kuo?", ru:"творительный"},
+  {lt:"vietininkas", q:"kur?", ru:"местный"},
+  {lt:"šauksmininkas", q:"o!", ru:"звательный"},
+];
+const NOUNS={
+  "močiutė":["močiutė","močiutės","močiutei","močiutę","močiute","močiutėje","močiute"],
+  "kava":["kava","kavos","kavai","kavą","kava","kavoje","kava"],
+  "stalas":["stalas","stalo","stalui","stalą","stalu","stale","stale"],
+  "sūnus":["sūnus","sūnaus","sūnui","sūnų","sūnumi","sūnuje","sūnau"],
+  "berniukas":["berniukas","berniuko","berniukui","berniuką","berniuku","berniuke","berniuke"],
+  "obuolys":["obuolys","obuolio","obuoliui","obuolį","obuoliu","obuolyje","obuoly"],
+  "brolis":["brolis","brolio","broliui","brolį","broliu","brolyje","broli"],
+  "katė":["katė","katės","katei","katę","kate","katėje","kate"],
+  "knyga":["knyga","knygos","knygai","knygą","knyga","knygoje","knyga"],
+  "draugas":["draugas","draugo","draugui","draugą","draugu","drauge","drauge"],
+  "mama":["mama","mamos","mamai","mamą","mama","mamoje","mama"],
+  "Vilnius":["Vilnius","Vilniaus","Vilniui","Vilnių","Vilniumi","Vilniuje","Vilniau"],
+};
+// type "fill": text before/after the slot, noun, correct case index (k), hint
+const FILL = [
+  {b:"Aš matau", a:".", w:"močiutė", k:3, h:"бабушка", tr:"Я вижу бабушку.", why:"Действую я (aš). Бабушка — та, кого я вижу."},
+  {b:"", a:"skaito knygą.", w:"močiutė", k:0, h:"бабушка", tr:"Бабушка читает книгу.", why:"Кто читает? Бабушка. Значит, она действует."},
+  {b:"Tėtis geria", a:".", w:"kava", k:3, h:"кофе", tr:"Папа пьёт кофе.", why:"Пьёт папа, а кофе — то, что пьют."},
+  {b:"", a:"stovi kambaryje.", w:"stalas", k:0, h:"стол", tr:"Стол стоит в комнате.", why:"Кто/что стоит? Стол. Здесь он подлежащее."},
+  {b:"Aš perku", a:".", w:"stalas", k:3, h:"стол", tr:"Я покупаю стол.", why:"Покупаю я. Стол — объект. По-русски «стол» = «стол», а в литовском видна разница."},
+  {b:"Mama myli", a:".", w:"sūnus", k:3, h:"сын", tr:"Мама любит сына.", why:"Любит мама. Сын — тот, кого любят."},
+  {b:"", a:"valgo obuolį.", w:"berniukas", k:0, h:"мальчик", tr:"Мальчик ест яблоко.", why:"Кто ест? Мальчик. Obuolį уже в винительном."},
+  {b:"Mergaitė valgo", a:".", w:"obuolys", k:3, h:"яблоко", tr:"Девочка ест яблоко.", why:"Ест девочка. Яблоко — то, что едят."},
+  {b:"", a:"mato katę.", w:"brolis", k:0, h:"брат", tr:"Брат видит кошку.", why:"Katę — объект (-ę). Значит, видит брат."},
+  {b:"Katę mato", a:".", w:"brolis", k:0, h:"брат", tr:"Кошку видит брат.", sense:"Брат видит кошку.", why:"Ловушка! Брат стоит в конце, но katę уже объект. Видит брат, значит именительный."},
+  {b:"Brolį mato", a:".", w:"katė", k:0, h:"кошка", tr:"Брата видит кошка.", sense:"Кошка видит брата.", why:"Brolį — объект. Видит кошка, поэтому -ė."},
+  {b:"Aš turiu", a:".", w:"knyga", k:3, h:"книга", tr:"Я имею книгу.", sense:"У меня есть книга.", why:"Turėti — «иметь». Имею я, книга — объект."},
+  {b:"Kur yra", a:"?", w:"knyga", k:0, h:"книга", tr:"Где есть книга?", sense:"Где книга?", why:"Yra («есть, находится») не действует на объект. Книга здесь подлежащее."},
+  {b:"Močiutė kviečia", a:".", w:"draugas", k:3, h:"друг", tr:"Бабушка приглашает друга.", why:"Приглашает бабушка. Друг — тот, кого приглашают."},
+  {b:"", a:"kviečia draugą.", w:"močiutė", k:0, h:"бабушка", tr:"Бабушка приглашает друга.", why:"Draugą — объект. Приглашает бабушка."},
+  {b:"Anūkas myli", a:".", w:"močiutė", k:3, h:"бабушка", tr:"Внук любит бабушку.", why:"Любит внук. Бабушка — та, кого любят."},
+  // contrast: other cases
+  {b:"Aš padedu", a:".", w:"močiutė", k:2, h:"бабушка", tr:"Я подкладываю [руку] → бабушке.", why:"Padėti — это ещё и «положить» (padėk knygą — положи книгу). Литовец «кладёт» помощь К бабушке. Есть скрытое «что» (рука, помощь), а бабушка — адрес, куда его кладут → kam? → -ei."},
+  {b:"Aš skambinu", a:".", w:"mama", k:2, h:"мама", tr:"Я звоню [звонок] → маме.", why:"Звонок отправляется К маме. Мама — адрес, а не то, во что упирается действие → kam? → -ai."},
+  {b:"Aš dėkoju", a:".", w:"močiutė", k:2, h:"бабушка", tr:"Я несу [спасибо] → бабушке.", why:"Dėkoti — «нести благодарность». Спасибо — скрытое «что», бабушка — получатель → kam? → -ei."},
+  {b:"Aš nematau", a:".", w:"knyga", k:1, h:"книга", tr:"Я не вижу книги.", sense:"Я не вижу книгу.", why:"При отрицании (ne-) винительный меняется на родительный: matau knygą → nematau knygos."},
+  {b:"Aš laukiu", a:".", w:"mama", k:1, h:"мама", tr:"Я жду мамы.", sense:"Я жду маму.", why:"Laukti — «ждать кого?». Этот глагол требует родительного."},
+  {b:"Einu į parką su", a:".", w:"brolis", k:4, h:"брат", tr:"Иду в парк с братом.", why:"Su («с») + творительный: su broliu."},
+  {b:"Aš gyvenu", a:".", w:"Vilnius", k:5, h:"Вильнюс", tr:"Я живу в-Вильнюсе (одно слово: Vilniuje).", sense:"Я живу в Вильнюсе.", why:"Где? Местный падеж (vietininkas) уже значит «в»: Vilniuje."},
+  {b:"Duok", a:"obuolį.", w:"brolis", k:2, h:"брат", tr:"Дай → брату [яблоко].", why:"Тут «что» названо прямо: obuolį (винит., вещь, которую передают). Брат — адрес, куда она идёт → kam? → -iui."},
+  {b:"Labas,", a:"!", w:"močiutė", k:6, h:"бабушка", tr:"Привет, бабушка!", why:"К человеку обращаются в звательном падеже: močiute!"},
+];
+const ALL = [
+  ...WHO.map((x,i)=>({...x,type:"who",id:"w"+i})),
+  ...FILL.map((x,i)=>({...x,type:"fill",id:"f"+i}))
+];
+
+/* ---------- STORAGE (safe) ---------- */
+const KEY="lt-cases-mistakes";
+function loadSaved(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
+function storeSaved(arr){ try{ localStorage.setItem(KEY, JSON.stringify(arr)); }catch(e){} }
+
+/* ---------- STATE ---------- */
+let items=[], idx=0, mistakes=[], answered=false;
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function show(sec){ ["start","quiz","result"].forEach(s=>$(s).classList.toggle("hidden",s!==sec)); window.scrollTo(0,0); }
+
+function refreshSaved(){
+  const s=loadSaved();
+  $("savedBox").style.display = s.length? "block":"none";
+  $("savedCount").textContent = s.length? `(${s.length})` : "";
+}
+
+function startRound(list){
+  items=list; idx=0; mistakes=[];
+  show("quiz"); render();
+}
+
+document.querySelectorAll(".modes button").forEach(b=>b.onclick=()=>{
+  const m=b.dataset.mode;
+  let pool = m==="who"? ALL.filter(x=>x.type==="who") : m==="fill"? ALL.filter(x=>x.type==="fill") : shuffle(ALL).slice(0,20);
+  startRound(shuffle(pool));
+});
+$("practiceSaved").onclick=()=>{
+  const ids=new Set(loadSaved().map(m=>m.id));
+  const pool=ALL.filter(x=>ids.has(x.id));
+  if(pool.length) startRound(shuffle(pool));
+};
+$("clearSaved").onclick=()=>{ storeSaved([]); refreshSaved(); };
+$("quit").onclick=()=>{ refreshSaved(); show("start"); };
+$("home").onclick=()=>{ refreshSaved(); show("start"); };
+$("retryMist").onclick=()=>{
+  const ids=new Set(mistakes.map(m=>m.id));
+  const pool=ALL.filter(x=>ids.has(x.id));
+  if(pool.length) startRound(shuffle(pool));
+};
+$("next").onclick=()=>{ idx++; idx<items.length? render() : finish(); };
+
+/* ---------- RENDER ---------- */
+function render(){
+  answered=false;
+  const it=items[idx];
+  $("counter").textContent=`${idx+1} / ${items.length}`;
+  $("prog").style.width=(idx/items.length*100)+"%";
+  $("fb").className="fb"; $("fb").innerHTML="";
+  $("next").classList.add("hidden");
+  $("chips").innerHTML=""; $("sentence").innerHTML="";
+  it.type==="who"? renderWho(it) : renderFill(it);
+}
+
+function renderWho(it){
+  $("task").textContent="Кто действует? Кликни на это слово.";
+  $("hint").textContent="";
+  it.t.forEach((w,i)=>{
+    const el=document.createElement("span");
+    el.className="w"+(i===it.n||i===it.a?" click":"");
+    el.textContent=w;
+    if(i===it.n||i===it.a) el.onclick=()=>answerWho(it,i);
+    $("sentence").appendChild(el);
+  });
+}
+function litOf(it){
+  const gl=it.gl.slice(); gl[0]=gl[0].charAt(0).toUpperCase()+gl[0].slice(1);
+  return gl.map((g,j)=> j===it.n?`<span class="nm">${g}</span>` : j===it.a?`<span class="ac">${g}</span>` : g).join(" ")+".";
+}
+function answerWho(it,i){
+  if(answered) return; answered=true;
+  const words=$("sentence").children;
+  const ok = i===it.n;
+  [...words].forEach((el,j)=>{
+    el.classList.remove("click"); el.onclick=null;
+    let tag="";
+    if(j===it.n){ el.classList.add("nom"); tag=" · kas?"; }
+    else if(j===it.a){ el.classList.add(ok?"acc":"wrong"); tag=" · ką?"; }
+    el.innerHTML=`${it.t[j]}<small>${it.gl[j]}${tag}</small>`;
+  });
+  const clean=s=>s.replace(/[.?!]$/,"");
+  const nW=clean(it.t[it.n]), aW=clean(it.t[it.a]);
+  const lit=litOf(it).replace(/<[^>]+>/g,"");
+  if(!ok) mistakes.push({id:it.id, sentence:it.t.join(" "), you:aW, right:nW, tr:`дословно: ${lit}`,
+    why:`${aW} — винительный (ką?, объект), ${nW} — именительный (kas?, действует).`});
+  feedback(ok, "",
+    `<div class="lit"><span class="lbl">Дословно — как думает литовец</span>${litOf(it)}</div><b>${nW}</b> (${it.gl[it.n]}) — именительный: тот, кто действует.<br><b>${aW}</b> (${it.gl[it.a]}) — винительный: на него/неё направлено действие.`);
+}
+
+const cap=(x,on)=>on? x.charAt(0).toUpperCase()+x.slice(1) : x;
+function formsOf(it){ return NOUNS[it.w].map(f=>cap(f,!it.b)); }
+function renderFill(it){
+  $("task").textContent="Перетащи или кликни нужную форму. Правильная только одна.";
+  $("hint").textContent=`Слово в пропуске: «${it.h}»`;
+  const s=$("sentence");
+  if(it.b){ const b=document.createElement("span"); b.textContent=it.b; s.appendChild(b); }
+  const slot=document.createElement("span"); slot.className="slot"; slot.id="slot"; slot.textContent="сюда"; s.appendChild(slot);
+  if(it.a){ const a=document.createElement("span"); a.textContent=it.a; s.appendChild(a); }
+  const forms=formsOf(it);
+  const uniq=[...new Set(forms)];
+  shuffle(uniq).forEach(opt=>{
+    const c=document.createElement("div"); c.className="chip"; c.dataset.form=opt;
+    c.innerHTML=`<span>${opt}</span>`;
+    makeDraggable(c, ()=>answerFill(it,opt));
+    $("chips").appendChild(c);
+  });
+}
+function answerFill(it,opt){
+  if(answered) return; answered=true;
+  const forms=formsOf(it), right=forms[it.k];
+  const slot=$("slot"); const ok = opt===right;
+  slot.textContent=opt; slot.classList.add("filled", ok?"ok":"bad");
+  document.querySelectorAll(".chip").forEach(c=>{
+    const f=c.dataset.form;
+    const names=forms.map((x,i)=>x===f?CASES[i].ru:null).filter(Boolean).join(" / ");
+    c.innerHTML=`<span>${f}</span><small>${names}</small>`;
+    c.classList.add("done");
+    if(f===right) c.classList.add("right");
+    else if(f===opt) c.classList.add("wrong");
+  });
+  const C=CASES[it.k];
+  const youCase=forms.map((x,i)=>x===opt?CASES[i].ru:null).filter(Boolean).join(" / ");
+  if(!ok) mistakes.push({id:it.id, sentence:`${it.b} ___ ${it.a}`.trim(), you:`${opt} (${youCase})`, right:`${right} (${C.ru})`, tr:it.tr, why:it.why});
+  feedback(ok, "", `<div class="lit"><span class="lbl">Дословно — как думает литовец</span>${it.tr}</div>${ok?"":`Правильно: <b>${right}</b>. `}Нужен ${C.ru} (${C.lt}, ${C.q}). ${it.why}`);
+}
+
+function feedback(ok, tr, text){
+  const fb=$("fb");
+  fb.className="fb show "+(ok?"ok":"bad");
+  fb.innerHTML=`<b>${ok?"Верно!":"Не совсем."}</b>${text}${tr?`<div class="tr" style="margin-top:6px">${tr}</div>`:""}`;
+  $("next").classList.remove("hidden");
+  $("next").textContent = idx===items.length-1? "Результат →" : "Дальше →";
+  $("prog").style.width=((idx+1)/items.length*100)+"%";
+}
+
+/* ---------- DRAG (pointer: works with mouse and touch) + CLICK ---------- */
+function makeDraggable(chip, onDrop){
+  chip.addEventListener("pointerdown", e=>{
+    if(answered) return;
+    e.preventDefault();
+    const sx=e.clientX, sy=e.clientY; let ghost=null, moved=false;
+    const slot=$("slot");
+    const overSlot=(x,y)=>{ const r=slot.getBoundingClientRect(); return x>=r.left-10&&x<=r.right+10&&y>=r.top-10&&y<=r.bottom+10; };
+    const move=ev=>{
+      if(!moved && Math.hypot(ev.clientX-sx, ev.clientY-sy)>6){
+        moved=true; ghost=chip.cloneNode(true); ghost.classList.add("ghost"); document.body.appendChild(ghost); chip.style.opacity=.3;
+      }
+      if(ghost){ ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px"; slot.classList.toggle("over", overSlot(ev.clientX,ev.clientY)); }
+    };
+    const up=ev=>{
+      window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); window.removeEventListener("pointercancel",up);
+      chip.style.opacity=""; slot.classList.remove("over");
+      if(ghost){ ghost.remove(); if(overSlot(ev.clientX,ev.clientY)) onDrop(); }
+      else onDrop(); // simple click
+    };
+    window.addEventListener("pointermove",move); window.addEventListener("pointerup",up); window.addEventListener("pointercancel",up);
+  });
+}
+
+/* ---------- RESULT ---------- */
+function mistakesText(){
+  const d=new Date();
+  const lines=[`Литовский: именительный / винительный — ошибки`, `Дата: ${d.toLocaleString("ru-RU")}`, `Результат: ${items.length-mistakes.length} из ${items.length}`, ""];
+  if(!mistakes.length) lines.push("Ошибок нет.");
+  mistakes.forEach((m,i)=>{
+    lines.push(`${i+1}. ${m.sentence}`);
+    lines.push(`   ты выбрал(а): ${m.you}   правильно: ${m.right}`);
+    lines.push(`   дословно: ${m.tr}`);
+    lines.push(`   почему: ${m.why}`);
+    lines.push("");
+  });
+  return lines.join("\n");
+}
+
+let downloads=null;
+(async()=>{ try{ if(window.claude&&claude.use){ downloads=await claude.use("downloads"); } }catch(e){ downloads=null; } })();
+
+function finish(){
+  show("result");
+  const right=items.length-mistakes.length;
+  $("score").textContent=`${right} / ${items.length}`;
+  $("resMsg").textContent = !mistakes.length? "Без ошибок. Отлично!" : `Ошибок: ${mistakes.length}. Они сохранены в этом браузере, их можно потренировать с главного экрана.`;
+  // merge into saved
+  const saved=loadSaved(); const have=new Set(saved.map(s=>s.id));
+  mistakes.forEach(m=>{ if(!have.has(m.id)){ saved.push(m); have.add(m.id);} });
+  storeSaved(saved);
+  $("mistCard").style.display = mistakes.length? "block":"none";
+  $("retryMist").disabled = !mistakes.length;
+  $("mistList").innerHTML = mistakes.map(m=>`
+    <div class="mist"><div class="s">${m.sentence}</div>
+    <div><span class="you">✗ ${m.you}</span> &nbsp; <span class="right">✓ ${m.right}</span></div>
+    <div class="tr">${m.tr}</div><div style="color:var(--muted)">${m.why}</div></div>`).join("");
+  $("saveNote").textContent=""; $("txt").style.display="none";
+}
+
+$("saveFile").onclick=async()=>{
+  const text=mistakesText();
+  const name=`oshibki-litovskij-${new Date().toISOString().slice(0,10)}.txt`;
+  if(!downloads){
+    // local file in a normal browser: plain download
+    try{
+      const url=URL.createObjectURL(new Blob([text],{type:"text/plain;charset=utf-8"}));
+      const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      $("saveNote").textContent="Файл сохранён в «Загрузки».";
+    }catch(e){ $("saveNote").textContent="Не получилось сохранить файл. Нажми «Копировать»."; }
+    return;
+  }
+  try{
+    await downloads.save({filename:name, data:text});
+    $("saveNote").textContent="Файл сохранён.";
+  }catch(e){
+    try{ await downloads.save({filename:name, data:new Blob([text],{type:"text/plain"})}); $("saveNote").textContent="Файл сохранён."; }
+    catch(e2){ $("saveNote").textContent="Не получилось сохранить файл. Нажми «Копировать»."; }
+  }
+};
+$("copyBtn").onclick=async()=>{
+  const text=mistakesText(); const ta=$("txt");
+  ta.value=text; ta.style.display="block";
+  try{ await navigator.clipboard.writeText(text); $("saveNote").textContent="Скопировано в буфер обмена."; }
+  catch(e){ ta.select(); $("saveNote").textContent="Выдели текст ниже и скопируй вручную."; }
+};
+
+refreshSaved();
+</script>
+<div id="ver" style="position:fixed;right:10px;bottom:8px;font-size:12px;color:#8a8f98;font-family:system-ui,sans-serif">v1.3</div>
+</body>
+</html>
