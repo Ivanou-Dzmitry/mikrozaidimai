@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Miško šeima — игра на литовские падежи · v1.2</title>
+<title>Miško šeima — игра на литовские падежи · v1.3</title>
 <style>
   html,body{margin:0;height:100%;background:#1b1e24;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
   #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
@@ -37,6 +37,15 @@
   #start h1{margin:0 0 10px;font-size:54px;color:#ffd65a}
   #start ul{padding-left:26px;margin:12px 0 26px}
   #start button{font:inherit;font-size:30px;padding:12px 40px;border-radius:12px;border:0;background:#ffd65a;font-weight:700;cursor:pointer}
+  #sheet{position:absolute;left:30px;top:150px;width:450px;background:rgba(20,25,35,.78);color:#f3f3f3;border-radius:14px;padding:12px 18px 14px;font-size:21px;line-height:1.35}
+  #sheet h3{margin:0 0 6px;font-size:20px;color:#ffd65a;cursor:pointer;user-select:none}
+  #sheet .r{display:flex;gap:10px;padding:3px 0;border-top:1px solid rgba(255,255,255,.12)}
+  #sheet .q{width:84px;flex:none;color:#ffd65a;font-weight:700}
+  #sheet .d{color:#e6e9ee}
+  #sheet.min .r{display:none}
+  .lv{margin:0 0 20px;display:flex;gap:12px}
+  .lv button{font:inherit;font-size:22px;padding:10px 18px;border-radius:12px;border:2px solid #ffd65a;background:transparent;color:#ffd65a;font-weight:600;cursor:pointer}
+  .lv button.on{background:#ffd65a;color:#222}
   .hidden{display:none!important}
 </style>
 </head>
@@ -103,8 +112,10 @@
     <g id="treesFront"></g>
   </svg>
 
-  <div id="ver" style="position:absolute;right:20px;bottom:14px;font-size:20px;color:rgba(255,255,255,.75)">Miško šeima v1.2</div>
+  <div id="ver" style="position:absolute;right:20px;bottom:14px;font-size:20px;color:rgba(255,255,255,.75)">Miško šeima v1.3</div>
   <div id="hud">Taškai: <b id="score">0</b> &nbsp;·&nbsp; Klaidos: <span class="bad" id="errs">0</span></div>
+
+  <div id="sheet"><h3 id="sheetH">📋 Шпаргалка: роль слова → падеж</h3><div id="sheetRows"></div></div>
 
   <div id="dlg">
     <div id="log"></div>
@@ -119,22 +130,22 @@
 
   <div id="start">
     <div class="box">
-      <h1>Miško šeima <span style="font-size:22px;color:#a9b0bb">v1.2</span></h1>
+      <h1>Miško šeima <span style="font-size:22px;color:#a9b0bb">v1.3</span></h1>
       <div style="color:#a9b0bb;margin:-6px 0 12px">«Лесная семья» · у ворот замка</div>
       <div>Из леса один за другим выходят члены лесной семьи. Каждому нужно попасть в замок, но у ворот стоит стражник и допрашивает его.</div>
       <ul>
-        <li>Стражник задаёт вопрос, а ты дописываешь фразу: впиши слово в нужном падеже.</li>
-        <li>Все 7 падежей: <i>kas? ko? kam? ką? kuo? kur? и обращение</i>.</li>
-        <li>В конце стражник обращается к слову. Впиши, как к нему обратиться (звательный падеж).</li>
-        <li>Если ответишь правильно, ворота откроются и ты получишь <b>+1 очко</b>. Если ошибёшься, слово уйдёт обратно в лес, и выйдет другое.</li>
+        <li>Стражник говорит фразу с пропуском <b>___</b>. Подумай: что слово делает в этой фразе (само действует? в него упирается действие? ему что-то отправляют?), и впиши его в нужном падеже. Помогает шпаргалка слева.</li>
+        <li>Правильный ответ поднимает ворота. Все ответы верны: <b>+1 очко</b>. Ошибка: слово уходит обратно в лес.</li>
       </ul>
+      <div class="lv"><button id="lv1" class="on">Уровень 1: kas / ką / kam</button><button id="lv2">Уровень 2: все 7 падежей</button></div>
       <button id="startBtn">Pradėti</button>
     </div>
   </div>
 </div>
 
 <script>
-const VERSION="v1.2";
+const VERSION="v1.3";
+let level=1; // 1: kas / ką / kam,  2: все 7 падежей
 /* ---------- scaling ---------- */
 const stage=document.getElementById("stage");
 function fit(){const s=Math.min(innerWidth/1920, innerHeight/1080);stage.style.transform=`scale(${s})`;stage.style.left=((innerWidth-1920*s)/2)+"px";stage.style.top=((innerHeight-1080*s)/2)+"px";}
@@ -173,29 +184,29 @@ const WORDS=[
   {w:"duktė", ru:"дочь", g:"f", f:["duktė","dukters","dukteriai","dukterį","dukterimi","dukteryje","dukterie"]},
 ];
 const CASES=[
-  {lt:"vardininkas", q:"kas?", ru:"именительный", idea:"он сам действует / о нём речь"},
-  {lt:"kilmininkas", q:"ko? kieno?", ru:"родительный", idea:"чей / кого нет / кого ищут"},
-  {lt:"naudininkas", q:"kam?", ru:"дательный", idea:"адрес: скрытое «что» (письмо, подарок, помощь) отправляется → к нему"},
-  {lt:"galininkas", q:"ką?", ru:"винительный", idea:"действие упирается прямо в него, он сам и есть «что»"},
-  {lt:"įnagininkas", q:"kuo?", ru:"творительный", idea:"с кем / кем (вместе, рядом)"},
-  {lt:"vietininkas", q:"kame? kur?", ru:"местный", idea:"внутри него"},
-  {lt:"šauksmininkas", q:"o!", ru:"звательный", idea:"зовём его"},
+  {lt:"vardininkas", q:"kas?", ru:"именительный", short:"он сам действует", idea:"он сам действует / о нём речь"},
+  {lt:"kilmininkas", q:"ko? kieno?", ru:"родительный", short:"чей · кого нет", idea:"чей / кого нет / кого ищут"},
+  {lt:"naudininkas", q:"kam?", ru:"дательный", short:"адрес: кому отправляют", idea:"адрес: скрытое «что» (письмо, подарок, помощь) отправляется → к нему"},
+  {lt:"galininkas", q:"ką?", ru:"винительный", short:"действие упирается в него", idea:"действие упирается прямо в него, он сам и есть «что»"},
+  {lt:"įnagininkas", q:"kuo?", ru:"творительный", short:"с кем / кем", idea:"с кем / кем (вместе, рядом)"},
+  {lt:"vietininkas", q:"kame? kur?", ru:"местный", short:"где: внутри него", idea:"внутри него"},
+  {lt:"šauksmininkas", q:"o!", ru:"звательный", short:"зовём его", idea:"зовём его"},
 ];
 // questions per case: variants {q, ru, pre, post}
 const Q={
-  0:[{q:"Stok! Kas tu? Prisistatyk!", ru:"Стой! Кто ты? Назовись!", pre:"Aš esu", post:"."}],
-  1:[{q:"Kieno tas maišas?", ru:"Чей это мешок?", pre:"Tai", post:"maišas."},
-     {q:"Ko ieško sargyba?", ru:"Кого ищет стража?", pre:"Sargyba ieško", post:"."},
-     {q:"Ko čia nėra?", ru:"Кого здесь нет?", pre:"Čia nėra", post:"."}],
-  2:[{q:"Kam tas laiškas?", ru:"Кому то письмо? (письмо идёт → к кому?)", pre:"Laiškas", post:"."},
-     {q:"Kam kunigaikštis siunčia dovaną?", ru:"Кому князь шлёт подарок? (подарок → к кому?)", pre:"Kunigaikštis siunčia dovaną", post:"."},
-     {q:"Kam tu padedi?", ru:"Кому ты подкладываешь [руку]? = кому помогаешь?", pre:"Aš padedu", post:"."}],
-  3:[{q:"Ką kviečia kunigaikštis?", ru:"Кого приглашает князь?", pre:"Kunigaikštis kviečia", post:"."},
-     {q:"Ką mato sargybinis?", ru:"Кого видит стражник?", pre:"Sargybinis mato", post:"."}],
-  4:[{q:"Su kuo kunigaikštis nori kalbėti?", ru:"С кем князь хочет поговорить?", pre:"Su", post:"."},
-     {q:"Kuo didžiuojasi miestas?", ru:"Кем гордится город?", pre:"Miestas didžiuojasi", post:"."}],
-  5:[{q:"Kame slypi miesto viltis?", ru:"В ком скрыта надежда города?", pre:"Viltis slypi", post:"."}],
-  6:[{q:"Vartai atsiveria! Kaip tave pakviesti?", ru:"Ворота открываются! Как к тебе обратиться?", pre:"", post:"!"}],
+  0:[{q:"Aš esu ___.", ru:"Я есть ___.", pre:"Aš esu", post:"."}],
+  1:[{q:"Tai ___ maišas.", ru:"Это ___ мешок.", pre:"Tai", post:"maišas."},
+     {q:"Sargyba ieško ___.", ru:"Стража ищет ___.", pre:"Sargyba ieško", post:"."},
+     {q:"Čia nėra ___.", ru:"Здесь нет ___.", pre:"Čia nėra", post:"."}],
+  2:[{q:"Aš siunčiu laišką ___.", ru:"Я посылаю письмо ___.", pre:"Aš siunčiu laišką", post:"."},
+     {q:"Kunigaikštis siunčia dovaną ___.", ru:"Князь шлёт подарок ___.", pre:"Kunigaikštis siunčia dovaną", post:"."},
+     {q:"Aš padedu ___.", ru:"Я подкладываю [руку] ___.", pre:"Aš padedu", post:"."}],
+  3:[{q:"Kunigaikštis kviečia ___.", ru:"Князь приглашает ___.", pre:"Kunigaikštis kviečia", post:"."},
+     {q:"Sargybinis mato ___.", ru:"Стражник видит ___.", pre:"Sargybinis mato", post:"."}],
+  4:[{q:"Kunigaikštis nori kalbėti su ___.", ru:"Князь хочет говорить с ___.", pre:"Kunigaikštis nori kalbėti su", post:"."},
+     {q:"Miestas didžiuojasi ___.", ru:"Город гордится ___.", pre:"Miestas didžiuojasi", post:"."}],
+  5:[{q:"Viltis slypi ___.", ru:"Надежда таится ___.", pre:"Viltis slypi", post:"."}],
+  6:[{q:"Prašom į pilį, gerbiamasis ___!", ru:"Прошу в замок, уважаемый ___!", pre:"", post:"!"}],
 };
 
 /* ---------- helpers ---------- */
@@ -266,18 +277,18 @@ async function round(){
   say(`Iš miško išeina <span class="w" style="color:${color}">${item.w}</span> <span class="ru">(${item.ru})</span>…`,"ln sys");
   await walk(1250,2600);
 
-  const order=[0,...shuffle([1,2,3,4,5]),6];
+  const order = level===1 ? shuffle([0,2,3]) : [0,...shuffle([1,2,3,4,5]),6];
   for(let step=0; step<order.length; step++){
     const c=order[step];
     const v=rnd(Q[c]);
     const pre = c===6 ? `Prašom į pilį, ${item.g==="f"?"gerbiamoji":"gerbiamasis"}` : v.pre;
-    guard(v.q, v.ru);
+    guard(c===6 ? v.q.replace("gerbiamasis",item.g==="f"?"gerbiamoji":"gerbiamasis") : v.q, v.ru);
     const input=await ask(pre,v.post);
     const right=item.f[c];
     const accepted=[right,...((item.alt&&item.alt[c])||[])];
     say(`<span class="w" style="color:${color}">${item.w}:</span> ${pre} <b>${input.trim()}</b>${v.post}`);
     if(check(input,accepted,pre)){
-      say(`✓ ${rnd(["Gerai.","Teisingai.","Taip.","Tinka."])} <span class="ru">${CASES[c].lt} · ${CASES[c].idea}</span> · vartai ${step+1}/7`,"ln ok");
+      say(`✓ ${rnd(["Gerai.","Teisingai.","Taip.","Tinka."])} <span class="ru">${CASES[c].lt} · ${CASES[c].idea}</span> · vartai ${step+1}/${order.length}`,"ln ok");
       await gateTo((step+1)/order.length);
     }else{
       errs++; $("errs").textContent=errs;
@@ -303,6 +314,13 @@ async function round(){
   return round();
 }
 
+function drawSheet(){
+  const ids=level===1?[0,3,2]:[0,3,2,1,4,5,6];
+  $("sheetRows").innerHTML=ids.map(i=>`<div class="r"><span class="q">${CASES[i].q.split(" ")[0]}</span><span class="d">${CASES[i].short}</span></div>`).join("");
+}
+$("sheetH").onclick=()=>$("sheet").classList.toggle("min");
+function setLevel(n){level=n;$("lv1").classList.toggle("on",n===1);$("lv2").classList.toggle("on",n===2);drawSheet();}
+$("lv1").onclick=()=>setLevel(1); $("lv2").onclick=()=>setLevel(2); drawSheet();
 $("startBtn").onclick=()=>{ $("start").classList.add("hidden"); round(); };
 drawWord();
 </script>
