@@ -5,22 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mikrozaidimai</title>
 <style>
-  body { margin:0; font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:#0f2f44; background:linear-gradient(#eef5f8,#9fc0d4); min-height:100vh; }
-  main { max-width:560px; margin:0 auto; padding:36px 20px; }
-  h1 { margin:0 0 4px; font-size:28px; } p { margin:0 0 24px; color:#35566a; }
-  a.game { display:block; padding:16px 18px; margin-bottom:12px; border-radius:16px; background:#fff; color:inherit; text-decoration:none; box-shadow:0 2px 12px #2a4a6a22; }
-  a.game b { display:block; font-size:20px; } a.game span { color:#35566a; font-size:15px; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:#0f2f44; background:linear-gradient(#eef5f8,#9fc0d4); min-height:100vh; }
+  main { max-width:900px; margin:0 auto; padding:24px 16px; }
+  h1 { margin:0 0 2px; font-size:26px; } p { margin:0 0 18px; color:#35566a; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  a.game { display:flex; flex-direction:column; gap:4px; padding:16px; border-radius:18px; color:inherit; text-decoration:none; background:var(--c); box-shadow:0 2px 10px #2a4a6a26; transition:transform .12s; }
+  a.game:hover, a.game:focus-visible { transform:translateY(-3px); }
+  a.game i { font-style:normal; font-size:38px; line-height:1; margin-bottom:6px; }
+  a.game b { font-size:18px; }
+  a.game span { font-size:14px; color:#2c4a5c; }
+  a.game span em { display:block; font-style:normal; color:#4d6b7c; margin-top:2px; }
 </style>
 </head>
 <body>
 <main>
   <h1>Mikrozaidimai</h1>
-  <p>Micro games / Микроигры.</p>
-  <a class="game" href="deadbranch/"><b>Dead Branch</b><span>An educational game for learning Lithuanian. Build words from letters and watch them grow like a molecule, with Russian translations of every word. Play on a phone or a PC: in a browser, or add it to your home screen to play fullscreen and offline.<br><br>Обучающая игра для изучения литовского языка. Собирай слова из букв, они растут молекулой, у каждого слова есть русский перевод. Играть можно на телефоне и на ПК: в браузере или с экрана «Домой», на весь экран и без интернета.</span></a>
-  <a class="game" href="bestgame4you/"><b>The Best Game For You</b><span>The best game is the one you imagine. Pick a game in your head, choose how many seconds to play, close your eyes and play it. Works in a browser on a phone or a PC, in 7 languages.<br><br>Лучшая игра та, которую ты придумал сам. Представь игру, выбери время, закрой глаза и играй. Работает в браузере на телефоне и на ПК, 7 языков.</span></a>
-  <a class="game" href="vicky/"><b>VICKY Jam Session</b><span>A one-hour brainstorm for a game jam team: Value, Interests, Crazy 8s, Keepers, Yes and. Steps with timers, idea notes, 3-vote Keepers and a result you copy as Markdown. Run it from one screen.<br><br>Часовой брейншторм для команды на гейм-джеме: Value, Interests, Crazy 8s, Keepers, Yes and. Шаги с таймером, идеи-стикеры, голосование по 3 голоса и итог в Markdown. Ведите сессию с одного экрана.</span></a>
-  <a class="game" href="kas-ka/"><b>Kas? Ką?</b><span>A trainer for Lithuanian cases. See who acts (kas?) and who the action lands on (ką?), then pick the right form among all 7 cases. Literal translations in Lithuanian word order show the logic.<br><br>Тренажёр литовских падежей. Найди, кто действует (kas?) и на кого направлено действие (ką?), и выбери верную форму из 7 падежей. Дословный перевод в литовском порядке слов показывает логику.</span></a>
-  <a class="game" href="misko-seima/"><b>Miško šeima</b><span>A game about Lithuanian cases in the singular. A relative walks up to the castle guard, and you decline their name through all 7 cases to raise the gate. Hints show each case's role in the action, with literal translations in Lithuanian word order.<br><br>Игра на литовские падежи в единственном числе. Родственник подходит к стражнику замка, а ты склоняешь его имя по 7 падежам, чтобы поднять ворота. Подсказки показывают роль слова в действии, перевод дословный, в литовском порядке слов.</span></a>
+  <p>Micro games / Микроигры</p>
+  <div class="grid">
+    <a class="game" style="--c:#d9f0d2" href="deadbranch/"><i>🌿</i><b>Dead Branch</b><span>Build Lithuanian words from letters, with Russian translations.<em>Собирай литовские слова из букв, с русским переводом.</em></span></a>
+    <a class="game" style="--c:#ffe9c2" href="bestgame4you/"><i>🎲</i><b>The Best Game For You</b><span>Imagine a game, set the seconds, close your eyes and play.<em>Придумай игру, выбери время, закрой глаза и играй.</em></span></a>
+    <a class="game" style="--c:#e3dcf7" href="vicky/"><i>💡</i><b>VICKY Jam Session</b><span>One-hour game jam brainstorm with timers and voting.<em>Часовой брейншторм для гейм-джема с таймером и голосованием.</em></span></a>
+    <a class="game" style="--c:#d5e8fa" href="kas-ka/"><i>❓</i><b>Kas? Ką?</b><span>Trainer for Lithuanian cases: who acts, who is acted on.<em>Тренажёр падежей: кто действует и на кого направлено.</em></span></a>
+    <a class="game" style="--c:#fadcdc" href="misko-seima/"><i>🏰</i><b>Miško šeima</b><span>Decline relatives' names in 7 cases to open the castle gate.<em>Склоняй имена родственников по 7 падежам, чтобы открыть ворота.</em></span></a>
+  </div>
 </main>
 </body>
 </html>
