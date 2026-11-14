@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Miško šeima — игра на литовские падежи · v1.2</title>
+<style>
+  html,body{margin:0;height:100%;background:#1b1e24;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+  #scene{position:absolute;inset:0;width:1920px;height:1080px}
+  /* HUD */
+  #hud{position:absolute;left:30px;top:30px;background:rgba(20,25,35,.72);color:#fff;border-radius:14px;padding:14px 22px;font-size:26px;line-height:1.4}
+  #hud b{color:#ffd65a}
+  #hud .bad{color:#ff8a80}
+  /* dialog */
+  #dlg{position:absolute;left:520px;top:30px;width:880px;background:rgba(20,25,35,.72);border-radius:16px;color:#f3f3f3;padding:18px 24px 20px;box-sizing:border-box;backdrop-filter:blur(2px)}
+  #log{height:448px;overflow:hidden;font-size:22px;line-height:28px;display:flex;flex-direction:column;justify-content:flex-end}
+  #log .ln{margin:0}
+  #log .g{color:#ffd65a;font-weight:700}
+  #log .ru{color:#a9b0bb;font-size:19px}
+  #log .w{font-weight:700}
+  #log .ok{color:#7ee2a8}
+  #log .no{color:#ff8a80}
+  #log .sys{color:#a9b0bb;font-style:italic}
+  #inrow{margin-top:14px;border-top:1px solid rgba(255,255,255,.18);padding-top:14px;display:flex;align-items:center;gap:10px;font-size:26px;flex-wrap:wrap}
+  #inrow .pre,#inrow .post{white-space:nowrap}
+  #ans{font:inherit;font-size:26px;width:260px;padding:6px 12px;border-radius:10px;border:2px solid #ffd65a;background:rgba(0,0,0,.35);color:#fff;outline:none}
+  #ans:disabled{opacity:.4;border-color:#777}
+  #go{font:inherit;font-size:22px;padding:8px 18px;border-radius:10px;border:0;background:#ffd65a;color:#222;font-weight:700;cursor:pointer}
+  #go:disabled{opacity:.4;cursor:default}
+  #keys{margin-top:10px;display:flex;gap:6px}
+  #keys button{font:inherit;font-size:22px;width:44px;height:40px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+  #keys button:hover{background:rgba(255,255,255,.2)}
+  /* start overlay */
+  #start{position:absolute;inset:0;background:rgba(15,18,24,.6);display:flex;align-items:center;justify-content:center}
+  #start .box{background:rgba(20,25,35,.92);color:#eee;border-radius:20px;padding:40px 56px;width:900px;font-size:24px;line-height:1.5}
+  #start h1{margin:0 0 10px;font-size:54px;color:#ffd65a}
+  #start ul{padding-left:26px;margin:12px 0 26px}
+  #start button{font:inherit;font-size:30px;padding:12px 40px;border-radius:12px;border:0;background:#ffd65a;font-weight:700;cursor:pointer}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="scene" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="gateClip"><path d="M1600,880 L1600,620 A80,80 0 0 1 1760,620 L1760,880 Z"/></clipPath>
+    </defs>
+    <!-- sky -->
+    <rect width="1920" height="1080" fill="#bfe3f2"/>
+    <circle cx="1790" cy="120" r="62" fill="#ffd65a"/>
+    <!-- hills -->
+    <polygon points="0,720 260,600 520,690 820,580 1120,680 1400,600 1920,700 1920,760 0,760" fill="#a8d38a"/>
+    <!-- ground -->
+    <rect y="730" width="1920" height="350" fill="#8cc265"/>
+    <!-- road -->
+    <polygon points="200,800 1600,800 1600,885 200,915" fill="#d9b77a"/>
+    <polygon points="200,915 1600,885 1600,895 200,930" fill="#c39d5e"/>
+    <!-- back trees -->
+    <g id="treesBack"></g>
+    <!-- castle -->
+    <g id="castle">
+      <rect x="1500" y="360" width="420" height="525" fill="#a3a09a"/>
+      <g fill="#a3a09a" id="merlons"></g>
+      <rect x="1470" y="270" width="100" height="615" fill="#8f8b84"/>
+      <rect x="1840" y="270" width="100" height="615" fill="#8f8b84"/>
+      <g fill="#8f8b84" id="towerMerlons"></g>
+      <rect x="1505" y="380" width="30" height="60" rx="15" fill="#3a3530"/>
+      <rect x="1875" y="380" width="30" height="60" rx="15" fill="#3a3530"/>
+      <g stroke="#8e8a83" stroke-width="3" id="bricks"></g>
+      <!-- gate opening -->
+      <path d="M1600,880 L1600,620 A80,80 0 0 1 1760,620 L1760,880 Z" fill="#2c2520"/>
+      <!-- portcullis -->
+      <g clip-path="url(#gateClip)">
+        <g id="portcullis">
+          <rect x="1600" y="530" width="160" height="350" fill="#6b4f33"/>
+          <g stroke="#4a3522" stroke-width="6" id="bars"></g>
+        </g>
+      </g>
+      <path d="M1590,880 L1590,620 A90,90 0 0 1 1770,620 L1770,880" fill="none" stroke="#7a766f" stroke-width="16"/>
+    </g>
+    <!-- word -->
+    <g id="word" transform="translate(-300,772)">
+      <g id="wordShape"></g>
+      <text id="wordText" x="0" y="12" text-anchor="middle" font-size="38" font-weight="700" fill="#1f2328" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">žodis</text>
+    </g>
+    <!-- guard -->
+    <g id="guard">
+      <line x1="1495" y1="540" x2="1495" y2="880" stroke="#5a3d22" stroke-width="8"/>
+      <polygon points="1495,500 1482,548 1508,548" fill="#c9ccd1"/>
+      <rect x="1418" y="800" width="20" height="80" fill="#3b3b44"/>
+      <rect x="1444" y="800" width="20" height="80" fill="#3b3b44"/>
+      <rect x="1405" y="690" width="72" height="120" rx="10" fill="#b23a3a"/>
+      <rect x="1405" y="760" width="72" height="12" fill="#6b4f33"/>
+      <rect x="1470" y="705" width="30" height="16" rx="8" fill="#b23a3a"/>
+      <circle cx="1441" cy="660" r="28" fill="#f1c9a5"/>
+      <polygon points="1408,652 1474,652 1441,606" fill="#9aa0a8"/>
+      <rect x="1405" y="648" width="72" height="10" fill="#7f858d"/>
+      <circle cx="1452" cy="668" r="3.5" fill="#222"/>
+      <circle cx="1380" cy="745" r="38" fill="#2456a6" stroke="#ffd65a" stroke-width="6"/>
+    </g>
+    <!-- front trees -->
+    <g id="treesFront"></g>
+  </svg>
+
+  <div id="ver" style="position:absolute;right:20px;bottom:14px;font-size:20px;color:rgba(255,255,255,.75)">Miško šeima v1.2</div>
+  <div id="hud">Taškai: <b id="score">0</b> &nbsp;·&nbsp; Klaidos: <span class="bad" id="errs">0</span></div>
+
+  <div id="dlg">
+    <div id="log"></div>
+    <form id="inrow" autocomplete="off">
+      <span class="pre" id="pre"></span>
+      <input id="ans" spellcheck="false" disabled>
+      <span class="post" id="post"></span>
+      <button id="go" type="submit" disabled>Atsakyti ⏎</button>
+    </form>
+    <div id="keys"></div>
+  </div>
+
+  <div id="start">
+    <div class="box">
+      <h1>Miško šeima <span style="font-size:22px;color:#a9b0bb">v1.2</span></h1>
+      <div style="color:#a9b0bb;margin:-6px 0 12px">«Лесная семья» · у ворот замка</div>
+      <div>Из леса один за другим выходят члены лесной семьи. Каждому нужно попасть в замок, но у ворот стоит стражник и допрашивает его.</div>
+      <ul>
+        <li>Стражник задаёт вопрос, а ты дописываешь фразу: впиши слово в нужном падеже.</li>
+        <li>Все 7 падежей: <i>kas? ko? kam? ką? kuo? kur? и обращение</i>.</li>
+        <li>В конце стражник обращается к слову. Впиши, как к нему обратиться (звательный падеж).</li>
+        <li>Если ответишь правильно, ворота откроются и ты получишь <b>+1 очко</b>. Если ошибёшься, слово уйдёт обратно в лес, и выйдет другое.</li>
+      </ul>
+      <button id="startBtn">Pradėti</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const VERSION="v1.2";
+/* ---------- scaling ---------- */
+const stage=document.getElementById("stage");
+function fit(){const s=Math.min(innerWidth/1920, innerHeight/1080);stage.style.transform=`scale(${s})`;stage.style.left=((innerWidth-1920*s)/2)+"px";stage.style.top=((innerHeight-1080*s)/2)+"px";}
+addEventListener("resize",fit); fit();
+
+/* ---------- scene builders ---------- */
+const NS="http://www.w3.org/2000/svg";
+const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e;};
+function tree(parent,x,base,h,col){
+  el("rect",{x:x-h*0.05,y:base-h*0.28,width:h*0.1,height:h*0.28,fill:"#6b4a2b"},parent);
+  for(let i=0;i<3;i++){
+    const w=h*(0.55-i*0.12), top=base-h*(0.5+i*0.22), bot=base-h*(0.18+i*0.22);
+    el("polygon",{points:`${x-w},${bot} ${x+w},${bot} ${x},${top-h*0.12}`,fill:col},parent);
+  }
+}
+const tb=document.getElementById("treesBack"), tf=document.getElementById("treesFront");
+[[40,800,420,"#3f7d4a"],[150,780,360,"#4f8f55"],[260,790,400,"#3f7d4a"],[360,770,300,"#5a9b5c"],[90,760,300,"#5a9b5c"],[440,790,260,"#4f8f55"]].forEach(t=>tree(tb,...t));
+[[-10,1000,520,"#2f6b3b"],[120,1040,460,"#356f40"],[250,1060,420,"#2f6b3b"],[60,920,300,"#3a7444"],[330,990,330,"#356f40"]].forEach(t=>tree(tf,...t));
+const mer=document.getElementById("merlons"); for(let x=1575;x<1840;x+=56) el("rect",{x,y:320,width:34,height:44},mer);
+const tm=document.getElementById("towerMerlons"); [1470,1840].forEach(x0=>{for(let i=0;i<3;i++) el("rect",{x:x0+i*38,y:236,width:24,height:38},tm);});
+const br=document.getElementById("bricks"); for(let y=420;y<880;y+=60){ el("line",{x1:1570,y1:y,x2:1840,y2:y},br); }
+const bars=document.getElementById("bars"); for(let x=1620;x<1760;x+=30) el("line",{x1:x,y1:530,x2:x,y2:880},bars); for(let y=580;y<880;y+=50) el("line",{x1:1600,y1:y,x2:1760,y2:y},bars);
+
+/* ---------- data ---------- */
+// forms: [vard, kilm, naud, gal, įnag, viet, šauksm]
+const WORDS=[
+  {w:"tėtis", ru:"папа", g:"m", f:["tėtis","tėčio","tėčiui","tėtį","tėčiu","tėtyje","tėti"]},
+  {w:"mama", ru:"мама", g:"f", f:["mama","mamos","mamai","mamą","mama","mamoje","mama"]},
+  {w:"brolis", ru:"брат", g:"m", f:["brolis","brolio","broliui","brolį","broliu","brolyje","broli"]},
+  {w:"sesuo", ru:"сестра", g:"f", f:["sesuo","sesers","seseriai","seserį","seserimi","seseryje","seserie"], alt:{6:["sese"]}},
+  {w:"močiutė", ru:"бабушка", g:"f", f:["močiutė","močiutės","močiutei","močiutę","močiute","močiutėje","močiute"]},
+  {w:"senelis", ru:"дедушка", g:"m", f:["senelis","senelio","seneliui","senelį","seneliu","senelyje","seneli"]},
+  {w:"teta", ru:"тётя", g:"f", f:["teta","tetos","tetai","tetą","teta","tetoje","teta"]},
+  {w:"dėdė", ru:"дядя", g:"m", f:["dėdė","dėdės","dėdei","dėdę","dėde","dėdėje","dėde"]},
+  {w:"sūnus", ru:"сын", g:"m", f:["sūnus","sūnaus","sūnui","sūnų","sūnumi","sūnuje","sūnau"]},
+  {w:"duktė", ru:"дочь", g:"f", f:["duktė","dukters","dukteriai","dukterį","dukterimi","dukteryje","dukterie"]},
+];
+const CASES=[
+  {lt:"vardininkas", q:"kas?", ru:"именительный", idea:"он сам действует / о нём речь"},
+  {lt:"kilmininkas", q:"ko? kieno?", ru:"родительный", idea:"чей / кого нет / кого ищут"},
+  {lt:"naudininkas", q:"kam?", ru:"дательный", idea:"адрес: скрытое «что» (письмо, подарок, помощь) отправляется → к нему"},
+  {lt:"galininkas", q:"ką?", ru:"винительный", idea:"действие упирается прямо в него, он сам и есть «что»"},
+  {lt:"įnagininkas", q:"kuo?", ru:"творительный", idea:"с кем / кем (вместе, рядом)"},
+  {lt:"vietininkas", q:"kame? kur?", ru:"местный", idea:"внутри него"},
+  {lt:"šauksmininkas", q:"o!", ru:"звательный", idea:"зовём его"},
+];
+// questions per case: variants {q, ru, pre, post}
+const Q={
+  0:[{q:"Stok! Kas tu? Prisistatyk!", ru:"Стой! Кто ты? Назовись!", pre:"Aš esu", post:"."}],
+  1:[{q:"Kieno tas maišas?", ru:"Чей это мешок?", pre:"Tai", post:"maišas."},
+     {q:"Ko ieško sargyba?", ru:"Кого ищет стража?", pre:"Sargyba ieško", post:"."},
+     {q:"Ko čia nėra?", ru:"Кого здесь нет?", pre:"Čia nėra", post:"."}],
+  2:[{q:"Kam tas laiškas?", ru:"Кому то письмо? (письмо идёт → к кому?)", pre:"Laiškas", post:"."},
+     {q:"Kam kunigaikštis siunčia dovaną?", ru:"Кому князь шлёт подарок? (подарок → к кому?)", pre:"Kunigaikštis siunčia dovaną", post:"."},
+     {q:"Kam tu padedi?", ru:"Кому ты подкладываешь [руку]? = кому помогаешь?", pre:"Aš padedu", post:"."}],
+  3:[{q:"Ką kviečia kunigaikštis?", ru:"Кого приглашает князь?", pre:"Kunigaikštis kviečia", post:"."},
+     {q:"Ką mato sargybinis?", ru:"Кого видит стражник?", pre:"Sargybinis mato", post:"."}],
+  4:[{q:"Su kuo kunigaikštis nori kalbėti?", ru:"С кем князь хочет поговорить?", pre:"Su", post:"."},
+     {q:"Kuo didžiuojasi miestas?", ru:"Кем гордится город?", pre:"Miestas didžiuojasi", post:"."}],
+  5:[{q:"Kame slypi miesto viltis?", ru:"В ком скрыта надежда города?", pre:"Viltis slypi", post:"."}],
+  6:[{q:"Vartai atsiveria! Kaip tave pakviesti?", ru:"Ворота открываются! Как к тебе обратиться?", pre:"", post:"!"}],
+};
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function tween(dur,fn){return new Promise(r=>{const t0=performance.now();const step=t=>{const k=Math.min(1,(t-t0)/dur);fn(k);k<1?requestAnimationFrame(step):r();};requestAnimationFrame(step);});}
+const norm=s=>s.toLowerCase().replace(/[.,!?;:—–\-"«»]/g," ").replace(/\s+/g," ").trim();
+
+const log=$("log");
+function say(html,cls="ln"){const p=document.createElement("p");p.className=cls;p.innerHTML=html;log.appendChild(p);while(log.children.length>40)log.removeChild(log.firstChild);}
+function guard(lt,ru){say(`<span class="g">Sargybinis:</span> ${lt}${ru?` <span class="ru">— ${ru}</span>`:""}`);}
+
+/* ---------- word ---------- */
+const wordG=$("word"), shapeG=$("wordShape"), wordT=$("wordText");
+const COLORS=["#f6c177","#9ccfd8","#c4a7e7","#ebbcba","#a6e3a1","#f9e2af","#89b4fa"];
+let wx=-300, wy=772, wScale=1, wOpacity=1, cur=null, color="#fff";
+function drawWord(){wordG.setAttribute("transform",`translate(${wx},${wy}) scale(${wScale})`);wordG.setAttribute("opacity",wOpacity);}
+function makeWord(item){
+  shapeG.innerHTML=""; color=rnd(COLORS);
+  if(Math.random()<.5) el("circle",{cx:0,cy:0,r:95,fill:color,stroke:"#1f2328","stroke-width":5},shapeG);
+  else el("rect",{x:-95,y:-95,width:190,height:190,rx:14,fill:color,stroke:"#1f2328","stroke-width":5},shapeG);
+  wordT.textContent=item.w;
+  wordT.setAttribute("font-size",Math.min(42,Math.floor(300/(item.w.length*1.0))));
+}
+function setShapeColor(c){const s=shapeG.firstChild; if(s) s.setAttribute("fill",c);}
+async function walk(to,dur){
+  const from=wx;
+  await tween(dur,k=>{wx=from+(to-from)*k; wy=772-Math.abs(Math.sin(k*dur/130))*14; drawWord();});
+  wy=772; drawWord();
+}
+
+/* ---------- gate ---------- */
+const port=$("portcullis"); let gateY=0;
+// frac: 0 = closed, 1 = fully open
+async function gateTo(frac,dur=700){const from=gateY,to=-330*frac;await tween(dur,k=>{const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;gateY=from+(to-from)*e;port.setAttribute("transform",`translate(0,${gateY})`);});}
+
+/* ---------- input ---------- */
+const ans=$("ans"), go=$("go");
+let resolver=null;
+function ask(pre,post){
+  $("pre").textContent=pre; $("post").textContent=post;
+  ans.value=""; ans.disabled=false; go.disabled=false; ans.focus();
+  return new Promise(r=>resolver=r);
+}
+$("inrow").addEventListener("submit",e=>{
+  e.preventDefault(); if(!resolver||!ans.value.trim())return;
+  const v=ans.value; ans.disabled=true; go.disabled=true; const r=resolver; resolver=null; r(v);
+});
+"ą č ę ė į š ų ū ž".split(" ").forEach(ch=>{
+  const b=document.createElement("button"); b.type="button"; b.textContent=ch;
+  b.onclick=()=>{ if(ans.disabled)return; const s=ans.selectionStart??ans.value.length, e2=ans.selectionEnd??s;
+    ans.value=ans.value.slice(0,s)+ch+ans.value.slice(e2); ans.focus(); ans.setSelectionRange(s+1,s+1); };
+  $("keys").appendChild(b);
+});
+
+function clearDialog(){ log.innerHTML=""; ans.value=""; $("pre").textContent=""; $("post").textContent=""; }
+/* ---------- game loop ---------- */
+let score=0, errs=0, last=null;
+function check(input,forms,pre){
+  const n=norm(input);
+  return forms.some(f=>n===norm(f) || n===norm(pre+" "+f));
+}
+async function round(){
+  let item; do{item=rnd(WORDS);}while(item===last); last=item; cur=item;
+  makeWord(item); wx=-300; wScale=1; wOpacity=1; drawWord();
+  say(`Iš miško išeina <span class="w" style="color:${color}">${item.w}</span> <span class="ru">(${item.ru})</span>…`,"ln sys");
+  await walk(1250,2600);
+
+  const order=[0,...shuffle([1,2,3,4,5]),6];
+  for(let step=0; step<order.length; step++){
+    const c=order[step];
+    const v=rnd(Q[c]);
+    const pre = c===6 ? `Prašom į pilį, ${item.g==="f"?"gerbiamoji":"gerbiamasis"}` : v.pre;
+    guard(v.q, v.ru);
+    const input=await ask(pre,v.post);
+    const right=item.f[c];
+    const accepted=[right,...((item.alt&&item.alt[c])||[])];
+    say(`<span class="w" style="color:${color}">${item.w}:</span> ${pre} <b>${input.trim()}</b>${v.post}`);
+    if(check(input,accepted,pre)){
+      say(`✓ ${rnd(["Gerai.","Teisingai.","Taip.","Tinka."])} <span class="ru">${CASES[c].lt} · ${CASES[c].idea}</span> · vartai ${step+1}/7`,"ln ok");
+      await gateTo((step+1)/order.length);
+    }else{
+      errs++; $("errs").textContent=errs;
+      guard(`Ne! Turi būti: <b>${right}</b>. Atgal į mišką!`, `${CASES[c].ru} (${CASES[c].lt}, ${CASES[c].q})`);
+      say(`💡 ${CASES[c].q} — ${CASES[c].idea}`,"ln sys");
+      setShapeColor("#ff8a80");
+      await sleep(600);
+      // slow walk back to the forest (~5 s) while the gate drops
+      await Promise.all([walk(-300,5000), gateTo(0,1500)]);
+      clearDialog();
+      return round();
+    }
+  }
+  // success: enter the castle
+  guard(`Sveiki atvykę, ${item.f[6]}!`, "Добро пожаловать!");
+  await walk(1680,1100);
+  await tween(500,k=>{wScale=1-k*0.5; wOpacity=1-k; drawWord();});
+  score++; $("score").textContent=score;
+  say(`+1 taškas. Iš viso: ${score}`,"ln ok");
+  await gateTo(0,900);
+  await sleep(1200);
+  clearDialog();
+  return round();
+}
+
+$("startBtn").onclick=()=>{ $("start").classList.add("hidden"); round(); };
+drawWord();
+</script>
+</body>
+</html>
