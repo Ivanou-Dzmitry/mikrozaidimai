@@ -15,20 +15,39 @@
   a.game i { font-style:normal; font-size:38px; line-height:1; margin-bottom:6px; }
   a.game b { font-size:18px; }
   a.game span { font-size:14px; color:#2c4a5c; }
-  a.game span em { display:block; font-style:normal; color:#4d6b7c; margin-top:2px; }
+  a.game span em { display:none; font-style:normal; }
+  body.ru a.game span .en { display:none; } body.ru a.game span em { display:inline; } body.ru em.ru { display:inline !important; } body.ru p .en { display:none; }
+  .top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .lang { display:flex; border-radius:999px; background:#fff; box-shadow:0 1px 6px #2a4a6a26; overflow:hidden; flex:none; }
+  .lang button { border:0; background:none; font:600 14px system-ui,sans-serif; padding:7px 14px; color:#35566a; cursor:pointer; }
+  .lang button[aria-pressed="true"] { background:#0f2f44; color:#fff; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Mikrozaidimai</h1>
-  <p>Micro games / Микроигры</p>
+  <div class="top"><div><h1>Mikrozaidimai</h1>
+  <p><span class="en">Micro games</span><em class="ru" style="font-style:normal;display:none">Микроигры</em></p></div>
+  <div class="lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div></div>
   <div class="grid">
-    <a class="game" style="--c:#d9f0d2" href="deadbranch/"><i>🌿</i><b>Dead Branch</b><span>Build Lithuanian words from letters, with Russian translations.<em>Собирай литовские слова из букв, с русским переводом.</em></span></a>
-    <a class="game" style="--c:#ffe9c2" href="bestgame4you/"><i>🎲</i><b>The Best Game For You</b><span>Imagine a game, set the seconds, close your eyes and play.<em>Придумай игру, выбери время, закрой глаза и играй.</em></span></a>
-    <a class="game" style="--c:#e3dcf7" href="vicky/"><i>💡</i><b>VICKY Jam Session</b><span>One-hour game jam brainstorm with timers and voting.<em>Часовой брейншторм для гейм-джема с таймером и голосованием.</em></span></a>
-    <a class="game" style="--c:#d5e8fa" href="kas-ka/"><i>❓</i><b>Kas? Ką?</b><span>Trainer for Lithuanian cases: who acts, who is acted on.<em>Тренажёр падежей: кто действует и на кого направлено.</em></span></a>
-    <a class="game" style="--c:#fadcdc" href="misko-seima/"><i>🏰</i><b>Miško šeima</b><span>Decline relatives' names in 7 cases to open the castle gate.<em>Склоняй имена родственников по 7 падежам, чтобы открыть ворота.</em></span></a>
+    <a class="game" style="--c:#d9f0d2" href="deadbranch/"><i>🌿</i><b>Dead Branch</b><span><span class="en">Build Lithuanian words from letters, with Russian translations.</span><em>Собирай литовские слова из букв, с русским переводом.</em></span></a>
+    <a class="game" style="--c:#ffe9c2" href="bestgame4you/"><i>🎲</i><b>The Best Game For You</b><span><span class="en">Imagine a game, set the seconds, close your eyes and play.</span><em>Придумай игру, выбери время, закрой глаза и играй.</em></span></a>
+    <a class="game" style="--c:#e3dcf7" href="vicky/"><i>💡</i><b>VICKY Jam Session</b><span><span class="en">One-hour game jam brainstorm with timers and voting.</span><em>Часовой брейншторм для гейм-джема с таймером и голосованием.</em></span></a>
+    <a class="game" style="--c:#d5e8fa" href="kas-ka/"><i>❓</i><b>Kas? Ką?</b><span><span class="en">Trainer for Lithuanian cases: who acts, who is acted on.</span><em>Тренажёр падежей: кто действует и на кого направлено.</em></span></a>
+    <a class="game" style="--c:#fadcdc" href="misko-seima/"><i>🏰</i><b>Miško šeima</b><span><span class="en">Decline relatives' names in 7 cases to open the castle gate.</span><em>Склоняй имена родственников по 7 падежам, чтобы открыть ворота.</em></span></a>
   </div>
 </main>
+<script>
+(function(){
+  function set(l){
+    document.body.classList.toggle('ru',l==='ru');
+    document.documentElement.lang=l;
+    document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l)});
+    try{localStorage.setItem('lang',l)}catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){b.onclick=function(){set(b.dataset.l)}});
+  var l='en';try{l=localStorage.getItem('lang')||'en'}catch(e){}
+  set(l==='ru'?'ru':'en');
+})();
+</script>
 </body>
 </html>
